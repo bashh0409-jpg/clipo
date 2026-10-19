@@ -515,7 +515,7 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Industry
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-4 text-sm font-medium tracking-tight text-[#999]">
                     {cell.title}
                   </h2>
                 </div>
