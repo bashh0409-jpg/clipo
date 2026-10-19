@@ -64,7 +64,7 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className="absolute inset-x-0 top-0 z-[100] flex items-center justify-between p-5 text-white md:p-7"
+      className="absolute fixed inset-x-0 top-0 z-[100] flex items-center justify-between p-5 text-white md:p-7"
     >
       <Link href="/" aria-label="Clipo home" className="block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
