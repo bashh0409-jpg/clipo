@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TransitionLink } from "../components/PageTransitions";
+import Link from "next/link";
 import MouseFollowerImage from "../components/MouseFollowerImage";
 
 export const metadata: Metadata = {
@@ -47,14 +47,14 @@ export default function AboutPage() {
               the industries they work in, and the ideas behind them.
             </p>
 
-            <TransitionLink
+            <Link
               href="/"
               className="mt-3 inline-flex items-center gap-3 bg-[#F5D76A] px-5 py-3 text-sm font-semibold text-[#171717] transition-transform hover:translate-x-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
               <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase md:text-2xl">
                 home
               </p>
-            </TransitionLink>
+            </Link>
           </div>
         </div>
       </section>
