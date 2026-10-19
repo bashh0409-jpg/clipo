@@ -7,7 +7,7 @@ import gsap from "gsap";
 const NAV_ITEMS = [
   { label: "Work", href: "/", icon: WorkIcon },
 
-  { label: "Sponsor", href: "/sponsor", icon: SponsorIcon },
+  { label: "Sponsor", href: "#", icon: SponsorIcon },
   { label: "About", href: "/about", icon: InfoIcon },
   { label: "Contact", href: "/contact", icon: ContactIcon },
 ] as const;
