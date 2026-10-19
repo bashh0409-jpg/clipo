@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import gsap from "gsap";
 import { Fraunces } from "next/font/google";
-
+import Link from "next/link";
 const companyFont = Fraunces({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
@@ -910,6 +910,15 @@ export default function GridHover() {
         ref={backgroundRef}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
+        <Link href="/" aria-label="Clipo home" className="block left-4 top-4 fixed z-1000 absolute shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            
+            src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
+            alt="Clipo"
+            className="h-[56px] rotate-[15deg] w-auto"
+          />
+        </Link>
         {CELLS.map((cell) => (
           <Cell key={cell.id} cell={cell} onSeeMore={openSidebar} />
         ))}
