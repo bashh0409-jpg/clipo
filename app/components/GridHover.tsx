@@ -10,17 +10,21 @@ const companyFont = Fraunces({
   subsets: ["latin"],
 });
 
+// Single declaration: the file previously declared CellData twice, which TS silently merged.
 interface CellData {
   id: string;
   imgSrc: string;
   company: string;
+  title: string;
   url: string;
   xUrl?: string;
-  stockUrl?: string;
   discordUrl?: string;
-  title: string;
   reveal: string;
   detail: string;
+  location: string; // HQ city, country
+  founded: number; // number, not string, so you can sort or filter by it
+  // Plain string so it covers private companies too, e.g. "Public · Nasdaq: WSE" or "Private"
+  stage: string;
 }
 
 interface CellProps {
@@ -35,176 +39,314 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+// ids are company slugs, so they stay stable if you key animations or routes off them.
 const CELLS: CellData[] = [
   {
-    id: "brand",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/77d1b2941af91ab9c043df78dda9affcb57785a4-188x188.svg",
+    id: "wise",
+    imgSrc: "/logos/wise.svg",
     company: "Wise",
     title: "Money transfer and financial services",
     url: "https://wise.com/",
-    stockUrl:
-      "https://www.londonstockexchange.com/stock/WISE/wise-plc/company-page",
     reveal:
-      "Wise is an international financial technology company that makes sending, receiving, and holding money across currencies easier. It focuses on transparent fees and international money transfers for individuals and businesses.",
+      "Wise makes sending, receiving, and holding money across currencies cheaper and more transparent, for both individuals and businesses.",
     detail: "Multi-currency accounts and money transfers",
+    location: "London, United Kingdom",
+    founded: 2011,
+    stage: "Public · Nasdaq: WSE",
   },
   {
-    id: "design",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/0788bdd6f42d21e06d185b0d909be6f4250a2e0c-188x188.svg",
-    company: "taxflix",
+    id: "taxfix",
+    imgSrc: "/logos/taxfix.svg",
+    company: "Taxfix",
     title: "Tax preparation software",
     url: "https://taxfix.de/en/",
     reveal:
-      "Making complex tax systems accessible to everyone, Taxfix allows users to submit tax returns quickly and easily via app or web. Tax filing with forms takes hours and requires expert knowledge. Taxfix disrupts the industry by offering an easy solution that guides users through the process of filing their taxes by asking them simple questions – as a tax advisor would. With its underlying tax engine, Taxfix's systems can generate the smartest questions and achieve the best refund for its customers.",
+      "Taxfix lets users file tax returns from an app or the web by answering simple questions, the way a tax advisor would, while its tax engine works out the best refund.",
     detail: "Digital tax filing and tax guidance",
+    location: "Berlin, Germany",
+    founded: 2016,
+    stage: "Private",
   },
   {
-    id: "frontend",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/7155a96d8ec88d2d8844fc5313077b21e977914f-188x188.svg",
-    company: "syfe",
+    id: "syfe",
+    imgSrc: "/logos/syfe.svg",
+    company: "Syfe",
     title: "Investment management",
     url: "https://www.syfe.com/",
     reveal:
-      "Syfe is a digital wealth management platform offering investment and portfolio management products. Its technology-led approach helps users access and manage their investments online.",
+      "Syfe is a digital wealth management platform offering managed portfolios and self-directed investing, all handled online.",
     detail: "Investment and portfolio management",
+    location: "Singapore",
+    founded: 2017,
+    stage: "Private",
   },
   {
-    id: "backend",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/da3083fc0bb8809cf8ebc8c7380c80e506e3880c-188x188.svg",
-    company: "neo",
+    id: "neo-financial",
+    imgSrc: "/logos/neo-financial.svg",
+    company: "Neo Financial",
     title: "Digital banking and consumer finance",
     url: "https://neofinancial.com/",
     reveal:
-      "Neo Financial is reimagining the Canadian banking experience by building next generation financial products from the ground up. Neo offers a one-stop-shop for Canadians, with a supercharged cash back credit card, no-fee bank accounts, managed investments, and digital mortgages - all on one app. ",
+      "Neo Financial is a Canadian fintech that puts a cash back credit card, no-fee accounts, managed investments, and digital mortgages into a single app.",
     detail: "Digital banking and financial products",
+    location: "Calgary, Canada",
+    founded: 2018,
+    stage: "Private",
   },
   {
-    id: "motion",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/ea6884f7b62069c9ff6e8321d9b4fb2eaa6863b8-188x188.svg",
-    company: "mondu",
+    id: "mondu",
+    imgSrc: "/logos/mondu.svg",
+    company: "Mondu",
     title: "B2B payments",
     url: "https://www.mondu.ai/",
     reveal:
-      "Mondu is a B2B payments company focused on business-to-business payment solutions, including flexible payment options for business buyers and sellers.",
+      "Mondu provides buy-now-pay-later and invoice payment options for business buyers, while sellers get paid upfront and the credit risk moves to Mondu.",
     detail: "Flexible payment options for businesses",
+    location: "Berlin, Germany",
+    founded: 2021,
+    stage: "Private",
   },
   {
-    id: "webgl",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/21f07b81514b6b62c60c9159be8851bfca467be4-188x188.svg",
+    id: "atlas",
+    imgSrc: "/logos/atlas.svg",
     company: "Atlas",
     title: "Premium credit cards",
     url: "https://atlascard.com/",
     reveal:
-      "Atlas is building a members-only charge card for last minute access to coveted experiences.",
+      "Atlas is a members-only charge card built around last-minute access to sought-after dining, travel, and event experiences.",
     detail: "Members-only charge card and experience access",
+    location: "New York, United States",
+    founded: 2021,
+    stage: "Private",
   },
   {
-    id: "type",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/3585c93de1859eeb0d31633e8cc476223083194b-188x188.svg",
-    company: "majority",
+    id: "majority",
+    imgSrc: "/logos/majority.svg",
+    company: "Majority",
     title: "Digital banking",
     url: "https://www.majority.com/",
     reveal:
-      "MAJORITY is a financial technology company focused on serving international communities with financial services, including money transfers and mobile banking features.",
+      "Majority is a mobile banking app aimed at immigrant communities, combining everyday banking with low-cost international money transfers.",
     detail: "Banking services and international money transfers",
+    location: "Stockholm, Sweden",
+    founded: 2019,
+    stage: "Private",
   },
   {
-    id: "brand-id",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/34b63f57f26da561919df07dec379ff19a392a02-188x188.svg",
-    company: "qonto",
+    id: "qonto",
+    imgSrc: "/logos/qonto.svg",
+    company: "Qonto",
     title: "Business banking",
     url: "https://qonto.com/",
     reveal:
-      "Qonto is a European business finance platform for small and medium-sized businesses and freelancers. Its services include business accounts, payment cards, expense management, invoicing, and accounting tools.",
+      "Qonto is a European business finance platform for SMEs and freelancers, with business accounts, payment cards, expense management, invoicing, and accounting tools.",
     detail: "Business accounts, cards, and expense management",
+    location: "Paris, France",
+    founded: 2016,
+    stage: "Private",
   },
   {
-    id: "illustration",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/0bff149ef816ead4922be1d798680664069ab9de-188x188.svg",
-    company: "bitpanda",
+    id: "bitpanda",
+    imgSrc: "/logos/bitpanda.svg",
+    company: "Bitpanda",
     title: "Digital asset investment",
     url: "https://www.bitpanda.com/",
     xUrl: "https://x.com/bitpanda",
     reveal:
-      "Bitpanda is a European digital investment platform that provides access to financial assets, including cryptocurrencies, stocks, ETFs, and precious metals, depending on the market and product.",
+      "Bitpanda is a European investment platform offering cryptocurrencies, stocks, ETFs, and precious metals, with availability varying by market.",
     detail: "Investments across multiple asset classes",
+    location: "Vienna, Austria",
+    founded: 2014,
+    stage: "Private",
   },
   {
-    id: "mobile",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/5d8b2589cb90dfa1713a525a98d58f642bcf75aa-188x188.svg",
+    id: "bukuwarung",
+    imgSrc: "/logos/bukuwarung.svg",
     company: "BukuWarung",
     title: "Small-business fintech",
     url: "https://bukuwarung.com/",
     reveal:
-      "BukuWarung is an Indonesian business technology platform associated with tools that help micro and small businesses manage bookkeeping, transactions, and business operations.",
+      "BukuWarung is an Indonesian platform that helps micro and small merchants handle bookkeeping, digital payments, and day-to-day business operations.",
     detail: "Bookkeeping and business management tools",
+    location: "Jakarta, Indonesia",
+    founded: 2019,
+    stage: "Private",
   },
   {
-    id: "ai",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/73a31af4a47f8f386ef0108ed6cd19f77393bb25-188x188.svg",
-    company: "velocity",
+    id: "velocity",
+    imgSrc: "/logos/velocity.svg",
+    company: "Velocity",
     title: "Revenue-based financing",
     url: "https://velocity.in",
     xUrl: "https://x.com/velocity_in",
     reveal:
-      "Velocity is building the future of business financing in India. Businesses in India have evolved but financial products haven’t. Velocity unlocks a company's growth by providing eCommerce analytics tools and revenue-based financing. Velocity also offers a first-of-its-kind corporate credit card, a seamless payments management platform, and much more to empower digital first businesses in India.",
+      "Velocity gives digital-first Indian businesses revenue-based financing and eCommerce analytics, alongside a corporate credit card and a payments management platform.",
     detail: "Growth financing for online businesses",
+    location: "Bengaluru, India",
+    founded: 2019,
+    stage: "Private",
   },
   {
-    id: "audio",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/096fa4f0626ddf50fbb017b3252491c2e7857f35-188x188.svg",
-    company: "novo",
+    id: "novo",
+    imgSrc: "/logos/novo.svg",
+    company: "Novo",
     title: "Small-business banking",
     url: "https://novo.co/",
     xUrl: "https://x.com/Novo_HQ",
     reveal:
-      "Visit Novo is the award-winning, powerfully simple business banking platform built for small businesses. Big banks don’t provide the access, assistance and modern tools that small business owners need to successfully grow their business. Novo is on a mission to increase the GDP of the modern small business by creating the go-to banking platform for SMBs as well as tools to help them save time and increase their cash flow.",
+      "Novo is a business banking platform for small business owners, pairing simple online accounts with tools that save time and improve cash flow.",
     detail: "Digital banking for small businesses",
+    location: "Miami, United States",
+    founded: 2016,
+    stage: "Private",
   },
   {
-    id: "film",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/7c70c42d655e6f01ea45f82a5fe52056b74a1211-188x188.svg",
-    company: "regate",
+    id: "regate",
+    imgSrc: "/logos/regate.svg",
+    company: "Regate",
     title: "Accounting software",
     url: "https://en.regate.io/",
     reveal:
-      "Regate is a financial technology company known for software that helps businesses automate accounting processes, manage invoices, and streamline financial administration.",
+      "Regate builds software that automates accounting workflows, from invoice management to day-to-day financial administration.",
     detail: "Accounting and financial operations automation",
+    location: "Paris, France",
+    founded: 2018,
+    stage: "Private",
   },
   {
-    id: "tools",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/26c2e449ba76972e53236f66310d240a57cca5de-188x188.svg",
-    company: "albo",
+    id: "albo",
+    imgSrc: "/logos/albo.svg",
+    company: "Albo",
     title: "Digital banking",
     url: "https://www.albo.mx/",
     reveal:
-      "Albo is a Mexican digital financial services company offering digital banking and related financial products. Its services are designed to help people manage money through digital tools.",
+      "Albo is a Mexican digital bank that lets people manage everyday money entirely from an app.",
     detail: "Banking and financial services in Mexico",
+    location: "Mexico City, Mexico",
+    founded: 2016,
+    stage: "Private",
   },
   {
-    id: "join",
-    imgSrc:
-      "https://cdn.sanity.io/images/9y5rc2e3/production/3a6c464e5fd4ce913663cab9767c1bdfbe5a3655-188x189.svg",
-    company: "bestow",
+    id: "bestow",
+    imgSrc: "/logos/bestow.svg",
+    company: "Bestow",
     title: "Life insurance",
     url: "https://www.bestow.com/",
     reveal:
-      "Bestow is an insurance technology company known for digital life insurance products and technology that simplifies the life insurance application process.",
+      "Bestow is an insurtech that provides the technology behind digital life insurance, replacing lengthy paperwork with a fast online application.",
     detail: "Digital life insurance products",
+    location: "Dallas, United States",
+    founded: 2016,
+    stage: "Private",
+  },
+  {
+    id: "stripe",
+    imgSrc: "/logos/stripe.svg",
+    company: "Stripe",
+    title: "Payments infrastructure",
+    url: "https://stripe.com/",
+    xUrl: "https://x.com/stripe",
+    reveal:
+      "Stripe provides the payments infrastructure that online businesses use to accept payments, manage subscriptions, and move money globally.",
+    detail: "Payment processing and billing APIs",
+    location: "San Francisco, United States",
+    founded: 2010,
+    stage: "Private",
+  },
+  {
+    id: "revolut",
+    imgSrc: "/logos/revolut.svg",
+    company: "Revolut",
+    title: "Digital banking",
+    url: "https://www.revolut.com/",
+    xUrl: "https://x.com/RevolutApp",
+    reveal:
+      "Revolut is a global financial app combining everyday banking, currency exchange, trading, and business accounts under one roof.",
+    detail: "Multi-currency banking and trading",
+    location: "London, United Kingdom",
+    founded: 2015,
+    stage: "Private",
+  },
+  {
+    id: "monzo",
+    imgSrc: "/logos/monzo.svg",
+    company: "Monzo",
+    title: "Digital banking",
+    url: "https://monzo.com/",
+    xUrl: "https://x.com/monzo",
+    reveal:
+      "Monzo is a UK digital bank built around its mobile app, offering current accounts, savings pots, and instant spending notifications.",
+    detail: "App-first current accounts and savings",
+    location: "London, United Kingdom",
+    founded: 2015,
+    stage: "Private",
+  },
+  {
+    id: "nubank",
+    imgSrc: "/logos/nubank.svg",
+    company: "Nubank",
+    title: "Digital banking and credit",
+    url: "https://nubank.com.br/",
+    reveal:
+      "Nubank is a Latin American digital bank serving millions of customers in Brazil, Mexico, and Colombia with credit cards, accounts, and loans.",
+    detail: "Credit cards and accounts across Latin America",
+    location: "São Paulo, Brazil",
+    founded: 2013,
+    stage: "Public · NYSE: NU",
+  },
+  {
+    id: "klarna",
+    imgSrc: "/logos/klarna.svg",
+    company: "Klarna",
+    title: "Buy now, pay later",
+    url: "https://www.klarna.com/",
+    xUrl: "https://x.com/klarna",
+    reveal:
+      "Klarna is a Swedish payments company known for letting shoppers pay later or in instalments at online and in-store merchants.",
+    detail: "Instalment payments and shopping tools",
+    location: "Stockholm, Sweden",
+    founded: 2005,
+    stage: "Public · NYSE: KLAR",
+  },
+  {
+    id: "plaid",
+    imgSrc: "/logos/plaid.svg",
+    company: "Plaid",
+    title: "Financial data connectivity",
+    url: "https://plaid.com/",
+    xUrl: "https://x.com/Plaid",
+    reveal:
+      "Plaid lets apps securely connect to users' bank accounts, powering account linking, payments, and identity verification for fintech products.",
+    detail: "Bank account linking and financial data APIs",
+    location: "San Francisco, United States",
+    founded: 2013,
+    stage: "Private",
+  },
+  {
+    id: "chime",
+    imgSrc: "/logos/chime.svg",
+    company: "Chime",
+    title: "Consumer neobank",
+    url: "https://www.chime.com/",
+    reveal:
+      "Chime is a US neobank offering fee-light checking and savings accounts with early access to direct deposits, delivered through partner banks.",
+    detail: "Mobile checking and savings in the US",
+    location: "San Francisco, United States",
+    founded: 2013,
+    stage: "Public · Nasdaq: CHYM",
+  },
+  {
+    id: "ramp",
+    imgSrc: "/logos/ramp.svg",
+    company: "Ramp",
+    title: "Corporate cards and spend management",
+    url: "https://ramp.com/",
+    reveal:
+      "Ramp is a corporate card and spend management platform that automates expense tracking, approvals, and bill payments for finance teams.",
+    detail: "Corporate cards and expense automation",
+    location: "New York, United States",
+    founded: 2019,
+    stage: "Private",
   },
 ];
 
@@ -305,12 +447,13 @@ function Cell({ cell, onSeeMore }: CellProps) {
           >
             {cell.company}
           </p>
-          {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar */}
-          <p className="line-clamp- hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar.
+              Was "line-clamp-" (invalid class), so no clamp was actually applied. */}
+          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
             {cell.reveal}
           </p>
 
-          <p className="line-clamp-6  md:hidden whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp-6 md:hidden whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
             Click to see more details about{" "}
             <span className="capitalize">{cell.company}</span>
           </p>
@@ -488,8 +631,7 @@ function DetailsSidebar({
             >
               <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
             </svg>
-                  </button>
-                  
+          </button>
         </div>
 
         {cell && (
@@ -507,7 +649,8 @@ function DetailsSidebar({
                 <a
                   href={cell.url}
                   target="_blank"
-                  className="underline cursor-pointer capitalize uppercase"
+                  rel="noopener noreferrer"
+                  className="underline cursor-pointer capitalize"
                 >
                   {" "}
                   {cell.company}
@@ -534,6 +677,30 @@ function DetailsSidebar({
                   </h2>
                   <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
                     {cell.detail}
+                  </h2>
+                </div>
+                <div>
+                  <h2 className=" text-sm font-medium tracking-tight ">
+                    Location
+                  </h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.location}
+                  </h2>
+                </div>
+                <div>
+                  <h2 className=" text-sm font-medium tracking-tight ">
+                    Founded
+                  </h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.founded}
+                  </h2>
+                </div>
+                <div>
+                  <h2 className=" text-sm font-medium tracking-tight ">
+                    Stage
+                  </h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.stage}
                   </h2>
                 </div>
               </div>
@@ -625,24 +792,6 @@ function DetailsSidebar({
                     </svg>
                   </a>
                 )}
-                {cell.stockUrl && (
-                  <a
-                    href={cell.stockUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mb-2 text-sm font-medium tracking-tight text-[#999] underline"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20px"
-                      viewBox="0 -960 960 960"
-                      width="20px"
-                      fill="currentColor"
-                    >
-                      <path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-480h480q22 0 42 5t38 16v-21q0-33-23.5-56.5T720-720H240q-33 0-56.5 23.5T160-640v21q18-11 38-16t42-5Zm-74 130 445 108q9 2 18 0t17-8l139-116q-11-15-28-24.5t-37-9.5H240q-26 0-45.5 13.5T166-510Z" />
-                    </svg>
-                  </a>
-                )}
               </div>
             </div>
           </>
@@ -694,4 +843,6 @@ export default function GridHover() {
  * - The background is inert while the dialog is open, and Tab navigation stays within the dialog.
  * - The cell is role="group" and the reveal clamps text to 6 lines. The button is pinned to the
  *   bottom with mt-auto, so it stays visible however long the description is.
+ * - `stage` is a display string rather than a structured listing: the sidebar only renders it,
+ *   and one string covers public and private companies alike.
  */
