@@ -15,6 +15,9 @@ interface CellData {
   imgSrc: string;
   company: string;
   url: string;
+  xUrl?: string;
+  stockUrl?: string;
+  discordUrl?: string;
   title: string;
   reveal: string;
   detail: string;
@@ -40,6 +43,7 @@ const CELLS: CellData[] = [
     company: "Wise",
     title: "Money transfer and financial services",
     url: "https://wise.com/",
+    stockUrl: "https://www.londonstockexchange.com/stock/WISE/wise-plc/company-page",
     reveal:
       "Wise is an international financial technology company that makes sending, receiving, and holding money across currencies easier. It focuses on transparent fees and international money transfers for individuals and businesses.",
     detail: "Multi-currency accounts and money transfers",
@@ -73,7 +77,7 @@ const CELLS: CellData[] = [
     company: "neo",
     title: "Digital banking and consumer finance",
     url: "https://neofinancial.com/",
-    reveal: "Visit Neo to learn more about the company and its work.",
+    reveal: "Neo Financial is reimagining the Canadian banking experience by building next generation financial products from the ground up. Neo offers a one-stop-shop for Canadians, with a supercharged cash back credit card, no-fee bank accounts, managed investments, and digital mortgages - all on one app. ",
     detail: "Digital banking and financial products",
   },
   {
@@ -127,6 +131,7 @@ const CELLS: CellData[] = [
     company: "bitpanda",
     title: "Digital asset investment",
     url: "https://www.bitpanda.com/",
+    xUrl: "https://x.com/bitpanda",
     reveal:
       "Bitpanda is a European digital investment platform that provides access to financial assets, including cryptocurrencies, stocks, ETFs, and precious metals, depending on the market and product.",
     detail: "Investments across multiple asset classes",
@@ -149,7 +154,8 @@ const CELLS: CellData[] = [
     company: "velocity",
     title: "Revenue-based financing",
     url: "https://velocity.in",
-    reveal: "Visit Velocity to learn more about the company and its work.",
+    xUrl: "https://x.com/velocity_in",
+    reveal: "Velocity is building the future of business financing in India. Businesses in India have evolved but financial products haven’t. Velocity unlocks a company's growth by providing eCommerce analytics tools and revenue-based financing. Velocity also offers a first-of-its-kind corporate credit card, a seamless payments management platform, and much more to empower digital first businesses in India.",
     detail: "Growth financing for online businesses",
   },
   {
@@ -159,7 +165,8 @@ const CELLS: CellData[] = [
     company: "novo",
     title: "Small-business banking",
     url: "https://novo.co/",
-    reveal: "Visit Novo to learn more about the company and its work.",
+    xUrl: "https://x.com/Novo_HQ",
+    reveal: "Visit Novo is the award-winning, powerfully simple business banking platform built for small businesses. Big banks don’t provide the access, assistance and modern tools that small business owners need to successfully grow their business. Novo is on a mission to increase the GDP of the modern small business by creating the go-to banking platform for SMBs as well as tools to help them save time and increase their cash flow.",
     detail: "Digital banking for small businesses",
   },
   {
@@ -515,14 +522,14 @@ function DetailsSidebar({
             </div>
             <div>
               <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
-                Connect with{" "}
-                <span className="uppercase"> {cell.company}</span>
+                Connect with <span className="uppercase"> {cell.company}</span>
               </h2>
               <div className=" flex gap-4">
                 <a
                   href={cell.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Visit ${cell.company} website`}
                   className="mb-2 text-sm font-medium tracking-tight text-[#999]"
                 >
                   <svg
@@ -556,44 +563,68 @@ function DetailsSidebar({
                   </svg>
                 </a>
 
-                <a
-                  href={cell.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mb-2 text-sm font-medium tracking-tight text-[#999]"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                {cell.xUrl && (
+                  <a
+                    href={cell.xUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${cell.company} on X`}
+                    className="mb-2 text-sm font-medium tracking-tight text-[#999]"
                   >
-                    <path
-                      d="M14.8885 2.5H17.4953L11.8002 8.85385L18.5 17.5H13.2541L9.14539 12.2562L4.44405 17.5H1.8357L7.92711 10.7038L1.5 2.5H6.87904L10.593 7.29308L14.8885 2.5ZM13.9736 15.9769H15.418L6.09417 3.94308H4.54413L13.9736 15.9769Z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </a>
-                <a
-                  href={cell.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mb-2 text-sm font-medium tracking-tight text-[#999]"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14.8885 2.5H17.4953L11.8002 8.85385L18.5 17.5H13.2541L9.14539 12.2562L4.44405 17.5H1.8357L7.92711 10.7038L1.5 2.5H6.87904L10.593 7.29308L14.8885 2.5ZM13.9736 15.9769H15.418L6.09417 3.94308H4.54413L13.9736 15.9769Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  </a>
+                )}
+                {cell.discordUrl && (
+                  <a
+                    href={cell.discordUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${cell.company} on Discord`}
+                    className="mb-2 text-sm font-medium tracking-tight text-[#999]"
                   >
-                    <path
-                      d="M15.797 4.40653C17.6793 7.17402 18.6089 10.2957 18.2614 13.8894C18.26 13.9046 18.252 13.9186 18.2395 13.9278C16.8141 14.9744 15.4331 15.6096 14.0714 16.0309C14.0608 16.0341 14.0495 16.0339 14.039 16.0304C14.0285 16.0268 14.0194 16.0201 14.0129 16.0111C13.6983 15.5734 13.4125 15.1119 13.162 14.6273C13.1477 14.5988 13.1608 14.5644 13.1904 14.5532C13.6443 14.3821 14.076 14.1771 14.4912 13.9344C14.5239 13.9153 14.526 13.8684 14.4958 13.8459C14.4077 13.7805 14.3204 13.7117 14.2368 13.643C14.2212 13.6303 14.2002 13.6278 14.1825 13.6363C11.4868 14.8811 8.53393 14.8811 5.80644 13.6363C5.78873 13.6284 5.76769 13.6311 5.75248 13.6436C5.66914 13.7123 5.58164 13.7805 5.49435 13.8459C5.46414 13.8684 5.46664 13.9153 5.49956 13.9344C5.91477 14.1726 6.34643 14.3821 6.79977 14.554C6.82914 14.5653 6.8431 14.5988 6.82852 14.6273C6.58352 15.1126 6.29768 15.574 5.97727 16.0117C5.96331 16.0294 5.94039 16.0376 5.91873 16.0309C4.56352 15.6096 3.18248 14.9744 1.75707 13.9278C1.74519 13.9186 1.73665 13.904 1.7354 13.8888C1.44498 10.7803 2.03686 7.63277 4.19748 4.4059C4.20269 4.39736 4.2106 4.39069 4.21977 4.38674C5.28289 3.89882 6.42185 3.53986 7.61227 3.33486C7.63393 3.33153 7.6556 3.34153 7.66685 3.3607C7.81393 3.62111 7.98206 3.95507 8.09581 4.22799C9.3506 4.03632 10.625 4.03632 11.906 4.22799C12.0198 3.9609 12.1821 3.62111 12.3285 3.3607C12.3337 3.35119 12.3418 3.34357 12.3516 3.33893C12.3614 3.33429 12.3724 3.33287 12.3831 3.33486C13.5741 3.54049 14.7131 3.89945 15.7754 4.38674C15.7848 4.39069 15.7925 4.39736 15.797 4.40653ZM8.73372 10.3169C8.74685 9.39798 8.07685 8.63756 7.23581 8.63756C6.40164 8.63756 5.7381 9.39131 5.7381 10.3169C5.7381 11.2424 6.41477 11.9961 7.23581 11.9961C8.07018 11.9961 8.73372 11.2424 8.73372 10.3169ZM14.2716 10.3169C14.2848 9.39798 13.6148 8.63756 12.7739 8.63756C11.9395 8.63756 11.276 9.39131 11.276 10.3169C11.276 11.2424 11.9527 11.9961 12.7739 11.9961C13.6148 11.9961 14.2716 11.2424 14.2716 10.3169Z"
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.797 4.40653C17.6793 7.17402 18.6089 10.2957 18.2614 13.8894C18.26 13.9046 18.252 13.9186 18.2395 13.9278C16.8141 14.9744 15.4331 15.6096 14.0714 16.0309C14.0608 16.0341 14.0495 16.0339 14.039 16.0304C14.0285 16.0268 14.0194 16.0201 14.0129 16.0111C13.6983 15.5734 13.4125 15.1119 13.162 14.6273C13.1477 14.5988 13.1608 14.5644 13.1904 14.5532C13.6443 14.3821 14.076 14.1771 14.4912 13.9344C14.5239 13.9153 14.526 13.8684 14.4958 13.8459C14.4077 13.7805 14.3204 13.7117 14.2368 13.643C14.2212 13.6303 14.2002 13.6278 14.1825 13.6363C11.4868 14.8811 8.53393 14.8811 5.80644 13.6363C5.78873 13.6284 5.76769 13.6311 5.75248 13.6436C5.66914 13.7123 5.58164 13.7805 5.49435 13.8459C5.46414 13.8684 5.46664 13.9153 5.49956 13.9344C5.91477 14.1726 6.34643 14.3821 6.79977 14.554C6.82914 14.5653 6.8431 14.5988 6.82852 14.6273C6.58352 15.1126 6.29768 15.574 5.97727 16.0117C5.96331 16.0294 5.94039 16.0376 5.91873 16.0309C4.56352 15.6096 3.18248 14.9744 1.75707 13.9278C1.74519 13.9186 1.73665 13.904 1.7354 13.8888C1.44498 10.7803 2.03686 7.63277 4.19748 4.4059C4.20269 4.39736 4.2106 4.39069 4.21977 4.38674C5.28289 3.89882 6.42185 3.53986 7.61227 3.33486C7.63393 3.33153 7.6556 3.34153 7.66685 3.3607C7.81393 3.62111 7.98206 3.95507 8.09581 4.22799C9.3506 4.03632 10.625 4.03632 11.906 4.22799C12.0198 3.9609 12.1821 3.62111 12.3285 3.3607C12.3337 3.35119 12.3418 3.34357 12.3516 3.33893C12.3614 3.33429 12.3724 3.33287 12.3831 3.33486C13.5741 3.54049 14.7131 3.89945 15.7754 4.38674C15.7848 4.39069 15.7925 4.39736 15.797 4.40653ZM8.73372 10.3169C8.74685 9.39798 8.07685 8.63756 7.23581 8.63756C6.40164 8.63756 5.7381 9.39131 5.7381 10.3169C5.7381 11.2424 6.41477 11.9961 7.23581 11.9961C8.07018 11.9961 8.73372 11.2424 8.73372 10.3169ZM14.2716 10.3169C14.2848 9.39798 13.6148 8.63756 12.7739 8.63756C11.9395 8.63756 11.276 9.39131 11.276 10.3169C11.276 11.2424 11.9527 11.9961 12.7739 11.9961C13.6148 11.9961 14.2716 11.2424 14.2716 10.3169Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  </a>
+                )}
+                {cell.stockUrl && (
+                  <a
+                    href={cell.stockUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-2 text-sm font-medium tracking-tight text-[#999] underline"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20px"
+                      viewBox="0 -960 960 960"
+                      width="20px"
                       fill="currentColor"
-                    ></path>
-                  </svg>
-                </a>
+                    >
+                      <path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-480h480q22 0 42 5t38 16v-21q0-33-23.5-56.5T720-720H240q-33 0-56.5 23.5T160-640v21q18-11 38-16t42-5Zm-74 130 445 108q9 2 18 0t17-8l139-116q-11-15-28-24.5t-37-9.5H240q-26 0-45.5 13.5T166-510Z" />
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
           </>
