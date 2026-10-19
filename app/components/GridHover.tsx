@@ -94,6 +94,20 @@ const CELLS: CellData[] = [
     stage: "Private",
   },
   {
+    id: "revolut",
+    imgSrc: "/logos/revolut.svg",
+    company: "Revolut",
+    title: "Digital banking",
+    url: "https://www.revolut.com/",
+    xUrl: "https://x.com/RevolutApp",
+    reveal:
+      "Revolut is a global financial app combining everyday banking, currency exchange, trading, and business accounts under one roof.",
+    detail: "Multi-currency banking and trading",
+    location: "London, United Kingdom",
+    founded: 2015,
+    stage: "Private",
+  },
+  {
     id: "mondu",
     imgSrc: "/logos/mondu.svg",
     company: "Mondu",
@@ -240,6 +254,32 @@ const CELLS: CellData[] = [
     stage: "Private",
   },
   {
+    id: "capitec",
+    imgSrc: "/logos/capitec.svg",
+    company: "Capitec",
+    title: "Retail banking and financial services",
+    url: "https://www.capitecbank.co.za/",
+    reveal:
+      "Capitec is a South African bank offering digital banking, savings, credit, payments, and everyday financial services to individuals.",
+    detail: "Personal banking, savings, credit, and payments",
+    location: "Stellenbosch, South Africa",
+    founded: 2001,
+    stage: "Public · JSE: CPI",
+  },
+  {
+    id: "standard-bank",
+    imgSrc: "/logos/standardbank.svg",
+    company: "Standard Bank",
+    title: "Commercial and retail banking",
+    url: "https://www.standardbank.co.za/",
+    reveal:
+      "Standard Bank is a major African financial services group providing personal and business banking, lending, investment, and wealth management services.",
+    detail: "Personal banking, business banking, and wealth management",
+    location: "Johannesburg, South Africa",
+    founded: 1862,
+    stage: "Public · JSE: SBK",
+  },
+  {
     id: "stripe",
     imgSrc: "/logos/stripe.svg",
     company: "Stripe",
@@ -253,20 +293,7 @@ const CELLS: CellData[] = [
     founded: 2010,
     stage: "Private",
   },
-  {
-    id: "revolut",
-    imgSrc: "/logos/revolut.svg",
-    company: "Revolut",
-    title: "Digital banking",
-    url: "https://www.revolut.com/",
-    xUrl: "https://x.com/RevolutApp",
-    reveal:
-      "Revolut is a global financial app combining everyday banking, currency exchange, trading, and business accounts under one roof.",
-    detail: "Multi-currency banking and trading",
-    location: "London, United Kingdom",
-    founded: 2015,
-    stage: "Private",
-  },
+
   {
     id: "monzo",
     imgSrc: "/logos/monzo.svg",
@@ -308,33 +335,7 @@ const CELLS: CellData[] = [
     founded: 2005,
     stage: "Public · NYSE: KLAR",
   },
-  {
-    id: "plaid",
-    imgSrc: "/logos/plaid.svg",
-    company: "Plaid",
-    title: "Financial data connectivity",
-    url: "https://plaid.com/",
-    xUrl: "https://x.com/Plaid",
-    reveal:
-      "Plaid lets apps securely connect to users' bank accounts, powering account linking, payments, and identity verification for fintech products.",
-    detail: "Bank account linking and financial data APIs",
-    location: "San Francisco, United States",
-    founded: 2013,
-    stage: "Private",
-  },
-  {
-    id: "chime",
-    imgSrc: "/logos/chime.svg",
-    company: "Chime",
-    title: "Consumer neobank",
-    url: "https://www.chime.com/",
-    reveal:
-      "Chime is a US neobank offering fee-light checking and savings accounts with early access to direct deposits, delivered through partner banks.",
-    detail: "Mobile checking and savings in the US",
-    location: "San Francisco, United States",
-    founded: 2013,
-    stage: "Public · Nasdaq: CHYM",
-  },
+
   {
     id: "ramp",
     imgSrc: "/logos/ramp.svg",
@@ -347,6 +348,32 @@ const CELLS: CellData[] = [
     location: "New York, United States",
     founded: 2019,
     stage: "Private",
+  },
+  {
+    id: "fnb",
+    imgSrc: "/logos/fnb.svg",
+    company: "FNB",
+    title: "Retail and business banking",
+    url: "https://www.fnb.co.za/",
+    reveal:
+      "FNB is a South African bank offering digital banking, transactional accounts, lending, investments, insurance, and financial services for individuals and businesses.",
+    detail: "Personal banking, business banking, lending, and investments",
+    location: "Johannesburg, South Africa",
+    founded: 1838,
+    stage: "Public · JSE: FSR",
+  },
+  {
+    id: "nedbank",
+    imgSrc: "/logos/nedbank.svg",
+    company: "Nedbank",
+    title: "Banking and financial services",
+    url: "https://www.nedbank.co.za/",
+    reveal:
+      "Nedbank is a South African financial services group providing personal and business banking, lending, investment, and wealth management solutions.",
+    detail: "Personal banking, corporate banking, lending, and investments",
+    location: "Sandton, South Africa",
+    founded: 1888,
+    stage: "Public · JSE: NED",
   },
 ];
 
@@ -418,7 +445,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
         close();
       }}
-      className="relative aspect-square cursor-pointer overflow-hidden bg-[#2535E8] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A] md:aspect-auto"
+      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#2535E8] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
       <div
         data-base
@@ -817,7 +844,7 @@ export default function GridHover() {
       {/* gap + white background paints the 2px white lines between cells without per-cell borders */}
       <main
         ref={backgroundRef}
-        className="grid min-h-screen grid-cols-2 gap-[2px] bg-white p-[2px] md:h-screen md:grid-cols-5 md:grid-rows-3"
+        className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
         {CELLS.map((cell) => (
           <Cell key={cell.id} cell={cell} onSeeMore={openSidebar} />
