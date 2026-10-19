@@ -76,7 +76,7 @@ export default function Navbar() {
         />
       </Link>
 
-      <div className="flex items-center gap-6 text-xs font-bold uppercase tracking-wide md:gap-8">
+      <div className="flex items-center  gap-6 text-xs font-bold uppercase tracking-wide md:gap-8">
         <Link
           href="/"
           className="text-lg font-bold uppercase tracking-tight text-white/90 transition-opacity hover:opacity-60 md:text-lg"
@@ -88,7 +88,7 @@ export default function Navbar() {
           href="/about"
           className="text-lg font-bold uppercase tracking-tight text-white/90 transition-opacity hover:opacity-60 md:text-lg"
         >
-          About Clipo
+          About
         </Link>
       </div>
     </nav>

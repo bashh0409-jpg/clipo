@@ -26,7 +26,7 @@ export default function AboutPage() {
       
       <section className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
         <p className="max-w-xl text-md leading-tight tracking-tight font-bold uppercase text-white/90 md:text-md ">
-          About Clipo
+          About us
         </p>
         <h1 className="max-w-5xl text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-6xl md:text-8xl">
           Good ideas deserve to be seen.

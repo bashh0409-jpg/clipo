@@ -43,7 +43,8 @@ const CELLS: CellData[] = [
     company: "Wise",
     title: "Money transfer and financial services",
     url: "https://wise.com/",
-    stockUrl: "https://www.londonstockexchange.com/stock/WISE/wise-plc/company-page",
+    stockUrl:
+      "https://www.londonstockexchange.com/stock/WISE/wise-plc/company-page",
     reveal:
       "Wise is an international financial technology company that makes sending, receiving, and holding money across currencies easier. It focuses on transparent fees and international money transfers for individuals and businesses.",
     detail: "Multi-currency accounts and money transfers",
@@ -77,7 +78,8 @@ const CELLS: CellData[] = [
     company: "neo",
     title: "Digital banking and consumer finance",
     url: "https://neofinancial.com/",
-    reveal: "Neo Financial is reimagining the Canadian banking experience by building next generation financial products from the ground up. Neo offers a one-stop-shop for Canadians, with a supercharged cash back credit card, no-fee bank accounts, managed investments, and digital mortgages - all on one app. ",
+    reveal:
+      "Neo Financial is reimagining the Canadian banking experience by building next generation financial products from the ground up. Neo offers a one-stop-shop for Canadians, with a supercharged cash back credit card, no-fee bank accounts, managed investments, and digital mortgages - all on one app. ",
     detail: "Digital banking and financial products",
   },
   {
@@ -155,7 +157,8 @@ const CELLS: CellData[] = [
     title: "Revenue-based financing",
     url: "https://velocity.in",
     xUrl: "https://x.com/velocity_in",
-    reveal: "Velocity is building the future of business financing in India. Businesses in India have evolved but financial products haven’t. Velocity unlocks a company's growth by providing eCommerce analytics tools and revenue-based financing. Velocity also offers a first-of-its-kind corporate credit card, a seamless payments management platform, and much more to empower digital first businesses in India.",
+    reveal:
+      "Velocity is building the future of business financing in India. Businesses in India have evolved but financial products haven’t. Velocity unlocks a company's growth by providing eCommerce analytics tools and revenue-based financing. Velocity also offers a first-of-its-kind corporate credit card, a seamless payments management platform, and much more to empower digital first businesses in India.",
     detail: "Growth financing for online businesses",
   },
   {
@@ -166,7 +169,8 @@ const CELLS: CellData[] = [
     title: "Small-business banking",
     url: "https://novo.co/",
     xUrl: "https://x.com/Novo_HQ",
-    reveal: "Visit Novo is the award-winning, powerfully simple business banking platform built for small businesses. Big banks don’t provide the access, assistance and modern tools that small business owners need to successfully grow their business. Novo is on a mission to increase the GDP of the modern small business by creating the go-to banking platform for SMBs as well as tools to help them save time and increase their cash flow.",
+    reveal:
+      "Visit Novo is the award-winning, powerfully simple business banking platform built for small businesses. Big banks don’t provide the access, assistance and modern tools that small business owners need to successfully grow their business. Novo is on a mission to increase the GDP of the modern small business by creating the go-to banking platform for SMBs as well as tools to help them save time and increase their cash flow.",
     detail: "Digital banking for small businesses",
   },
   {
@@ -307,7 +311,8 @@ function Cell({ cell, onSeeMore }: CellProps) {
           </p>
 
           <p className="line-clamp-6  md:hidden whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
-            Click to see more details about <span className="capitalize">{cell.company}</span>
+            Click to see more details about{" "}
+            <span className="capitalize">{cell.company}</span>
           </p>
 
           <button
@@ -417,7 +422,10 @@ function DetailsSidebar({
       if (e.shiftKey && (activeElement === first || focusOutsideDialog)) {
         e.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && (activeElement === last || focusOutsideDialog)) {
+      } else if (
+        !e.shiftKey &&
+        (activeElement === last || focusOutsideDialog)
+      ) {
         e.preventDefault();
         first.focus();
       }
@@ -463,29 +471,30 @@ function DetailsSidebar({
         tabIndex={-1}
         className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#2535E8]"
       >
-        <div className="flex justify-end">
+        <div className="absolute bottom-6 right-6">
           <button
             ref={closeBtnRef}
             type="button"
             onClick={onClose}
             aria-label="Close details"
-            className="bg-[#2535E8] cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
+            className=" cursor-pointer  text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="24px"
+              height="32px"
               viewBox="0 -960 960 960"
-              width="24px"
-              fill="#fff"
+              width="32px"
+              fill="#999"
             >
-              <path d="M160-360v-80h640v80H160Zm0-160v-80h640v80H160Z" />
+              <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
             </svg>
-          </button>
+                  </button>
+                  
         </div>
 
         {cell && (
           <>
-            <div className="gap-2 flex flex-col">
+            <div className="gap-2 flex mt-15 flex-col">
               <h2
                 id="details-title"
                 data-item
@@ -553,21 +562,21 @@ function DetailsSidebar({
                       stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
+                      strokeLinejoin="round"
                     ></path>
                     <path
                       d="M3 10H17"
                       stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
+                      strokeLinejoin="round"
                     ></path>
                     <path
                       d="M10 3C11.7509 4.91685 12.7459 7.40442 12.8 10C12.7459 12.5956 11.7509 15.0832 10 17C8.24912 15.0832 7.25409 12.5956 7.20001 10C7.25409 7.40442 8.24912 4.91685 10 3V3Z"
                       stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
+                      strokeLinejoin="round"
                     ></path>
                   </svg>
                 </a>
