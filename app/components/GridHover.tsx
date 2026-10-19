@@ -302,8 +302,12 @@ function Cell({ cell, onSeeMore }: CellProps) {
             {cell.company}
           </p>
           {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar */}
-          <p className="line-clamp-6 whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
             {cell.reveal}
+          </p>
+
+          <p className="line-clamp-6  md:hidden whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+            Click to see more details about <span className="capitalize">{cell.company}</span>
           </p>
 
           <button
