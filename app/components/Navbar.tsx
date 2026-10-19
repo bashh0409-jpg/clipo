@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink } from "./PageTransitions";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
@@ -66,7 +66,7 @@ export default function Navbar() {
       aria-label="Main navigation"
       className="absolute fixed inset-x-0 top-0 z-[100] flex items-center justify-between p-5 text-white md:p-7"
     >
-      <Link href="/" aria-label="Clipo home" className="block">
+      <TransitionLink href="/" aria-label="Clipo home" className="block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={logoRef}
@@ -74,22 +74,22 @@ export default function Navbar() {
           alt="Clipo"
           className="h-[30px] w-auto"
         />
-      </Link>
+      </TransitionLink>
 
       <div className="flex items-center  gap-6 text-xs font-bold uppercase tracking-wide md:gap-8">
-        <Link
+        <TransitionLink
           href="/"
           className="text-lg font-bold uppercase tracking-tight text-white/90 transition-opacity hover:opacity-60 md:text-lg"
         >
           Work
-        </Link>
+        </TransitionLink>
 
-        <Link
+        <TransitionLink
           href="/about"
           className="text-lg font-bold uppercase tracking-tight text-white/90 transition-opacity hover:opacity-60 md:text-lg"
         >
           About
-        </Link>
+        </TransitionLink>
       </div>
     </nav>
   );
