@@ -254,13 +254,19 @@ function Cell({ cell, onSeeMore }: CellProps) {
       onPointerLeave={(e) => {
         if (e.pointerType === "mouse") close();
       }}
-      // Touch has no hover, so a tap toggles the reveal instead
+      // Touch devices open the details directly instead of stepping through the hover reveal.
       onClick={() => {
         if (pointerTypeRef.current === "mouse") return;
-        if ((tlRef.current?.progress() ?? 0) > 0.5) close();
-        else open();
+        onSeeMore(cell);
       }}
-      onFocus={open}
+      onFocus={(e) => {
+        if (
+          e.target instanceof HTMLElement &&
+          e.target.matches(":focus-visible")
+        ) {
+          open();
+        }
+      }}
       onBlur={(e) => {
         // Focus moving from the cell to its own button is not "leaving", so don't collapse the reveal
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
@@ -279,7 +285,6 @@ function Cell({ cell, onSeeMore }: CellProps) {
       {/* Initial clip-path inline so the white layer is hidden before GSAP hydrates */}
       <div
         onClick={(e) => {
-          // Stop the cell's touch-toggle handler from also firing
           e.stopPropagation();
           onSeeMore(cell);
         }}
@@ -306,7 +311,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
             aria-haspopup="dialog"
             aria-label={`See more about ${cell.company}`}
             onClick={(e) => {
-              // Stop the cell's touch-toggle handler from also firing
+              // Prevent the card's touch handler from opening the sidebar again.
               e.stopPropagation();
               onSeeMore(cell);
             }}
