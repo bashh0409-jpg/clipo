@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Navbar = () => {
   return (
-    <div className="w-full fixed absolute  justify-between capitalize z-100  text-white p-4">
+    <div className=" fixed absolute  justify-between capitalize z-100  text-white p-4">
       <Link href="/"><img
        
         src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
