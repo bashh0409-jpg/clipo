@@ -16,6 +16,21 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Contact form
+
+The contact form sends messages through the [Resend](https://resend.com) API.
+Set these environment variables in your local environment and deployment:
+
+```bash
+RESEND_API_KEY=re_your_api_key
+CONTACT_EMAIL=contact@weeverything.xyz
+CONTACT_FROM="Clipo <contact@weeverything.xyz>"
+```
+
+Verify `weeverything.xyz` with Resend before sending. Keep
+`RESEND_API_KEY` server-side; do not prefix it with `NEXT_PUBLIC_` or commit
+these environment variables to source control.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

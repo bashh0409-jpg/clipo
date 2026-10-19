@@ -306,7 +306,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
             {cell.company}
           </p>
           {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar */}
-          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp- hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
             {cell.reveal}
           </p>
 
@@ -324,7 +324,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
+            className="mt-auto hidden tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
           >
             See more
           </button>
@@ -540,7 +540,7 @@ function DetailsSidebar({
             </div>
             <div>
               <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
-                Connect with <span className="uppercase"> {cell.company}</span>
+                Connect with <span className="capitalize"> {cell.company}</span>
               </h2>
               <div className=" flex gap-4">
                 <a

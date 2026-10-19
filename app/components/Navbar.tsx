@@ -90,6 +90,13 @@ export default function Navbar() {
         >
           About
         </Link>
+
+        <Link
+          href="/contact"
+          className="text-lg font-bold uppercase tracking-tight text-white/90 transition-opacity hover:opacity-60 md:text-lg"
+        >
+          Contact
+        </Link>
       </div>
     </nav>
   );
