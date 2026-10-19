@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
 import MouseFollowerImage from "../components/MouseFollowerImage";
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#2535E8] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
-      <Navbar />
+    
       <MouseFollowerImage />
 
       <div

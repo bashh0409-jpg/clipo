@@ -477,14 +477,14 @@ function DetailsSidebar({
             type="button"
             onClick={onClose}
             aria-label="Close details"
-            className=" cursor-pointer  text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
+            className="bg-[#2535E8] cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="32px"
+              height="24px"
               viewBox="0 -960 960 960"
-              width="32px"
-              fill="#999"
+              width="24px"
+              fill="currentColor"
             >
               <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
             </svg>
