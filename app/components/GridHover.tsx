@@ -335,7 +335,71 @@ const CELLS: CellData[] = [
     founded: 2005,
     stage: "Public · NYSE: KLAR",
   },
-
+  {
+    id: "absa",
+    imgSrc: "/logos/absa.svg",
+    company: "Absa",
+    title: "Banking and financial services",
+    url: "https://www.absa.co.za/",
+    reveal:
+      "Absa is a major African financial services group offering personal and business banking, lending, insurance, and investment products.",
+    detail: "Personal banking, business banking, lending, and investments",
+    location: "Johannesburg, South Africa",
+    founded: 1991,
+    stage: "Public · JSE: ABG",
+  },
+  {
+    id: "investec",
+    imgSrc: "/logos/investec.svg",
+    company: "Investec",
+    title: "International banking and wealth management",
+    url: "https://www.investec.com/",
+    reveal:
+      "Investec is an international financial services group specialising in private banking, wealth management, and investment services.",
+    detail: "Private banking, wealth management, and investments",
+    location: "Sandton, South Africa",
+    founded: 1974,
+    stage: "Public · JSE: INL",
+  },
+  {
+    id: "discovery-bank",
+    imgSrc: "/logos/discoverybank.svg",
+    company: "Discovery Bank",
+    title: "Digital banking and financial services",
+    url: "https://www.discovery.co.za/bank",
+    reveal:
+      "Discovery Bank is a digital bank that combines transactional accounts, savings, credit cards, and personalised financial rewards.",
+    detail: "Digital banking, savings, credit, and rewards",
+    location: "Sandton, South Africa",
+    founded: 2019,
+    stage: "Private · Discovery Limited group",
+  },
+  {
+    id: "tymebank",
+    imgSrc: "/logos/tymebank.svg",
+    company: "TymeBank",
+    title: "Digital banking",
+    url: "https://www.tymebank.co.za/",
+    reveal:
+      "TymeBank is a digital banking provider offering accessible transactional accounts, savings products, and business banking services.",
+    detail: "Digital personal banking, savings, and business accounts",
+    location: "Johannesburg, South Africa",
+    founded: 2019,
+    stage: "Private",
+  },
+  {
+    id: "om-bank",
+    imgSrc: "/logos/ombank.svg",
+    company: "OM Bank",
+    title: "Digital banking and financial services",
+    url: "https://www.oldmutual.co.za/",
+    reveal:
+      "OM Bank is associated with Old Mutual's financial services ecosystem, focused on making everyday banking and financial products more accessible to customers.",
+    detail: "Banking and integrated financial services",
+    location: "Cape Town, South Africa",
+    founded: 2025,
+    stage: "Private · Old Mutual subsidiary",
+  },
   {
     id: "ramp",
     imgSrc: "/logos/ramp.svg",
@@ -694,7 +758,7 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Industry
                   </h2>
-                  <h2 className="mb-4 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
                     {cell.title}
                   </h2>
                 </div>
