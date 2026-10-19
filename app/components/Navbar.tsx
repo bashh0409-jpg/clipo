@@ -73,7 +73,7 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-[100] px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
+      className="fixed inset-x-0 bottom-0 z-[100] px-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
     >
       <div className="mx-auto flex w-full bg-white  md:max-w-xs items-center justify-between gap-6 px-6 py-2 rounded-xl text-black shadow-2xl backdrop-blur-xl md:px-5">
         <Link href="/" aria-label="Clipo home" className="block shrink-0">
