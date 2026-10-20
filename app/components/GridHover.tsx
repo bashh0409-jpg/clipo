@@ -579,7 +579,7 @@ const CELLS: CellData[] = [
     title: "Portfolio group",
     url: "https://veyragroup.vercel.app/",
     reveal:
-      "Veyra is a portfolio group bringing together companies, products, and ideas focused on making everyday experiences simpler, smarter, and more connected.",
+      "Veyra group is a portfolio of companies, products, and ideas that make everyday life simpler, smarter, and more connected. From moving money across borders to running a business, filing taxes, or investing for the future, each company in the group tackles a different real-world challenge. Veyra's mission is simple: good ideas deserve to be seen. Veyra is a portfolio group bringing together companies, products, and ideas focused on making everyday experiences simpler, smarter, and more connected.",
     detail: "Portfolio and company discovery",
     location: "Pietermaritzburg, South Africa",
     ceo: "Wandile Yanda Langa",
@@ -656,7 +656,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
     >
       <div
         data-base
-        className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -845,6 +845,7 @@ function DetailsSidebar({
         aria-modal="true"
         aria-labelledby="details-title"
         tabIndex={-1}
+        data-lenis-prevent
         style={{ clipPath: "inset(0% 100% 0% 0%)" }}
         className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col z-[102] gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
@@ -963,7 +964,7 @@ function DetailsSidebar({
             </div>
 
             <div>
-              <h2 className="mb-2 text-sm leading-tight capitalize font-medium tracking-tight text-[#999]">
+              <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                 Follow {cell.company}
               </h2>
               <div className="flex w-full items-center justify-between">
