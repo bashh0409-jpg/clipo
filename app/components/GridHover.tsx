@@ -18,7 +18,7 @@ interface CellData {
   title: string;
   url: string;
   xUrl?: string;
-  linkedinUrl: string;
+  linkedinUrl?: string;
   discordUrl?: string;
   reveal: string;
   detail: string;
@@ -570,6 +570,22 @@ const CELLS: CellData[] = [
     stage: "Public · JSE: NED",
     ceo: "Jason Quinn",
     stockUrl: "https://www.google.com/finance/quote/NED:JSE",
+  },
+  {
+    id: "veyra",
+    imgSrc: "/logos/veyra.svg",
+    company: "Veyra",
+    title: "Portfolio group",
+    url: "https://veyragroup.vercel.app/",
+    reveal:
+      "Veyra is a portfolio group bringing together companies, products, and ideas focused on making everyday experiences simpler, smarter, and more connected.",
+    detail: "Portfolio and company discovery",
+    location: "Not specified",
+    ceo: "Wandile Yanda Langa",
+    availability: "Explore individual portfolio company profiles",
+    audience: "People exploring companies, products, and ideas",
+    founded: 2026,
+    stage: "Private · Holding company",
   },
 ];
 

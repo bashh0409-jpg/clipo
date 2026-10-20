@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const bbhBartle = BBH_Bartle({
+  weight: "400",
+  variable: "--font-bartle",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Veyra group | Selected work",
   description:
@@ -26,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bbhBartle.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}
