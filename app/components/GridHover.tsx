@@ -680,9 +680,8 @@ function Cell({ cell, onSeeMore }: CellProps) {
           data-reveal
           className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#010c84]"
         >
-         
           <p
-            className={`${companyFont.className} text-[1.05rem] font-medium capitalize tracking-tight`}
+            className={`${companyFont.className} text-4xl font-medium capitalize tracking-tighter`}
           >
             {cell.company}
           </p>
