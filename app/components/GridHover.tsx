@@ -895,7 +895,7 @@ function DetailsSidebar({
                 <div>
                   <h2 className=" text-sm font-medium tracking-tight ">CEO</h2>
                   <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
-                    {cell.ceo}
+                    {cell.ceo ?? "CEO not listed"}
                   </h2>
                 </div>
                 <div>
@@ -929,7 +929,7 @@ function DetailsSidebar({
 
             <div>
               <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
-                Connect with <span className="capitalize"> {cell.company}</span>
+                Visit <span className="capitalize"> {cell.company}</span>
               </h2>
               <div className="flex w-full items-center justify-between">
                 <div className=" flex gap-4">

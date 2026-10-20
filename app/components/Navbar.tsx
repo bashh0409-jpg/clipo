@@ -163,7 +163,7 @@ export default function Navbar() {
               data-nav-item
               data-active={isActive}
               aria-current={isActive ? "page" : undefined}
-              className={`group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
+              className={`group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap- rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
                 isActive ? "text-black" : "text-[#999]"
               }`}
             >
