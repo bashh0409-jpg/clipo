@@ -523,7 +523,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       tlRef.current = gsap
         .timeline({
           paused: true,
-          defaults: { duration: 0.5, ease: "power3.out" },
+          defaults: { duration: 1, ease: "power3.out" },
         })
         .fromTo(
           "[data-wipe]",
@@ -531,12 +531,11 @@ function Cell({ cell, onSeeMore }: CellProps) {
           { clipPath: "inset(0% 0% 0% 0%)" },
           0,
         )
-        .to("[data-base]", { yPercent: -25, opacity: 0, duration: 0.35 }, 0)
         .fromTo(
           "[data-reveal]",
-          { yPercent: 25, opacity: 0 },
-          { yPercent: 0, opacity: 1 },
-          0.12,
+          { opacity: 0 },
+          { opacity: 1 },
+          0,
         );
     }, rootRef);
 
@@ -584,21 +583,25 @@ function Cell({ cell, onSeeMore }: CellProps) {
     >
       <div
         data-base
-        className="absolute inset-0 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
+          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={cell.imgSrc || undefined} alt={cell.company} />
-      </div>
+          <img
+            src={cell.imgSrc || undefined}
+            alt={cell.company}
+            className=" max-w-[100%] object-contain"
+          />
+        </div>
 
-      {/* Initial clip-path inline so the white layer is hidden before GSAP hydrates */}
-      <div
+        {/* Initial clip-path inline so the white layer is hidden before GSAP hydrates */}
+        <div
         onClick={(e) => {
           e.stopPropagation();
           onSeeMore(cell);
         }}
         data-wipe
         style={{ clipPath: "inset(100% 0% 0% 0%)" }}
-        className="absolute inset-0 bg-white"
+        className="absolute inset-0 z-10 bg-white"
       >
         <div
           data-reveal
@@ -665,21 +668,15 @@ function DetailsSidebar({
         )
         .fromTo(
           "[data-panel]",
-          { xPercent: -100, autoAlpha: 0 },
-          { xPercent: 0, autoAlpha: 1 },
+          { clipPath: "inset(0% 100% 0% 0%)", autoAlpha: 0 },
+          { clipPath: "inset(0% 0% 0% 0%)", autoAlpha: 1 },
           0,
         )
         .fromTo(
           "[data-item]",
-          { y: 16, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.45,
-            ease: "power2.out",
-            stagger: 0.06,
-          },
-          0.3,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.45 },
+          0,
         );
     }, rootRef);
 
@@ -774,6 +771,7 @@ function DetailsSidebar({
         aria-modal="true"
         aria-labelledby="details-title"
         tabIndex={-1}
+        style={{ clipPath: "inset(0% 100% 0% 0%)" }}
         className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col z-[102] gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
       
