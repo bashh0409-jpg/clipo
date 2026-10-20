@@ -611,11 +611,11 @@ function Cell({ cell, onSeeMore }: CellProps) {
           </p>
           {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar.
               Was "line-clamp-" (invalid class), so no clamp was actually applied. */}
-          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#999]">
             {cell.reveal}
           </p>
 
-          <p className="line-clamp-6 md:hidden whitespace-pre-line text-justify text-xs font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp-6 md:hidden whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#999]">
             Click to see more details about{" "}
             <span className="capitalize">{cell.company}</span>
           </p>
@@ -629,7 +629,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
+            className="mt-auto hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
           >
             See more
           </button>
@@ -1031,7 +1031,7 @@ export default function GridHover() {
       {/* gap + white background paints the 2px white lines between cells without per-cell borders */}
       <main
         ref={backgroundRef}
-        className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
         <Link
           href="/"
