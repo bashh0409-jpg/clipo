@@ -140,7 +140,7 @@ export default function Navbar() {
     >
       <div
         ref={navRef}
-        className="relative mx-auto flex w-full max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
+        className="relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
       >
         <Link href="/" aria-label="Clipo home" className="bloc hidden shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -171,7 +171,7 @@ export default function Navbar() {
               data-nav-item
               data-active={isActive}
               aria-current={isActive ? "page" : undefined}
-              className={`group relative z-10 flex h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
+              className={`group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
                 isActive ? "text-black" : "text-[#999]"
               }`}
             >
@@ -181,7 +181,7 @@ export default function Navbar() {
                 aria-hidden="true"
                 className="transition-transform duration-300"
               />
-              <span className="text-[10px] font-medium leading-none md:hidden">
+              <span className="text-[10px] hidden font-medium leading-none md:hidden">
                 {label}
               </span>
             </Link>
