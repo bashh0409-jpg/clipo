@@ -1059,16 +1059,3 @@ export default function GridHover() {
     </>
   );
 }
-
-/*
- * Design note
- * - Selected cell lives in GridHover, not in each Cell, so only one sidebar exists and opening a
- *   second cell can never stack panels.
- * - GridHover retains the last sidebar content while it slides out, so the details remain visible
- *   until the close animation completes.
- * - The background is inert while the dialog is open, and Tab navigation stays within the dialog.
- * - The cell is role="group" and the reveal clamps text to 6 lines. The button is pinned to the
- *   bottom with mt-auto, so it stays visible however long the description is.
- * - `stage` is a display string rather than a structured listing: the sidebar only renders it,
- *   and one string covers public and private companies alike.
- */

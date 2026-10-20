@@ -300,13 +300,15 @@ function Sparkline({ values, tone, format }: SparklineProps) {
           stroke="currentColor"
           strokeWidth={1.5}
           strokeLinejoin="round"
+          strokeLinecap="round"
         />
         <line
           ref={guideRef}
           y1={0}
           y2={SPARK_HEIGHT}
           stroke="currentColor"
-          strokeOpacity={0.3}
+          strokeOpacity={0.5}
+          strokeDasharray="4 3"
           className="opacity-0 transition-opacity group-data-[active=true]:opacity-100"
         />
         <circle
@@ -319,4 +321,3 @@ function Sparkline({ values, tone, format }: SparklineProps) {
     </div>
   );
 }
-
