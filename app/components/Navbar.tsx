@@ -120,13 +120,15 @@ export default function Navbar() {
      });
    };
 
+   const handleResize = () => movePill();
+
    // Animate the pill to the active route.
    movePill();
 
-   window.addEventListener("resize", movePill);
+   window.addEventListener("resize", handleResize);
 
    return () => {
-     window.removeEventListener("resize", movePill);
+     window.removeEventListener("resize", handleResize);
      gsap.killTweensOf(pill);
    };
  }, [pathname]);
@@ -159,7 +161,7 @@ export default function Navbar() {
         {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
           const isActive =
             href === pathname ||
-            (href !== "/" && href !== "#" && pathname.startsWith(`${href}/`));
+            (href !== "/" && pathname.startsWith(`${href}/`));
 
           return (
             <Link
