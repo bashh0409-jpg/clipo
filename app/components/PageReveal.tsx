@@ -49,9 +49,29 @@ export default function PageReveal({
     const html = document.documentElement;
     const previousOverflow = html.style.overflow;
     html.style.overflow = "hidden";
+    let resourcesReady = false;
+    let handleWindowLoad: (() => void) | undefined;
+    const windowLoaded =
+      document.readyState === "complete"
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            handleWindowLoad = () => resolve();
+            window.addEventListener("load", handleWindowLoad, { once: true });
+          });
+    const pageImagesLoaded = Promise.all(
+      Array.from(document.images, (image) =>
+        image.decode().catch(() => undefined),
+      ),
+    );
+    void Promise.all([windowLoaded, document.fonts.ready, pageImagesLoaded]).then(
+      () => {
+        resourcesReady = true;
+      },
+    );
 
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");
+      let activeTimeline: gsap.core.Timeline | null = null;
 
       gsap.set(page, { clipPath: PAGE_HIDDEN });
       gsap.set(images, {
@@ -61,49 +81,75 @@ export default function PageReveal({
       gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
       gsap.set(edge, { autoAlpha: 0, y: 0 });
 
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        onComplete: () => {
-          gsap.set(page, { clearProps: "clipPath,zIndex,position" });
-          gsap.set([curtain, edge], { autoAlpha: 0 });
-          html.style.overflow = previousOverflow;
-          root.removeAttribute("aria-busy");
-        },
-      });
-
-      // Each new square opens over the previous image, which remains underneath.
-      images.forEach((image, i) => {
-        tl.to(
-          image,
-          {
-            autoAlpha: 1,
-            clipPath: "inset(0%)",
-            duration: 0.55,
-            ease: "power2.out",
+      const completeReveal = () => {
+        activeTimeline = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          onComplete: () => {
+            gsap.set(page, { clearProps: "clipPath,zIndex,position" });
+            gsap.set([curtain, edge], { autoAlpha: 0 });
+            html.style.overflow = previousOverflow;
+            root.removeAttribute("aria-busy");
           },
-          i === 0 ? 0.1 : ">-0.12",
-        );
-      });
+        });
 
-      // Progress bar tracks the logo sequence.
-      tl.to(progress, { scaleX: 1, duration: tl.duration(), ease: "none" }, 0);
+        activeTimeline
+          .set(page, { zIndex: 201 }, 0)
+          .set(edge, { autoAlpha: 1, y: 0 }, 0)
+          .to(progress, { autoAlpha: 0, duration: 0.3 }, 0)
+          .to(
+            page,
+            { clipPath: PAGE_VISIBLE, duration: 1.5, ease: "expo.inOut" },
+            0,
+          )
+          .to(edge, { y: "-100vh", duration: 1.1, ease: "expo.inOut" }, 0)
+          .to(edge, { autoAlpha: 0, duration: 0.8 }, "-=0.1");
+      };
 
-      // Final reveal: a straight line rises from the bottom to the top,
-      // uncovering the page behind it.
-      tl.set(edge, { autoAlpha: 1, y: 0 }, "+=0.05")
-        .to(progress, { autoAlpha: 0, duration: 0.3 }, "<")
-        .to(
-          page,
-          { clipPath: PAGE_VISIBLE, duration: 1.5, ease: "expo.inOut" },
-          "<",
-        )
-        .to(edge, { y: "-100vh", duration: 1.1, ease: "expo.inOut" }, "<")
-        .to(edge, { autoAlpha: 0, duration: 0.8 }, "-=0.1");
+      const playImageSequence = () => {
+        activeTimeline = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          onComplete: () => {
+            if (resourcesReady) {
+              completeReveal();
+              return;
+            }
+
+            gsap.set(images, {
+              autoAlpha: 0,
+              clipPath: "inset(50%)",
+            });
+            playImageSequence();
+          },
+        });
+
+        // Each new square opens over the previous image, which remains underneath.
+        images.forEach((image, i) => {
+          activeTimeline?.to(
+            image,
+            {
+              autoAlpha: 1,
+              clipPath: "inset(0%)",
+              duration: 0.55,
+              ease: "power2.out",
+            },
+            i === 0 ? 0.1 : ">-0.12",
+          );
+        });
+
+        activeTimeline.play();
+      };
+
+      playImageSequence();
+
+      return () => activeTimeline?.kill();
     }, root);
 
     return () => {
       ctx.revert();
       html.style.overflow = previousOverflow;
+      if (handleWindowLoad) {
+        window.removeEventListener("load", handleWindowLoad);
+      }
     };
   }, []);
 
@@ -111,7 +157,7 @@ export default function PageReveal({
     <div ref={rootRef} aria-busy="true">
       <div
         data-page-content
-        className="relative z-[201]"
+        className="relative z-[100]"
         style={{ clipPath: PAGE_HIDDEN }}
       >
         {children}

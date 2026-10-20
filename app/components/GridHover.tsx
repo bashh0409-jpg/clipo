@@ -1,15 +1,29 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { createPortal } from "react-dom";
 import type { RefObject } from "react";
 import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import { Fraunces } from "next/font/google";
 import Link from "next/link";
 import { StockPanel } from "./StockPanel";
+gsap.registerPlugin(SplitText);
+
 const companyFont = Fraunces({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
+
+const subscribeToNothing = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 // Single declaration: the file previously declared CellData twice, which TS silently merged.
 interface CellData {
@@ -609,7 +623,16 @@ function Cell({ cell, onSeeMore }: CellProps) {
           { clipPath: "inset(0% 0% 0% 0%)" },
           0,
         )
-        .fromTo("[data-reveal]", { opacity: 0 }, { opacity: 1 }, 0);
+        .fromTo(
+          "[data-reveal] > *",
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 0.65,
+            stagger: 0.12,
+          },
+          0.3,
+        );
     }, rootRef);
 
     return () => ctx.revert();
@@ -721,12 +744,29 @@ function DetailsSidebar({
   backgroundRef,
   onClose,
 }: SidebarProps) {
+  const portalReady = useSyncExternalStore(
+    subscribeToNothing,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   const rootRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    if (!portalReady || !cell) return;
+
+    const splitText = SplitText.create(
+      rootRef.current?.querySelectorAll<HTMLElement>(
+        "[data-panel] h2:not(.hidden), [data-panel] p",
+      ) ?? [],
+      {
+        type: "lines",
+        mask: "lines",
+      },
+    );
+
     const ctx = gsap.context(() => {
       tlRef.current = gsap
         .timeline({
@@ -750,13 +790,27 @@ function DetailsSidebar({
           { autoAlpha: 0 },
           { autoAlpha: 1, duration: 0.45 },
           0,
+        )
+        .fromTo(
+          splitText.lines,
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 1,
+          },
+          0.2,
         );
     }, rootRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+      splitText.revert();
+    };
+  }, [portalReady, cell]);
 
   useEffect(() => {
+    if (!portalReady) return;
+
     const tl = tlRef.current;
     if (!tl) return;
 
@@ -826,15 +880,17 @@ function DetailsSidebar({
       focusTimer.kill();
       trigger?.focus({ preventScroll: true });
     };
-  }, [isOpen, backgroundRef, onClose]);
+  }, [isOpen, backgroundRef, onClose, portalReady, cell]);
 
-  return (
+  if (!portalReady) return null;
+
+  return createPortal(
     <div ref={rootRef}>
       <div
         data-overlay
         aria-hidden="true"
         onClick={onClose}
-        className="invisible fixed inset-0 z-[60] bg-black/40"
+        className="invisible fixed inset-0 z-[1000] bg-black/40"
       />
 
       <aside
@@ -846,7 +902,7 @@ function DetailsSidebar({
         tabIndex={-1}
         data-lenis-prevent
         style={{ clipPath: "inset(0% 100% 0% 0%)" }}
-        className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col z-[102] gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
+        className="invisible fixed left-0 top-0 z-[1001] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
         {cell && (
           <>
@@ -1115,7 +1171,8 @@ function DetailsSidebar({
           </>
         )}
       </aside>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

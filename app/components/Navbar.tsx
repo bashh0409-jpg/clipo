@@ -136,7 +136,7 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-[100] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
+      className="fixed inset-x-0 bottom-0 z-[150] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
     >
       <div
         ref={navRef}

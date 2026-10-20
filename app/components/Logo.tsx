@@ -6,7 +6,7 @@ const Logo = () => {
     <Link
       href="/"
       aria-label="Veyra group home"
-      className="text-xs left-4 flex uppercas bbh text-[#fff] tracking-tighter   items-center font-semibold top-4 fixed z-1 absolute shrink-0"
+      className="fixed left-4 top-4 z-[150] flex shrink-0 items-center text-xs font-semibold uppercase tracking-tighter text-[#fff] bbh"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
