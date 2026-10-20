@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import gsap from "gsap";
 import { Fraunces } from "next/font/google";
-import Link from "next/link";
 import { StockPanel } from "./StockPanel";
 const companyFont = Fraunces({
   weight: ["400", "500", "600", "700"],
@@ -531,12 +530,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
           { clipPath: "inset(0% 0% 0% 0%)" },
           0,
         )
-        .fromTo(
-          "[data-reveal]",
-          { opacity: 0 },
-          { opacity: 1 },
-          0,
-        );
+        .fromTo("[data-reveal]", { opacity: 0 }, { opacity: 1 }, 0);
     }, rootRef);
 
     return () => ctx.revert();
@@ -583,18 +577,18 @@ function Cell({ cell, onSeeMore }: CellProps) {
     >
       <div
         data-base
-          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
+        className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={cell.imgSrc || undefined}
-            alt={cell.company}
-            className=" max-w-[100%] object-contain"
-          />
-        </div>
+        <img
+          src={cell.imgSrc || undefined}
+          alt={cell.company}
+          className=" max-w-[100%] object-contain"
+        />
+      </div>
 
-        {/* Initial clip-path inline so the white layer is hidden before GSAP hydrates */}
-        <div
+      {/* Initial clip-path inline so the white layer is hidden before GSAP hydrates */}
+      <div
         onClick={(e) => {
           e.stopPropagation();
           onSeeMore(cell);
@@ -774,8 +768,6 @@ function DetailsSidebar({
         style={{ clipPath: "inset(0% 100% 0% 0%)" }}
         className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col z-[102] gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
-      
-
         {cell && (
           <>
             <div className="gap-2 flex mt-15 flex-col">
@@ -984,27 +976,27 @@ function DetailsSidebar({
                       </svg>
                     </a>
                   )}
-                </div> <div>
-                <button
-                  ref={closeBtnRef}
-                  type="button"
-                  onClick={onClose}
-                  aria-label="Close details"
-                  className="bg-[#010c84] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="currentColor"
+                </div>{" "}
+                <div>
+                  <button
+                    ref={closeBtnRef}
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close details"
+                    className="bg-[#010c84] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
                   >
-                    <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="currentColor"
+                    >
+                      <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              </div>
-             
             </div>
           </>
         )}
@@ -1031,18 +1023,7 @@ export default function GridHover() {
         ref={backgroundRef}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
-        <Link
-          href="/"
-          aria-label="Clipo home"
-          className="block left-4 top-4 fixed z-1000 absolute shrink-0"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
-            alt="Clipo"
-            className="h-[56px] rotate-[15deg] w-auto"
-          />
-        </Link>
+       
         {CELLS.map((cell) => (
           <Cell key={cell.id} cell={cell} onSeeMore={openSidebar} />
         ))}

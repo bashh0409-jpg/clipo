@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Logo from "./components/Logo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Clipo | Selected work",
+  title: "Veyra group | Selected work",
   description:
-    "Explore companies, products, and ideas featured in the Clipo portfolio.",
+    "Explore companies, products, and ideas featured in the Veyra group portfolio.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
 
         <Navbar />
+        <Logo />
         <SpeedInsights />
         <Analytics />
       </body>

@@ -3,8 +3,8 @@ import ContactForm from "./ContactForm";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contact | Clipo",
-  description: "Get in touch with the Clipo team.",
+  title: "Contact | Veyra group",
+  description: "Get in touch with the Veyra group team.",
 };
 
 export default function ContactPage() {
@@ -32,18 +32,7 @@ export default function ContactPage() {
             message and we&apos;ll get back to you.
           </p>
         </div>
-         <Link
-          href="/"
-          aria-label="Clipo home"
-          className="block left-4 top-4 fixed z-1000 absolute shrink-0"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
-            alt="Clipo"
-            className="h-[56px] rotate-[15deg] w-auto"
-          />
-        </Link>
+
         <div className="pt-7 md:mt-14">
           <ContactForm />
         </div>
@@ -53,7 +42,7 @@ export default function ContactPage() {
           Companies, products, and ideas.
         </p>
         <p className="text-right text-sm font-bold uppercase tracking-tight text-white/90 md:text-lg">
-          2026 Clipo All rights reserved.
+          2026 Veyra group All rights reserved.
         </p>
       </footer>
     </main>

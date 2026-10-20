@@ -142,15 +142,7 @@ export default function Navbar() {
         ref={navRef}
         className="relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
       >
-        <Link href="/" aria-label="Clipo home" className="bloc hidden shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            ref={logoRef}
-            src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
-            alt="Clipo"
-            className="hide h-[26px] w-auto"
-          />
-        </Link>
+        
 
         <span
           ref={pillRef}

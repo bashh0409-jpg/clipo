@@ -3,27 +3,16 @@ import Link from "next/link";
 import MouseFollowerImage from "../components/MouseFollowerImage";
 
 export const metadata: Metadata = {
-  title: "About | Clipo",
+  title: "About | Veyra group",
   description:
-    "A closer look at Clipo and the companies, products, and ideas featured in its portfolio.",
+    "A closer look at Veyra group and the companies, products, and ideas featured in its portfolio.",
 };
 
 export default function AboutPage() {
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
       <MouseFollowerImage />
-      <Link
-        href="/"
-        aria-label="Clipo home"
-        className="block left-4 top-4 fixed z-1000 absolute shrink-0"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
-          alt="Clipo"
-          className="h-[56px] rotate-[15deg] w-auto"
-        />
-      </Link>
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-32 top-24 h-80 w-80 rounded-full border border-white/15 md:right-[-8rem] md:top-16 md:h-[38rem] md:w-[38rem]"
@@ -43,8 +32,8 @@ export default function AboutPage() {
 
         <div className="mt-12 grid gap-10 border-t border-white/25 pt-7 md:mt-16 md:grid-cols-2 md:gap-16">
           <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
-            Clipo is a collection of companies and products making everyday
-            experiences simpler, smarter, and more connected.
+            Veyra group is a collection of companies and products making
+            everyday experiences simpler, smarter, and more connected.
           </p>
           <div className="max-w-xl space-y-5 text-sm leading-relaxed text-white/75 md:text-base">
             <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
@@ -74,7 +63,7 @@ export default function AboutPage() {
           Companies, products, and ideas.
         </p>
         <p className="max-w-xl text-lg leading-tight tracking-tight font-bold uppercase text-white/90 md:text-lg">
-          2026 Clipo All rights reserved.
+          2026 Veyra group All rights reserved.
         </p>
       </footer>
     </main>

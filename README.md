@@ -24,7 +24,7 @@ Set these environment variables in your local environment and deployment:
 ```bash
 RESEND_API_KEY=re_your_api_key
 CONTACT_EMAIL=contact@weeverything.xyz
-CONTACT_FROM="Clipo <contact@weeverything.xyz>"
+CONTACT_FROM="Veyra group <contact@weeverything.xyz>"
 ```
 
 Verify `weeverything.xyz` with Resend before sending. Keep
