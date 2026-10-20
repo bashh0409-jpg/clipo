@@ -832,7 +832,7 @@ function DetailsSidebar({
       >
         {cell && (
           <>
-            <div className="gap-2 flex mt-10 overflow-hidden flex-col">
+            <div className="gap-2 flex mt-10  flex-col">
               <h2
                 id="details-title"
                 data-item
