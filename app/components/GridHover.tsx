@@ -23,6 +23,8 @@ interface CellData {
   reveal: string;
   detail: string;
   location: string; // HQ city, country
+  availability: string;
+  audience: string;
   founded: number; // number, not string, so you can sort or filter by it
   // Plain string so it covers private companies too, e.g. "Public · Nasdaq: WSE" or "Private"
   stage: string;
@@ -56,6 +58,8 @@ const CELLS: CellData[] = [
       "Wise makes sending, receiving, and holding money across currencies cheaper and more transparent, for both individuals and businesses.",
     detail: "Multi-currency accounts and money transfers",
     location: "London, United Kingdom",
+    availability: "Multiple countries; services vary by market",
+    audience: "Individuals and businesses",
     founded: 2011,
     stage: "Public · Nasdaq: WSE",
     ceo: "Kristo Käärmann",
@@ -72,6 +76,8 @@ const CELLS: CellData[] = [
       "Taxfix lets users file tax returns from an app or the web by answering simple questions, the way a tax advisor would, while its tax engine works out the best refund.",
     detail: "Digital tax filing and tax guidance",
     location: "Berlin, Germany",
+    availability: "Germany and selected European markets",
+    audience: "Individuals filing tax returns",
     founded: 2016,
     stage: "Private",
     ceo: "Martin Ott",
@@ -87,6 +93,8 @@ const CELLS: CellData[] = [
       "Syfe is a digital wealth management platform offering managed portfolios and self-directed investing, all handled online.",
     detail: "Investment and portfolio management",
     location: "Singapore",
+    availability: "Singapore and selected Asian markets",
+    audience: "Individual investors",
     founded: 2017,
     stage: "Private",
     ceo: "Dhruv Arora",
@@ -102,6 +110,8 @@ const CELLS: CellData[] = [
       "Neo Financial is a Canadian fintech that puts a cash back credit card, no-fee accounts, managed investments, and digital mortgages into a single app.",
     detail: "Digital banking and financial products",
     location: "Calgary, Canada",
+    availability: "Canada",
+    audience: "Canadian individuals",
     founded: 2018,
     stage: "Private",
     ceo: "Andrew Chau",
@@ -118,6 +128,8 @@ const CELLS: CellData[] = [
       "Revolut is a global financial app combining everyday banking, currency exchange, trading, and business accounts under one roof.",
     detail: "Multi-currency banking and trading",
     location: "London, United Kingdom",
+    availability: "Multiple countries; product eligibility varies",
+    audience: "Individuals and businesses",
     founded: 2015,
     stage: "Private",
     ceo: "Nik Storonsky",
@@ -133,6 +145,8 @@ const CELLS: CellData[] = [
       "Mondu provides buy-now-pay-later and invoice payment options for business buyers, while sellers get paid upfront and the credit risk moves to Mondu.",
     detail: "Flexible payment options for businesses",
     location: "Berlin, Germany",
+    availability: "Selected European markets",
+    audience: "Business buyers, merchants, and marketplaces",
     founded: 2021,
     stage: "Private",
   },
@@ -147,6 +161,8 @@ const CELLS: CellData[] = [
       "Atlas is a members-only charge card built around last-minute access to sought-after dining, travel, and event experiences.",
     detail: "Members-only charge card and experience access",
     location: "New York, United States",
+    availability: "United States",
+    audience: "Members seeking premium experiences",
     founded: 2021,
     stage: "Private",
   },
@@ -161,6 +177,8 @@ const CELLS: CellData[] = [
       "Majority is a mobile banking app aimed at immigrant communities, combining everyday banking with low-cost international money transfers.",
     detail: "Banking services and international money transfers",
     location: "Stockholm, Sweden",
+    availability: "United States",
+    audience: "Migrant communities and their families",
     founded: 2019,
     stage: "Private",
   },
@@ -176,6 +194,8 @@ const CELLS: CellData[] = [
       "Qonto is a European business finance platform for SMEs and freelancers, with business accounts, payment cards, expense management, invoicing, and accounting tools.",
     detail: "Business accounts, cards, and expense management",
     location: "Paris, France",
+    availability: "France and selected European markets",
+    audience: "SMEs and freelancers",
     founded: 2016,
     stage: "Private",
     ceo: "Alexandre Prot",
@@ -192,6 +212,8 @@ const CELLS: CellData[] = [
       "Bitpanda is a European investment platform offering cryptocurrencies, stocks, ETFs, and precious metals, with availability varying by market.",
     detail: "Investments across multiple asset classes",
     location: "Vienna, Austria",
+    availability: "Selected European markets",
+    audience: "First-time and experienced investors",
     founded: 2014,
     stage: "Private",
     ceo: "Eric Demuth",
@@ -207,6 +229,8 @@ const CELLS: CellData[] = [
       "BukuWarung is an Indonesian platform that helps micro and small merchants handle bookkeeping, digital payments, and day-to-day business operations.",
     detail: "Bookkeeping and business management tools",
     location: "Jakarta, Indonesia",
+    availability: "Indonesia",
+    audience: "Micro and small merchants",
     founded: 2019,
     stage: "Private",
     ceo: "Abhinay Peddisetty",
@@ -223,6 +247,8 @@ const CELLS: CellData[] = [
       "Velocity gives digital-first Indian businesses revenue-based financing and eCommerce analytics, alongside a corporate credit card and a payments management platform.",
     detail: "Growth financing for online businesses",
     location: "Bengaluru, India",
+    availability: "India",
+    audience: "Digital-first and ecommerce businesses",
     founded: 2019,
     stage: "Private",
   },
@@ -238,6 +264,8 @@ const CELLS: CellData[] = [
       "Novo is a business banking platform for small business owners, pairing simple online accounts with tools that save time and improve cash flow.",
     detail: "Digital banking for small businesses",
     location: "Miami, United States",
+    availability: "United States",
+    audience: "Small businesses and founders",
     founded: 2016,
     stage: "Private",
     ceo: "Michael Rangel",
@@ -253,6 +281,8 @@ const CELLS: CellData[] = [
       "Regate builds software that automates accounting workflows, from invoice management to day-to-day financial administration.",
     detail: "Accounting and financial operations automation",
     location: "Paris, France",
+    availability: "France; now part of Qonto",
+    audience: "SMEs and accounting teams",
     founded: 2018,
     stage: "Private",
   },
@@ -267,6 +297,8 @@ const CELLS: CellData[] = [
       "Albo is a Mexican digital bank that lets people manage everyday money entirely from an app.",
     detail: "Banking and financial services in Mexico",
     location: "Mexico City, Mexico",
+    availability: "Mexico",
+    audience: "Individuals and small businesses",
     founded: 2016,
     stage: "Private",
   },
@@ -281,6 +313,8 @@ const CELLS: CellData[] = [
       "Bestow is an insurtech that provides the technology behind digital life insurance, replacing lengthy paperwork with a fast online application.",
     detail: "Digital life insurance products",
     location: "Dallas, United States",
+    availability: "United States",
+    audience: "Insurance carriers and their customers",
     founded: 2016,
     stage: "Private",
     ceo: "Melbourne O'Banion",
@@ -296,6 +330,8 @@ const CELLS: CellData[] = [
       "Capitec is a South African bank offering digital banking, savings, credit, payments, and everyday financial services to individuals.",
     detail: "Personal banking, savings, credit, and payments",
     location: "Stellenbosch, South Africa",
+    availability: "South Africa",
+    audience: "Individuals",
     founded: 2001,
     stage: "Public · JSE: CPI",
     ceo: "Graham Lee",
@@ -312,6 +348,8 @@ const CELLS: CellData[] = [
       "Standard Bank is a major African financial services group providing personal and business banking, lending, investment, and wealth management services.",
     detail: "Personal banking, business banking, and wealth management",
     location: "Johannesburg, South Africa",
+    availability: "South Africa and selected African markets",
+    audience: "Individuals, businesses, and institutions",
     founded: 1862,
     stage: "Public · JSE: SBK",
     ceo: "Sim Tshabalala", // retiring end of 2027
@@ -329,6 +367,8 @@ const CELLS: CellData[] = [
       "Stripe provides the payments infrastructure that online businesses use to accept payments, manage subscriptions, and move money globally.",
     detail: "Payment processing and billing APIs",
     location: "San Francisco, United States",
+    availability: "Multiple countries; capabilities vary by market",
+    audience: "Online businesses and developers",
     founded: 2010,
     stage: "Private",
     ceo: "Patrick Collison",
@@ -345,6 +385,8 @@ const CELLS: CellData[] = [
       "Monzo is a UK digital bank built around its mobile app, offering current accounts, savings pots, and instant spending notifications.",
     detail: "App-first current accounts and savings",
     location: "London, United Kingdom",
+    availability: "United Kingdom",
+    audience: "Individuals and small businesses",
     founded: 2015,
     stage: "Private",
     ceo: "Diana Layfield", // succeeded TS Anil in 2026
@@ -361,6 +403,8 @@ const CELLS: CellData[] = [
       "Nubank is a Latin American digital bank serving millions of customers in Brazil, Mexico, and Colombia with credit cards, accounts, and loans.",
     detail: "Credit cards and accounts across Latin America",
     location: "São Paulo, Brazil",
+    availability: "Brazil, Mexico, and Colombia",
+    audience: "Individuals and small businesses",
     founded: 2013,
     stage: "Public · NYSE: NU",
     ceo: "David Vélez",
@@ -378,6 +422,8 @@ const CELLS: CellData[] = [
       "Klarna is a Swedish payments company known for letting shoppers pay later or in instalments at online and in-store merchants.",
     detail: "Instalment payments and shopping tools",
     location: "Stockholm, Sweden",
+    availability: "Multiple countries; products vary by market",
+    audience: "Shoppers and merchants",
     founded: 2005,
     stage: "Public · NYSE: KLAR",
     ceo: "Sebastian Siemiatkowski",
@@ -394,6 +440,8 @@ const CELLS: CellData[] = [
       "Absa is a major African financial services group offering personal and business banking, lending, insurance, and investment products.",
     detail: "Personal banking, business banking, lending, and investments",
     location: "Johannesburg, South Africa",
+    availability: "South Africa and selected African markets",
+    audience: "Individuals, businesses, and corporates",
     founded: 1991,
     stage: "Public · JSE: ABG",
     ceo: "Kenny Fihla",
@@ -410,6 +458,8 @@ const CELLS: CellData[] = [
       "Investec is an international financial services group specialising in private banking, wealth management, and investment services.",
     detail: "Private banking, wealth management, and investments",
     location: "Sandton, South Africa",
+    availability: "South Africa, the UK, and selected markets",
+    audience: "Private clients, businesses, and institutions",
     founded: 1974,
     stage: "Public · JSE: INL",
     ceo: "Fani Titi",
@@ -426,6 +476,8 @@ const CELLS: CellData[] = [
       "Discovery Bank is a digital bank that combines transactional accounts, savings, credit cards, and personalised financial rewards.",
     detail: "Digital banking, savings, credit, and rewards",
     location: "Sandton, South Africa",
+    availability: "South Africa",
+    audience: "Individuals",
     founded: 2019,
     stage: "Private · Discovery Limited group",
     ceo: "Hylton Kallner",
@@ -441,6 +493,8 @@ const CELLS: CellData[] = [
       "TymeBank is a digital banking provider offering accessible transactional accounts, savings products, and business banking services.",
     detail: "Digital personal banking, savings, and business accounts",
     location: "Johannesburg, South Africa",
+    availability: "South Africa",
+    audience: "Individuals and small businesses",
     founded: 2019,
     stage: "Private",
     ceo: "Coen Jonker",
@@ -456,6 +510,8 @@ const CELLS: CellData[] = [
       "OM Bank is associated with Old Mutual's financial services ecosystem, focused on making everyday banking and financial products more accessible to customers.",
     detail: "Banking and integrated financial services",
     location: "Cape Town, South Africa",
+    availability: "South Africa",
+    audience: "Individuals and businesses",
     founded: 2025,
     stage: "Private · Old Mutual subsidiary",
   },
@@ -471,6 +527,8 @@ const CELLS: CellData[] = [
       "Ramp is a corporate card and spend management platform that automates expense tracking, approvals, and bill payments for finance teams.",
     detail: "Corporate cards and expense automation",
     location: "New York, United States",
+    availability: "United States and selected markets",
+    audience: "Businesses and finance teams",
     founded: 2019,
     stage: "Private",
     ceo: "Eric Glyman",
@@ -487,6 +545,8 @@ const CELLS: CellData[] = [
       "FNB is a South African bank offering digital banking, transactional accounts, lending, investments, insurance, and financial services for individuals and businesses.",
     detail: "Personal banking, business banking, lending, and investments",
     location: "Johannesburg, South Africa",
+    availability: "South Africa",
+    audience: "Individuals and businesses",
     founded: 1838,
     stage: "Public · JSE: FSR",
     ceo: "Harry Kellan", // Lytania Johnson takes over when he retires at end of 2026
@@ -504,6 +564,8 @@ const CELLS: CellData[] = [
       "Nedbank is a South African financial services group providing personal and business banking, lending, investment, and wealth management solutions.",
     detail: "Personal banking, corporate banking, lending, and investments",
     location: "Sandton, South Africa",
+    availability: "South Africa and selected African markets",
+    audience: "Individuals, businesses, and corporates",
     founded: 1888,
     stage: "Public · JSE: NED",
     ceo: "Jason Quinn",
@@ -770,7 +832,7 @@ function DetailsSidebar({
       >
         {cell && (
           <>
-            <div className="gap-2 flex mt-15 flex-col">
+            <div className="gap-2 flex mt-10 overflow-hidden flex-col">
               <h2
                 id="details-title"
                 data-item
@@ -778,7 +840,7 @@ function DetailsSidebar({
               >
                 {cell.company}
               </h2>
-              <h2 className="text-sm font-medium mt-2 tracking-tight text-[#999]">
+              <h2 className="text-sm hidden font-medium mt-2 tracking-tight text-[#999]">
                 About{" "}
                 <a
                   href={cell.url}
@@ -791,12 +853,13 @@ function DetailsSidebar({
                 </a>
               </h2>
               <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
-                {cell.reveal}
+                {cell.reveal} Availability and eligibility can vary by product.
+                Check with the provider for current details.
               </h2>{" "}
             </div>
 
             <div className="my-auto ">
-              <div className="grid grid-cols-2">
+              <div className="grid gap-1 grid-cols-2">
                 <div>
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Industry
@@ -815,7 +878,7 @@ function DetailsSidebar({
                 </div>
                 <div>
                   <h2 className=" text-sm font-medium tracking-tight ">
-                    Location
+                    Headquarters
                   </h2>
                   <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
                     {cell.location}
@@ -836,6 +899,22 @@ function DetailsSidebar({
                   </h2>
                 </div>
                 <div>
+                  <h2 className="text-sm font-medium tracking-tight">
+                    Availability
+                  </h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.availability}
+                  </h2>
+                </div>
+                <div>
+                  <h2 className="text-sm font-medium tracking-tight">
+                    Who it&apos;s for
+                  </h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.audience}
+                  </h2>
+                </div>
+                <div>
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Stage
                   </h2>
@@ -846,6 +925,7 @@ function DetailsSidebar({
 
                 <StockPanel cellId={cell.id} stockUrl={cell.stockUrl} />
               </div>
+
             </div>
 
             <div>
