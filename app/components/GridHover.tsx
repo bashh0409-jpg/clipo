@@ -752,8 +752,8 @@ function DetailsSidebar({
               </h2>{" "}
             </div>
 
-            <div className="my-auto">
-              <div>
+            <div className="my-auto ">
+              <div className="grid grid-cols-2">
                 <div>
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Industry

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
@@ -13,14 +14,16 @@ interface NavIconProps {
 
 const NAV_ITEMS = [
   { label: "Work", href: "/", icon: WorkIcon },
-
-  { label: "Sponsor", href: "#", icon: SponsorIcon },
+  { label: "Sponsor", href: "/sponsor", icon: SponsorIcon },
   { label: "About", href: "/about", icon: InfoIcon },
   { label: "Contact", href: "/contact", icon: ContactIcon },
 ] as const;
 
 export default function Navbar() {
+  const pathname = usePathname();
   const logoRef = useRef<HTMLImageElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const logo = logoRef.current;
@@ -77,37 +80,108 @@ export default function Navbar() {
     };
   }, []);
 
+  // Keep the pill on the active route.
+  // It does not respond to hover or focus.
+ useEffect(() => {
+   const nav = navRef.current;
+   const pill = pillRef.current;
+
+   if (!nav || !pill) return;
+
+   const items = Array.from(
+     nav.querySelectorAll<HTMLAnchorElement>("[data-nav-item]"),
+   );
+
+   const activeItem =
+     items.find((item) => item.dataset.active === "true") ?? null;
+
+   const movePill = (immediate = false) => {
+     if (!activeItem) {
+       gsap.to(pill, {
+         opacity: 0,
+         duration: 0.2,
+         overwrite: "auto",
+       });
+       return;
+     }
+
+     const navRect = nav.getBoundingClientRect();
+     const itemRect = activeItem.getBoundingClientRect();
+
+     gsap.to(pill, {
+       x: itemRect.left - navRect.left,
+       y: itemRect.top - navRect.top,
+       width: itemRect.width,
+       height: itemRect.height,
+       opacity: 1,
+       duration: immediate ? 0 : 0.45,
+       ease: "power3.inOut",
+       overwrite: "auto",
+     });
+   };
+
+   // Animate the pill to the active route.
+   movePill();
+
+   window.addEventListener("resize", movePill);
+
+   return () => {
+     window.removeEventListener("resize", movePill);
+     gsap.killTweensOf(pill);
+   };
+ }, [pathname]);
+
   return (
     <nav
       aria-label="Main navigation"
       className="fixed inset-x-0 bottom-0 z-[100] px-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
     >
-      <div className="mx-auto flex w-fit bg-white  max-w-xs items-center justify-between gap-6 px- py-1 rounded-full text-black shadow-2xl backdrop-blur-xl px-2">
-        <Link href="/" aria-label="Clipo home" className="block shrink-0">
+      <div
+        ref={navRef}
+        className="relative mx-auto flex w-fit max-w-xs items-center justify-between gap-2 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl"
+      >
+        <Link href="/" aria-label="Clipo home" className="bloc hidden shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={logoRef}
             src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
             alt="Clipo"
-            className="h-[26px] hide w-auto"
+            className="hide h-[26px] w-auto"
           />
         </Link>
 
-        {NAV_ITEMS.map(({ label, href, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            aria-label={label}
-            className="group flex flex-col items-center gap-1 text-[#999] transition-colors duration-300 hover:text-black focus-visible:text-white focus-visible:outline-none"
-          >
-            <Icon
-              size={20}
-              strokeWidth={2}
-              aria-hidden="true"
-              className="transition-transform duration-300"
-            />
-          </Link>
-        ))}
+        <span
+          ref={pillRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 top-0 z-0 rounded-full bg-black/10 opacity-0"
+        />
+
+        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+          const isActive =
+            href === pathname ||
+            (href !== "/" && href !== "#" && pathname.startsWith(`${href}/`));
+
+          return (
+            <Link
+              key={label}
+              href={href}
+              aria-label={label}
+              data-nav-item
+              data-active={isActive}
+              aria-current={isActive ? "page" : undefined}
+              className={`group relative z-10 flex h-8 w-10 shrink-0 items-center justify-center gap-1 rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none ${
+                isActive ? "text-black" : "text-[#999]"
+              }`}
+            >
+              <Icon
+                size={20}
+                strokeWidth={2}
+                aria-hidden="true"
+                className="transition-transform duration-300"
+              />
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
@@ -128,6 +202,7 @@ function SponsorIcon({ size, className, ...props }: NavIconProps) {
     </svg>
   );
 }
+
 function WorkIcon({ size, className, ...props }: NavIconProps) {
   return (
     <svg
@@ -143,6 +218,7 @@ function WorkIcon({ size, className, ...props }: NavIconProps) {
     </svg>
   );
 }
+
 function InfoIcon({ size, className, ...props }: NavIconProps) {
   return (
     <svg
@@ -158,6 +234,7 @@ function InfoIcon({ size, className, ...props }: NavIconProps) {
     </svg>
   );
 }
+
 function ContactIcon({ size, className, ...props }: NavIconProps) {
   return (
     <svg

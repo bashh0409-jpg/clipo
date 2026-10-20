@@ -12,7 +12,18 @@ export default function AboutPage() {
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
       <MouseFollowerImage />
-
+      <Link
+        href="/"
+        aria-label="Clipo home"
+        className="block left-4 top-4 fixed z-1000 absolute shrink-0"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
+          alt="Clipo"
+          className="h-[56px] rotate-[15deg] w-auto"
+        />
+      </Link>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-32 top-24 h-80 w-80 rounded-full border border-white/15 md:right-[-8rem] md:top-16 md:h-[38rem] md:w-[38rem]"
