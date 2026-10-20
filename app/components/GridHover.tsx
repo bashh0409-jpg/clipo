@@ -703,7 +703,7 @@ function DetailsSidebar({
         aria-modal="true"
         aria-labelledby="details-title"
         tabIndex={-1}
-        className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
+        className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col z-[102] gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
         <div className="absolute bottom-6 right-6">
           <button
