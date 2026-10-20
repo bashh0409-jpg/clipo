@@ -94,9 +94,7 @@ export function StockPanel({ cellId, stockUrl }: StockPanelProps) {
 
       {currentState.status === "ready" && (
         <Quote quote={currentState.quote} label={label} />
-          )}
-          
-          
+      )}
 
       {stockUrl && currentState.status !== "private" && (
         <a
@@ -186,6 +184,12 @@ function Sparkline({ values, tone, format }: SparklineProps) {
   const { xAt, yAt } = scale;
   const lastIndex = values.length - 1;
 
+  // Visibility is driven by a data attribute rather than CSS :hover, because
+  // touch browsers emulate hover unreliably (sticky after a tap, absent mid-drag).
+  const setActive = (active: boolean) => {
+    containerRef.current?.setAttribute("data-active", String(active));
+  };
+
   // Draw the marker at a fractional index. Interpolating between the two
   // neighbouring points keeps it exactly on the polyline (the line is linear
   // between points), so movement is continuous rather than snapping per sample.
@@ -234,12 +238,13 @@ function Sparkline({ values, tone, format }: SparklineProps) {
     frameRef.current = requestAnimationFrame(step);
   };
 
-  const handleEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-    // Snap on entry so the marker doesn't sweep in from wherever it last was
+  const handleStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Snap on entry/touch-down so the marker doesn't sweep in from wherever it last was
     const position = positionFromEvent(e);
     targetRef.current = position;
     currentRef.current = position;
     render(position);
+    setActive(true);
   };
 
   const handleMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -253,25 +258,34 @@ function Sparkline({ values, tone, format }: SparklineProps) {
       frameRef.current = requestAnimationFrame(step);
   };
 
-  const handleLeave = () => {
+  // Shared by pointerup, pointerleave and pointercancel: the browser fires
+  // pointercancel when it takes over a gesture (e.g. a vertical scroll)
+  const handleEnd = () => {
     if (frameRef.current !== null) {
       cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     }
+    setActive(false);
   };
 
   return (
     <div
       ref={containerRef}
-      className="group relative touch-pan-y"
+      data-active="false"
+      // touch-pan-y: horizontal drags reach our handlers, vertical drags still scroll the page.
+      // select-none stops long-press from selecting text or opening the callout menu.
+      className="group relative touch-pan-y select-none"
       style={{ width: SPARK_WIDTH, height: SPARK_HEIGHT }}
-      onPointerEnter={handleEnter}
+      onPointerEnter={handleStart}
+      onPointerDown={handleStart}
       onPointerMove={handleMove}
-      onPointerLeave={handleLeave}
+      onPointerUp={handleEnd}
+      onPointerLeave={handleEnd}
+      onPointerCancel={handleEnd}
     >
       <div
         ref={tipRef}
-        className="pointer-events-none min-w-20 absolute bottom-full left-0 mb-1 min- whitespace-nowrap rounded bg-[#111] px-1.5 py-0.5 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
+        className="pointer-events-none absolute bottom-full left-0 mb-1 min-w-20 whitespace-nowrap rounded bg-[#111] px-1.5 py-0.5 text-xs font-medium text-white opacity-0 transition-opacity group-data-[active=true]:opacity-100"
       />
       <svg
         width={SPARK_WIDTH}
@@ -293,28 +307,16 @@ function Sparkline({ values, tone, format }: SparklineProps) {
           y2={SPARK_HEIGHT}
           stroke="currentColor"
           strokeOpacity={0.3}
-          className="opacity-0 transition-opacity group-hover:opacity-100"
+          className="opacity-0 transition-opacity group-data-[active=true]:opacity-100"
         />
         <circle
           ref={dotRef}
           r={3.5}
           fill="currentColor"
-          className="opacity-0 transition-opacity group-hover:opacity-100"
+          className="opacity-0 transition-opacity group-data-[active=true]:opacity-100"
         />
       </svg>
     </div>
   );
 }
 
-/*
- * Design note
- * - Private companies render a static label with no fetch, so only the 9 listed cells hit the API.
- * - The loading skeleton matches the final row height to avoid layout shift inside the cell panel.
- * - The sparkline is a plain SVG polyline (no chart lib); colour inherits via currentColor from the change tone.
- * - The fetch is aborted on cleanup so rapid cell switching never applies a stale quote.
- * - The root spans two grid columns so the wider sparkline has room beside the price.
- * - Hover state lives in refs and is written straight to the DOM from a rAF loop, so a 60fps pointer
- *   never triggers React re-renders. Visibility is pure CSS (group-hover), which is why no state is needed.
- * - The marker eases toward the pointer (exponential smoothing) and is interpolated between samples,
- *   so it glides along the line instead of jumping from point to point.
- */
