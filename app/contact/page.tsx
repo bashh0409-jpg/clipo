@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "./ContactForm";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact | Clipo",
@@ -32,7 +32,7 @@ export default function ContactPage() {
             message and we&apos;ll get back to you.
           </p>
         </div>
-        <Link
+         <Link
           href="/"
           aria-label="Clipo home"
           className="block left-4 top-4 fixed z-1000 absolute shrink-0"
