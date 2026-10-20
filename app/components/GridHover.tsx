@@ -836,7 +836,7 @@ function DetailsSidebar({
               <h2
                 id="details-title"
                 data-item
-                className={`${companyFont.className} text-5xl font-medium capitalize leading-none tracking-tighter`}
+                className={`${companyFont.className} text-4xl font-medium capitalize leading-none tracking-tighter`}
               >
                 {cell.company}
               </h2>
@@ -852,7 +852,7 @@ function DetailsSidebar({
                   {cell.company}
                 </a>
               </h2>
-              <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+              <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                 {cell.reveal} Availability and eligibility can vary by product.
                 Check with the provider for current details.
               </h2>{" "}
@@ -864,7 +864,7 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Industry
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.title}
                   </h2>
                 </div>
@@ -872,7 +872,7 @@ function DetailsSidebar({
                   <h2 className="text-sm font-medium tracking-tight ">
                     Services
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.detail}
                   </h2>
                 </div>
@@ -880,7 +880,7 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Headquarters
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.location}
                   </h2>
                 </div>
@@ -888,13 +888,13 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Founded
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.founded}
                   </h2>
                 </div>
                 <div>
                   <h2 className=" text-sm font-medium tracking-tight ">CEO</h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.ceo}
                   </h2>
                 </div>
@@ -902,7 +902,7 @@ function DetailsSidebar({
                   <h2 className="text-sm font-medium tracking-tight">
                     Availability
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.availability}
                   </h2>
                 </div>
@@ -910,7 +910,7 @@ function DetailsSidebar({
                   <h2 className="text-sm font-medium tracking-tight">
                     Who it&apos;s for
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.audience}
                   </h2>
                 </div>
@@ -918,18 +918,17 @@ function DetailsSidebar({
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Stage
                   </h2>
-                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                  <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                     {cell.stage}
                   </h2>
                 </div>
 
                 <StockPanel cellId={cell.id} stockUrl={cell.stockUrl} />
               </div>
-
             </div>
 
             <div>
-              <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+              <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                 Connect with <span className="capitalize"> {cell.company}</span>
               </h2>
               <div className="flex w-full items-center justify-between">
@@ -1103,7 +1102,6 @@ export default function GridHover() {
         ref={backgroundRef}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
-       
         {CELLS.map((cell) => (
           <Cell key={cell.id} cell={cell} onSeeMore={openSidebar} />
         ))}
