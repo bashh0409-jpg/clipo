@@ -1,7 +1,7 @@
 // components/StockPanel.tsx
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { STOCK_TICKERS, hasStockTicker } from "@/lib/stocks/tickers";
 import type { StockQuote } from "@/lib/stocks/types";
 
@@ -20,15 +20,15 @@ interface SparklineProps {
   format: (value: number) => string;
 }
 
-const SPARK_WIDTH = 186;
+const SPARK_FALLBACK_WIDTH = 200; // used only until the real width is measured
 const SPARK_HEIGHT = 64;
 const FOLLOW_EASING = 0.8; // fraction of the remaining distance covered per frame
 
-function chartScale(values: number[]) {
+function chartScale(values: number[], width: number) {
   const min = Math.min(...values);
   const span = Math.max(...values) - min || 1; // avoid divide-by-zero on a flat line
   return {
-    xAt: (i: number) => (i / (values.length - 1)) * SPARK_WIDTH,
+    xAt: (i: number) => (i / (values.length - 1)) * width,
     yAt: (v: number) => SPARK_HEIGHT - ((v - min) / span) * SPARK_HEIGHT,
   };
 }
@@ -129,8 +129,8 @@ function Quote({ quote, label }: { quote: StockQuote; label?: string }) {
   });
 
   return (
-    <div className="mb-2 flex items-center gap-3">
-      <div>
+    <div className="mb-2 flex w-full items-center gap-3">
+      <div className="shrink-0">
         <p className="text-sm font-medium tracking-tight">
           {formatter.format(quote.price)}{" "}
           {label && <span className="text-[#999]">· {label}</span>}
@@ -155,9 +155,25 @@ function Sparkline({ values, tone, format }: SparklineProps) {
   const currentRef = useRef(0); // where the marker is, eased toward the target
   const frameRef = useRef<number | null>(null);
 
+  const [width, setWidth] = useState(SPARK_FALLBACK_WIDTH);
+  const hasData = values.length >= 2;
+
+  // Measure the space the chart actually gets and keep it in sync on resize.
+  // hasData is a dependency because the container only mounts once there is data.
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    setWidth(el.clientWidth);
+    const observer = new ResizeObserver(([entry]) => {
+      setWidth(entry.contentRect.width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasData]);
+
   const scale = useMemo(
-    () => (values.length < 2 ? null : chartScale(values)),
-    [values],
+    () => (values.length < 2 ? null : chartScale(values, width)),
+    [values, width],
   );
 
   const points = useMemo(
@@ -211,7 +227,7 @@ function Sparkline({ values, tone, format }: SparklineProps) {
       tip.textContent = format(value);
       // Clamp so the tooltip never overflows either end of the chart
       const half = tip.offsetWidth / 2;
-      const left = Math.min(Math.max(x, half), SPARK_WIDTH - half) - half;
+      const left = Math.min(Math.max(x, half), width - half) - half;
       tip.style.transform = `translate3d(${left}px, 0, 0)`;
     }
   };
@@ -272,10 +288,12 @@ function Sparkline({ values, tone, format }: SparklineProps) {
     <div
       ref={containerRef}
       data-active="false"
+      // flex-1 + min-w-0: take all the space the price block leaves free, and
+      // allow shrinking below the SVG's intrinsic size on narrow screens.
       // touch-pan-y: horizontal drags reach our handlers, vertical drags still scroll the page.
       // select-none stops long-press from selecting text or opening the callout menu.
-      className="group relative touch-pan-y select-none"
-      style={{ width: SPARK_WIDTH, height: SPARK_HEIGHT }}
+      className="group relative min-w-0 flex-1 touch-pan-y select-none"
+      style={{ height: SPARK_HEIGHT }}
       onPointerEnter={handleStart}
       onPointerDown={handleStart}
       onPointerMove={handleMove}
@@ -287,10 +305,12 @@ function Sparkline({ values, tone, format }: SparklineProps) {
         ref={tipRef}
         className="pointer-events-none absolute bottom-full left-0 mb-1 min-w-20 whitespace-nowrap rounded bg-[#111] px-1.5 py-0.5 text-xs font-medium text-white opacity-0 transition-opacity group-data-[active=true]:opacity-100"
       />
+      {/* viewBox matches the measured pixel width, so strokes and the hover dot
+          stay undistorted at any size */}
       <svg
-        width={SPARK_WIDTH}
+        width="100%"
         height={SPARK_HEIGHT}
-        viewBox={`0 0 ${SPARK_WIDTH} ${SPARK_HEIGHT}`}
+        viewBox={`0 0 ${width} ${SPARK_HEIGHT}`}
         className={`overflow-visible ${tone}`}
         aria-hidden
       >
