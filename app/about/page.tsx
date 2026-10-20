@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#2535E8] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
-    
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
       <MouseFollowerImage />
 
       <div
@@ -22,7 +21,7 @@ export default function AboutPage() {
         aria-hidden="true"
         className="pointer-events-none absolute -right-12 top-44 h-48 w-48 rounded-full border border-white/15 md:right-[-3rem] md:top-32 md:h-[26rem] md:w-[26rem]"
       />
-      
+
       <section className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
         <p className="max-w-xl text-md leading-tight tracking-tight font-bold uppercase text-white/90 md:text-md ">
           About us

@@ -509,7 +509,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
         close();
       }}
-      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#2535E8] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
+      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#010c84] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
       <div
         data-base
@@ -531,7 +531,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       >
         <div
           data-reveal
-          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#2535E8]"
+          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#010c84]"
         >
           <p
             className={`${companyFont.className} text-[1.05rem] font-medium capitalize tracking-tight`}
@@ -558,7 +558,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto hidden tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
+            className="mt-auto hidden tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
           >
             See more
           </button>
@@ -703,7 +703,7 @@ function DetailsSidebar({
         aria-modal="true"
         aria-labelledby="details-title"
         tabIndex={-1}
-        className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#2535E8]"
+        className="invisible fixed left-0 top-0 z-[70] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
       >
         <div className="absolute bottom-6 right-6">
           <button
@@ -711,7 +711,7 @@ function DetailsSidebar({
             type="button"
             onClick={onClose}
             aria-label="Close details"
-            className="bg-[#2535E8] cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2535E8]"
+            className="bg-[#010c84] cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -910,10 +910,13 @@ export default function GridHover() {
         ref={backgroundRef}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
-        <Link href="/" aria-label="Clipo home" className="block left-4 top-4 fixed z-1000 absolute shrink-0">
+        <Link
+          href="/"
+          aria-label="Clipo home"
+          className="block left-4 top-4 fixed z-1000 absolute shrink-0"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            
             src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
             alt="Clipo"
             className="h-[56px] rotate-[15deg] w-auto"

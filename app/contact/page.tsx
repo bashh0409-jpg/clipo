@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#2535E8] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-32 top-24 h-80 w-80 rounded-full border border-white/15 md:right-[-8rem] md:top-16 md:h-[38rem] md:w-[38rem]"
