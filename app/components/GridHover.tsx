@@ -5,6 +5,10 @@ import type { RefObject } from "react";
 import gsap from "gsap";
 import { Fraunces } from "next/font/google";
 import Link from "next/link";
+import {
+  StockPanel
+  
+ } from "./StockPanel";
 const companyFont = Fraunces({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
@@ -25,6 +29,8 @@ interface CellData {
   founded: number; // number, not string, so you can sort or filter by it
   // Plain string so it covers private companies too, e.g. "Public · Nasdaq: WSE" or "Private"
   stage: string;
+  ceo?: string; // optional so unverified entries can stay blank rather than wrong
+  stockUrl?: string; // only set for publicly listed companies
 }
 
 interface CellProps {
@@ -47,12 +53,15 @@ const CELLS: CellData[] = [
     company: "Wise",
     title: "Money transfer and financial services",
     url: "https://wise.com/",
+    xUrl: "https://x.com/Wise",
     reveal:
       "Wise makes sending, receiving, and holding money across currencies cheaper and more transparent, for both individuals and businesses.",
     detail: "Multi-currency accounts and money transfers",
     location: "London, United Kingdom",
     founded: 2011,
     stage: "Public · Nasdaq: WSE",
+    ceo: "Kristo Käärmann",
+    stockUrl: "https://www.google.com/finance/quote/WSE:NASDAQ",
   },
   {
     id: "taxfix",
@@ -66,6 +75,7 @@ const CELLS: CellData[] = [
     location: "Berlin, Germany",
     founded: 2016,
     stage: "Private",
+    ceo: "Martin Ott",
   },
   {
     id: "syfe",
@@ -79,6 +89,7 @@ const CELLS: CellData[] = [
     location: "Singapore",
     founded: 2017,
     stage: "Private",
+    ceo: "Dhruv Arora",
   },
   {
     id: "neo-financial",
@@ -92,6 +103,7 @@ const CELLS: CellData[] = [
     location: "Calgary, Canada",
     founded: 2018,
     stage: "Private",
+    ceo: "Andrew Chau",
   },
   {
     id: "revolut",
@@ -106,6 +118,7 @@ const CELLS: CellData[] = [
     location: "London, United Kingdom",
     founded: 2015,
     stage: "Private",
+    ceo: "Nik Storonsky",
   },
   {
     id: "mondu",
@@ -152,12 +165,14 @@ const CELLS: CellData[] = [
     company: "Qonto",
     title: "Business banking",
     url: "https://qonto.com/",
+    xUrl: "https://x.com/Qonto",
     reveal:
       "Qonto is a European business finance platform for SMEs and freelancers, with business accounts, payment cards, expense management, invoicing, and accounting tools.",
     detail: "Business accounts, cards, and expense management",
     location: "Paris, France",
     founded: 2016,
     stage: "Private",
+    ceo: "Alexandre Prot",
   },
   {
     id: "bitpanda",
@@ -172,6 +187,7 @@ const CELLS: CellData[] = [
     location: "Vienna, Austria",
     founded: 2014,
     stage: "Private",
+    ceo: "Eric Demuth",
   },
   {
     id: "bukuwarung",
@@ -185,6 +201,7 @@ const CELLS: CellData[] = [
     location: "Jakarta, Indonesia",
     founded: 2019,
     stage: "Private",
+    ceo: "Abhinay Peddisetty",
   },
   {
     id: "velocity",
@@ -213,6 +230,7 @@ const CELLS: CellData[] = [
     location: "Miami, United States",
     founded: 2016,
     stage: "Private",
+    ceo: "Michael Rangel",
   },
   {
     id: "regate",
@@ -252,6 +270,7 @@ const CELLS: CellData[] = [
     location: "Dallas, United States",
     founded: 2016,
     stage: "Private",
+    ceo: "Melbourne O'Banion",
   },
   {
     id: "capitec",
@@ -265,6 +284,8 @@ const CELLS: CellData[] = [
     location: "Stellenbosch, South Africa",
     founded: 2001,
     stage: "Public · JSE: CPI",
+    ceo: "Graham Lee",
+    stockUrl: "https://www.google.com/finance/quote/CPI:JSE",
   },
   {
     id: "standard-bank",
@@ -278,6 +299,8 @@ const CELLS: CellData[] = [
     location: "Johannesburg, South Africa",
     founded: 1862,
     stage: "Public · JSE: SBK",
+    ceo: "Sim Tshabalala", // retiring end of 2027
+    stockUrl: "https://www.google.com/finance/quote/SBK:JSE",
   },
   {
     id: "stripe",
@@ -292,8 +315,8 @@ const CELLS: CellData[] = [
     location: "San Francisco, United States",
     founded: 2010,
     stage: "Private",
+    ceo: "Patrick Collison",
   },
-
   {
     id: "monzo",
     imgSrc: "/logos/monzo.svg",
@@ -307,6 +330,7 @@ const CELLS: CellData[] = [
     location: "London, United Kingdom",
     founded: 2015,
     stage: "Private",
+    ceo: "Diana Layfield", // succeeded TS Anil in 2026
   },
   {
     id: "nubank",
@@ -314,12 +338,15 @@ const CELLS: CellData[] = [
     company: "Nubank",
     title: "Digital banking and credit",
     url: "https://nubank.com.br/",
+    xUrl: "https://x.com/nubank",
     reveal:
       "Nubank is a Latin American digital bank serving millions of customers in Brazil, Mexico, and Colombia with credit cards, accounts, and loans.",
     detail: "Credit cards and accounts across Latin America",
     location: "São Paulo, Brazil",
     founded: 2013,
     stage: "Public · NYSE: NU",
+    ceo: "David Vélez",
+    stockUrl: "https://www.google.com/finance/quote/NU:NYSE",
   },
   {
     id: "klarna",
@@ -334,6 +361,8 @@ const CELLS: CellData[] = [
     location: "Stockholm, Sweden",
     founded: 2005,
     stage: "Public · NYSE: KLAR",
+    ceo: "Sebastian Siemiatkowski",
+    stockUrl: "https://www.google.com/finance/quote/KLAR:NYSE",
   },
   {
     id: "absa",
@@ -347,6 +376,8 @@ const CELLS: CellData[] = [
     location: "Johannesburg, South Africa",
     founded: 1991,
     stage: "Public · JSE: ABG",
+    ceo: "Kenny Fihla",
+    stockUrl: "https://www.google.com/finance/quote/ABG:JSE",
   },
   {
     id: "investec",
@@ -360,6 +391,8 @@ const CELLS: CellData[] = [
     location: "Sandton, South Africa",
     founded: 1974,
     stage: "Public · JSE: INL",
+    ceo: "Fani Titi",
+    stockUrl: "https://www.google.com/finance/quote/INL:JSE",
   },
   {
     id: "discovery-bank",
@@ -373,6 +406,7 @@ const CELLS: CellData[] = [
     location: "Sandton, South Africa",
     founded: 2019,
     stage: "Private · Discovery Limited group",
+    ceo: "Hylton Kallner",
   },
   {
     id: "tymebank",
@@ -386,6 +420,7 @@ const CELLS: CellData[] = [
     location: "Johannesburg, South Africa",
     founded: 2019,
     stage: "Private",
+    ceo: "Coen Jonker",
   },
   {
     id: "om-bank",
@@ -406,12 +441,14 @@ const CELLS: CellData[] = [
     company: "Ramp",
     title: "Corporate cards and spend management",
     url: "https://ramp.com/",
+    xUrl: "https://x.com/tryramp",
     reveal:
       "Ramp is a corporate card and spend management platform that automates expense tracking, approvals, and bill payments for finance teams.",
     detail: "Corporate cards and expense automation",
     location: "New York, United States",
     founded: 2019,
     stage: "Private",
+    ceo: "Eric Glyman",
   },
   {
     id: "fnb",
@@ -419,12 +456,15 @@ const CELLS: CellData[] = [
     company: "FNB",
     title: "Retail and business banking",
     url: "https://www.fnb.co.za/",
+    xUrl: "https://x.com/FNBSA",
     reveal:
       "FNB is a South African bank offering digital banking, transactional accounts, lending, investments, insurance, and financial services for individuals and businesses.",
     detail: "Personal banking, business banking, lending, and investments",
     location: "Johannesburg, South Africa",
     founded: 1838,
     stage: "Public · JSE: FSR",
+    ceo: "Harry Kellan", // Lytania Johnson takes over when he retires at end of 2026
+    stockUrl: "https://www.google.com/finance/quote/FSR:JSE", // parent: FirstRand
   },
   {
     id: "nedbank",
@@ -432,12 +472,15 @@ const CELLS: CellData[] = [
     company: "Nedbank",
     title: "Banking and financial services",
     url: "https://www.nedbank.co.za/",
+    xUrl: "https://x.com/Nedbank",
     reveal:
       "Nedbank is a South African financial services group providing personal and business banking, lending, investment, and wealth management solutions.",
     detail: "Personal banking, corporate banking, lending, and investments",
     location: "Sandton, South Africa",
     founded: 1888,
     stage: "Public · JSE: NED",
+    ceo: "Jason Quinn",
+    stockUrl: "https://www.google.com/finance/quote/NED:JSE",
   },
 ];
 
@@ -558,7 +601,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto hidden tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
+            className="mt-auto hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-xs font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
           >
             See more
           </button>
@@ -787,6 +830,12 @@ function DetailsSidebar({
                   </h2>
                 </div>
                 <div>
+                  <h2 className=" text-sm font-medium tracking-tight ">CEO</h2>
+                  <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
+                    {cell.ceo}
+                  </h2>
+                </div>
+                <div>
                   <h2 className=" text-sm font-medium tracking-tight ">
                     Stage
                   </h2>
@@ -794,8 +843,12 @@ function DetailsSidebar({
                     {cell.stage}
                   </h2>
                 </div>
+               
+                  <StockPanel cellId={cell.id} stockUrl={cell.stockUrl} />
+                
               </div>
             </div>
+            
             <div>
               <h2 className="mb-2 text-sm font-medium tracking-tight text-[#999]">
                 Connect with <span className="capitalize"> {cell.company}</span>
@@ -858,6 +911,25 @@ function DetailsSidebar({
                         d="M14.8885 2.5H17.4953L11.8002 8.85385L18.5 17.5H13.2541L9.14539 12.2562L4.44405 17.5H1.8357L7.92711 10.7038L1.5 2.5H6.87904L10.593 7.29308L14.8885 2.5ZM13.9736 15.9769H15.418L6.09417 3.94308H4.54413L13.9736 15.9769Z"
                         fill="currentColor"
                       ></path>
+                    </svg>
+                  </a>
+                )}
+                {cell.stockUrl && (
+                  <a
+                    href={cell.stockUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${cell.company} stocks`}
+                    className="mb-2 text-sm font-medium tracking-tight text-[#999]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20px"
+                      viewBox="0 -960 960 960"
+                      width="20px"
+                      fill="#999"
+                    >
+                      <path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-480h480q22 0 42 5t38 16v-21q0-33-23.5-56.5T720-720H240q-33 0-56.5 23.5T160-640v21q18-11 38-16t42-5Zm-74 130 445 108q9 2 18 0t17-8l139-116q-11-15-28-24.5t-37-9.5H240q-26 0-45.5 13.5T166-510Z" />
                     </svg>
                   </a>
                 )}
