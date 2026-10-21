@@ -37,6 +37,19 @@ export default function PageTransition() {
   }, [pathname, router]);
 
   useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionPreferenceChange = () => {
+      if (!reducedMotion.matches) return;
+      transitionRef.current?.kill();
+      transitionRef.current = null;
+      outgoingPageRef.current?.remove();
+      outgoingPageRef.current = null;
+      directionRef.current = null;
+      const page = document.querySelector<HTMLElement>("[data-page-content]");
+      if (page) gsap.set(page, { clearProps: "transform,filter" });
+      if (stageRef.current) gsap.set(stageRef.current, { autoAlpha: 0 });
+    };
+
     const captureOutgoingPage = (direction: number) => {
       const page = document.querySelector<HTMLElement>("[data-page-content]");
       const stage = stageRef.current;
@@ -119,9 +132,11 @@ export default function PageTransition() {
 
     document.addEventListener("click", handleDocumentClick, true);
     window.addEventListener("popstate", handlePopState);
+    reducedMotion.addEventListener("change", handleMotionPreferenceChange);
     return () => {
       document.removeEventListener("click", handleDocumentClick, true);
       window.removeEventListener("popstate", handlePopState);
+      reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       transitionRef.current?.kill();
     };
   }, []);

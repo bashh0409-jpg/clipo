@@ -49,7 +49,15 @@ export default function PageReveal({
     const progress = root.querySelector<HTMLElement>("[data-intro-progress]");
     if (!page || !curtain || !progress) return;
 
+    const stopIntroVideo = () => {
+      const player = introVideoRef.current;
+      if (!player) return;
+      player.pause();
+      player.preload = "none";
+    };
+
     if (initialPathnameRef.current !== "/") {
+      stopIntroVideo();
       gsap.set(page, { clearProps: "clipPath,zIndex" });
       gsap.set(curtain, { autoAlpha: 0 });
       root.removeAttribute("aria-busy");
@@ -58,6 +66,7 @@ export default function PageReveal({
 
     // Reduced motion: skip the intro entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      stopIntroVideo();
       gsap.set(page, { clipPath: "none" });
       gsap.set(curtain, { autoAlpha: 0 });
       root.removeAttribute("aria-busy");
@@ -130,9 +139,9 @@ export default function PageReveal({
         finish();
       }
     });
+    let activeTimeline: gsap.core.Timeline | null = null;
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");
-      let activeTimeline: gsap.core.Timeline | null = null;
 
       gsap.set(page, { clipPath: PAGE_HIDDEN });
       gsap.set(curtain, { autoAlpha: 1 });
@@ -163,15 +172,16 @@ export default function PageReveal({
             duration: 1.25,
             ease: "expo.inOut",
           })
-          .to({}, { duration: 2 })
+          .to({}, { duration: 0.15 })
           .set(page, { zIndex: 201 })
           .to(progress, { autoAlpha: 0, duration: 0.3 }, "<")
-          .to(
+          .fromTo(
             page,
+            { clipPath: PAGE_HIDDEN },
             {
               clipPath: PAGE_VISIBLE,
-              duration: 2,
-              ease: "expo.inOut",
+              duration: 1.5,
+              ease: "power2.inOut",
             },
             "<",
           );
@@ -212,10 +222,28 @@ export default function PageReveal({
       return () => activeTimeline?.kill();
     }, root);
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionPreferenceChange = () => {
+      if (!reducedMotion.matches) return;
+      cancelled = true;
+      activeTimeline?.kill();
+      cancelVideoWait();
+      stopIntroVideo();
+      if (handleWindowLoad) {
+        window.removeEventListener("load", handleWindowLoad);
+      }
+      gsap.set(page, { clearProps: "clipPath,zIndex,transform,filter" });
+      gsap.set(curtain, { autoAlpha: 0 });
+      html.style.overflow = previousOverflow;
+      root.removeAttribute("aria-busy");
+    };
+    reducedMotion.addEventListener("change", handleMotionPreferenceChange);
+
     return () => {
       cancelled = true;
       ctx.revert();
       cancelVideoWait();
+      reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       html.style.overflow = previousOverflow;
       if (handleWindowLoad) {
         window.removeEventListener("load", handleWindowLoad);

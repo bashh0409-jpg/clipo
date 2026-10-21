@@ -31,8 +31,6 @@ export default function Navbar() {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    if (reduceMotion.matches) return;
-
     const handleMove = (event: PointerEvent) => {
       if (event.pointerType === "touch") return;
 
@@ -70,10 +68,24 @@ export default function Navbar() {
       });
     };
 
-    window.addEventListener("pointermove", handleMove);
-    document.documentElement.addEventListener("pointerleave", handleLeave);
+    const updateMotion = () => {
+      window.removeEventListener("pointermove", handleMove);
+      document.documentElement.removeEventListener("pointerleave", handleLeave);
+      gsap.killTweensOf(logo);
 
+      if (reduceMotion.matches) {
+        gsap.set(logo, { clearProps: "transform" });
+        return;
+      }
+
+      window.addEventListener("pointermove", handleMove);
+      document.documentElement.addEventListener("pointerleave", handleLeave);
+    };
+
+    updateMotion();
+    reduceMotion.addEventListener("change", updateMotion);
     return () => {
+      reduceMotion.removeEventListener("change", updateMotion);
       window.removeEventListener("pointermove", handleMove);
       document.documentElement.removeEventListener("pointerleave", handleLeave);
       gsap.killTweensOf(logo);
@@ -95,40 +107,50 @@ export default function Navbar() {
    const activeItem =
      items.find((item) => item.dataset.active === "true") ?? null;
 
-   const movePill = (immediate = false) => {
-     if (!activeItem) {
-       gsap.to(pill, {
-         opacity: 0,
-         duration: 0.2,
-         overwrite: "auto",
-       });
-       return;
-     }
+   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+   const movePill = () => {
+   const immediate = reducedMotion.matches;
+   if (!activeItem) {
+     if (immediate) gsap.set(pill, { opacity: 0 });
+     else gsap.to(pill, { opacity: 0, duration: 0.2, overwrite: "auto" });
+     return;
+   }
 
-     const navRect = nav.getBoundingClientRect();
-     const itemRect = activeItem.getBoundingClientRect();
+   const navRect = nav.getBoundingClientRect();
+   const itemRect = activeItem.getBoundingClientRect();
 
-     gsap.to(pill, {
-       x: itemRect.left - navRect.left,
-       y: itemRect.top - navRect.top,
-       width: itemRect.width,
-       height: itemRect.height,
-       opacity: 1,
-       duration: immediate ? 0 : 0.45,
-       ease: "power3.inOut",
-       overwrite: "auto",
-     });
+   const position = {
+     x: itemRect.left - navRect.left,
+     y: itemRect.top - navRect.top,
+     width: itemRect.width,
+     height: itemRect.height,
+     opacity: 1,
+   };
+   if (immediate) {
+     gsap.set(pill, position);
+     return;
+   }
+
+   gsap.to(pill, {
+     ...position,
+     duration: immediate ? 0 : 0.45,
+     ease: "power3.inOut",
+     overwrite: "auto",
+   });
    };
 
    const handleResize = () => movePill();
+   const handleMotionPreferenceChange = () => movePill();
 
    // Animate the pill to the active route.
    movePill();
 
    window.addEventListener("resize", handleResize);
+   reducedMotion.addEventListener("change", handleMotionPreferenceChange);
 
    return () => {
      window.removeEventListener("resize", handleResize);
+     reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
      gsap.killTweensOf(pill);
    };
  }, [pathname]);

@@ -669,8 +669,41 @@ function Cell({ cell, onSeeMore }: CellProps) {
     return () => ctx.revert();
   }, []);
 
-  const open = () => tlRef.current?.play();
-  const close = () => tlRef.current?.reverse();
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionPreferenceChange = () => {
+      if (!reducedMotion.matches) return;
+      const visible =
+        rootRef.current?.matches(":hover") ||
+        rootRef.current?.contains(document.activeElement) ||
+        false;
+      tlRef.current?.pause().progress(visible ? 1 : 0);
+      const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+      if (wipe) {
+        gsap.set(wipe, {
+          clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)",
+        });
+      }
+    };
+
+    reducedMotion.addEventListener("change", handleMotionPreferenceChange);
+    return () =>
+      reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
+  }, []);
+
+  const setWipeVisible = (visible: boolean) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+      if (wipe) gsap.set(wipe, { clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)" });
+      return;
+    }
+
+    if (visible) tlRef.current?.play();
+    else tlRef.current?.reverse();
+  };
+
+  const open = () => setWipeVisible(true);
+  const close = () => setWipeVisible(false);
 
   return (
     <div
@@ -788,15 +821,18 @@ function DetailsSidebar({
   useEffect(() => {
     if (!portalReady || !cell) return;
 
-    const splitText = SplitText.create(
-      rootRef.current?.querySelectorAll<HTMLElement>(
-        "[data-panel] h2:not(.hidden), [data-panel] p",
-      ) ?? [],
-      {
-        type: "lines",
-        mask: "lines",
-      },
-    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const splitText = reducedMotion
+      ? null
+      : SplitText.create(
+          rootRef.current?.querySelectorAll<HTMLElement>(
+            "[data-panel] h2:not(.hidden), [data-panel] p",
+          ) ?? [],
+          {
+            type: "lines",
+            mask: "lines",
+          },
+        );
 
     const ctx = gsap.context(() => {
       tlRef.current = gsap
@@ -823,7 +859,7 @@ function DetailsSidebar({
           0,
         )
         .fromTo(
-          splitText.lines,
+          splitText?.lines ?? [],
           { clipPath: "inset(0% 0% 100% 0%)" },
           {
             clipPath: "inset(0% 0% 0% 0%)",
@@ -835,19 +871,42 @@ function DetailsSidebar({
 
     return () => {
       ctx.revert();
-      splitText.revert();
+      splitText?.revert();
     };
   }, [portalReady, cell]);
 
   useEffect(() => {
     if (!portalReady) return;
 
+    const motionPreference = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+    const reducedMotion = motionPreference.matches;
     const tl = tlRef.current;
-    if (!tl) return;
+    const handleMotionPreferenceChange = () => {
+      if (!motionPreference.matches) return;
+      tl?.pause().progress(isOpen ? 1 : 0);
+      gsap.set("[data-overlay], [data-panel], [data-item]", {
+        autoAlpha: isOpen ? 1 : 0,
+        clearProps: "clipPath",
+      });
+    };
+    motionPreference.addEventListener("change", handleMotionPreferenceChange);
 
     if (!isOpen) {
-      tl.timeScale(1.3).reverse();
-      return;
+      if (reducedMotion) {
+        gsap.set("[data-overlay], [data-panel]", {
+          autoAlpha: 0,
+          clearProps: "clipPath",
+        });
+      } else {
+        tl?.timeScale(1.3).reverse();
+      }
+      return () =>
+        motionPreference.removeEventListener(
+          "change",
+          handleMotionPreferenceChange,
+        );
     }
 
     // Only restore focus for keyboard users. Restoring it after a mouse click would
@@ -898,17 +957,29 @@ function DetailsSidebar({
 
     window.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
-    tl.timeScale(1).play();
-    // The panel is still visibility:hidden on this tick, so wait a beat before moving focus
-    const focusTimer = gsap.delayedCall(0.1, () =>
-      closeBtnRef.current?.focus({ preventScroll: true }),
-    );
+    let focusTimer: gsap.core.Tween | null = null;
+    if (reducedMotion) {
+      gsap.set("[data-overlay], [data-panel], [data-item]", {
+        autoAlpha: 1,
+        clearProps: "clipPath",
+      });
+      closeBtnRef.current?.focus({ preventScroll: true });
+    } else {
+      tl?.timeScale(1).play();
+      focusTimer = gsap.delayedCall(0.1, () =>
+        closeBtnRef.current?.focus({ preventScroll: true }),
+      );
+    }
 
     return () => {
+      motionPreference.removeEventListener(
+        "change",
+        handleMotionPreferenceChange,
+      );
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
       if (background) background.inert = wasInert;
-      focusTimer.kill();
+      focusTimer?.kill();
       trigger?.focus({ preventScroll: true });
     };
   }, [isOpen, backgroundRef, onClose, portalReady, cell]);

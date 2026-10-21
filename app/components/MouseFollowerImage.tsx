@@ -12,8 +12,6 @@ export default function MouseFollowerImage() {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    if (reduceMotion.matches) return;
-
     gsap.set(image, {
       transformPerspective: 800,
       transformOrigin: "center center",
@@ -50,10 +48,24 @@ export default function MouseFollowerImage() {
       });
     };
 
-    window.addEventListener("pointermove", handleMove);
-    document.documentElement.addEventListener("pointerleave", handleLeave);
+    const updateMotion = () => {
+      window.removeEventListener("pointermove", handleMove);
+      document.documentElement.removeEventListener("pointerleave", handleLeave);
+      gsap.killTweensOf(image);
 
+      if (reduceMotion.matches) {
+        gsap.set(image, { clearProps: "transform" });
+        return;
+      }
+
+      window.addEventListener("pointermove", handleMove);
+      document.documentElement.addEventListener("pointerleave", handleLeave);
+    };
+
+    updateMotion();
+    reduceMotion.addEventListener("change", updateMotion);
     return () => {
+      reduceMotion.removeEventListener("change", updateMotion);
       window.removeEventListener("pointermove", handleMove);
       document.documentElement.removeEventListener("pointerleave", handleLeave);
       gsap.killTweensOf(image);

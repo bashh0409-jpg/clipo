@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import MouseFollowerImage from "../components/MouseFollowerImage";
 
 export const metadata: Metadata = {
   title: "Sponsor | Veyra group",
@@ -10,30 +9,56 @@ export const metadata: Metadata = {
 
 export default function SponsorPage() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#010c84] px-6 py-32 text-center text-white">
-      <MouseFollowerImage />
+    <main className="relative min-h-screen w-full overflow-hidden bg-[#010c84] text-white">
+      <section
+        className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center px-6 py-20"
+        style={{ backgroundImage: "url('/images/about-bg.jpg')" }}
+      >
+        <video
+          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+          src="/start/cosmos_512150715.mp4"
+          poster="/images/about-bg.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
 
-      <section className="relative z-10 mx-auto max-w-3xl">
-        <p className="mb-5 text-xs font-semibold uppercase tracking-tigh bbh text-white/70">
-          Partner with Veyra
-        </p>
-       
-        <h1 className="text-xl font-bold uppercase  bbh leading-[0.98] tracking-tight sm:text-6xl md:text-4xl">
-          Put your brand in the discovery.
-        </h1>
+        {/* Overlay keeps text legible over the moving background. */}
+        <div aria-hidden="true" className="absolute inset-0 " />
 
-        <p className="mx-auto mt-7 max-w-sm text-sm tracking-tight leading-4 text-white font-medium">
-          Veyra introduces people to companies, products, and ideas. We’re open
-          to relevant sponsorship partnerships. Sponsored placements will be
-          clearly identified and are not independent endorsements. Get in touch
-          to discuss options and availability.
-        </p>
-        <Link
-          href="/contact"
-          className="mt-4 inline-flex uppercase items-center bg-[#F5D76A] px-2 py-1 text-xs font-semibold text-[#171717] "
-        >
-          Contact us
-        </Link>
+        <div className="relative z-10 flex w-full flex-col items-center text-center">
+          <h1 className="bbh flex w-full flex-col items-center justify-center font-black uppercase leading-[0.85] tracking-tighter text-white md:flex-row md:gap-[0.15em]">
+            <span className="text-[24vw] md:text-[8vw]">Veyra</span>
+            <span className="text-[24vw] md:text-[8vw]">Group</span>
+          </h1>
+
+          <div className="relative z-10 mx-auto mt-8 w-full max-w-3xl">
+            <p className="bbh mb-5 text-xs font-semibold uppercase tracking-tight text-white/70">
+              Partner with Veyra
+            </p>
+
+            <h2 className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-4xl md:text-5xl">
+              Put your brand in the discovery.
+            </h2>
+
+            <p className="mx-auto mt-7 max-w-sm text-sm font-medium leading-5 tracking-tight text-white">
+              Veyra introduces people to companies, products, and ideas. We’re
+              open to relevant sponsorship partnerships. Sponsored placements
+              will be clearly identified and are not independent endorsements.
+              Get in touch to discuss options and availability.
+            </p>
+
+            <Link
+              href="/contact"
+              className="mt-6 inline-flex items-center bg-[#F5D76A] px-4 py-3 text-xs font-semibold uppercase text-[#171717] transition-colors hover:bg-white"
+            >
+              Contact us
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );
