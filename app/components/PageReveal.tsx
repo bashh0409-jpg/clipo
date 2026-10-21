@@ -1,9 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import MuxPlayer, {
+  type MuxPlayerRefAttributes,
+} from "@mux/mux-player-react";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
+
+const MUX_PLAYBACK_ID = "s00AcBh8SwqiRssd7F017X7i01jYBOe5scgDrUyZYybOMg";
+const MUX_INTRO_VIDEO = "mux-intro-video";
 
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
@@ -18,7 +24,7 @@ const INTRO_IMAGES = [
   "/start/cosmos_2024599819.webp",
   "/start/cosmos_1980853716.webp",
 
-  "/start/cosmos_512150715-mobile.mp4",
+  MUX_INTRO_VIDEO,
 ] as const;
 
 const PAGE_HIDDEN = "inset(100% 0% 0% 0%)";
@@ -28,6 +34,7 @@ export default function PageReveal({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const introVideoRef = useRef<MuxPlayerRefAttributes | null>(null);
   const pathname = usePathname();
   const initialPathnameRef = useRef(pathname);
 
@@ -187,25 +194,35 @@ export default function PageReveal({
             className="invisible absolute left-1/2 top-1/2 aspect-[4/5] w-[min(35vw,35vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden will-change-[clip-path]"
             style={{ clipPath: "inset(50%)" }}
           >
-            {image.endsWith(".mp4") ? (
-              <video
-                src={image}
-                poster="/start/cosmos_1980853716.webp"
-                autoPlay={true}
-                muted={true}
-                loop={true}
-                playsInline={true}
+            {image === MUX_INTRO_VIDEO ? (
+              <MuxPlayer
+                ref={introVideoRef}
+                playbackId={MUX_PLAYBACK_ID}
+                streamType="on-demand"
+                autoPlay="muted"
+                muted
+                loop
+                playsInline
                 preload="auto"
+                poster=""
+                placeholder=""
                 aria-hidden="true"
                 data-intro-video
-                onCanPlay={(event) => {
-                  event.currentTarget.defaultMuted = true;
-                  event.currentTarget.muted = true;
-                  void event.currentTarget.play().catch((error: unknown) => {
-                    console.error("The intro video could not start playback.", error);
+                onCanPlay={() => {
+                  const player = introVideoRef.current;
+                  if (!player) return;
+                  player.muted = true;
+                  void player.play().catch((error: unknown) => {
+                    console.error("The Mux intro video could not start playback.", error);
                   });
                 }}
-                className="absolute inset-0 h-full w-full object-cover"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  "--media-object-fit": "cover",
+                  "--media-object-position": "center",
+                }}
+                className="absolute inset-0 h-full w-full"
               />
             ) : (
               <Image
