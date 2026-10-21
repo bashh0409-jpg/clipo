@@ -23,26 +23,28 @@ export default function AboutPage() {
       />
 
       <section className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
-        <p className="max-w-xl text-md leading-tight tracking-tight font-bold uppercase text-white/90 md:text-md ">
+        <p className="mb-5 text-xs font-semibold uppercase tracking-tigh bbh text-white/70">
           About us
         </p>
-        <h1 className="max-w-5xl text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-6xl md:text-8xl">
+
+        <h1 className="text-xl max-w-xl font-bold uppercase  bbh leading-[0.98] tracking-tight sm:text-6xl md:text-4xl">
           Good ideas deserve to be seen.
         </h1>
 
         <div className="mt-12 grid gap-10 border-t border-white/25 pt-7 md:mt-16 md:grid-cols-2 md:gap-16">
-          <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
+          <p className="max-w-xl text-lg leading-tight tracking-tighter font-bold uppercase text-white/90 md:text-2xl">
             Veyra group is a collection of companies and products making
             everyday experiences simpler, smarter, and more connected.
           </p>
+          
 
           <div className="max-w-xl space-y-5 text-sm leading-relaxed text-white/75 md:text-base">
-            <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
+            <p className="max-w-xl text-lg leading-tight tracking-tighter font-bold uppercase text-white/90 md:text-2xl">
               From moving money across borders to managing a business, filing
               taxes, or investing for the future, each company here solves a
               different kind of real-world challenge.
             </p>
-            <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
+            <p className="max-w-xl text-lg leading-tight tracking-tighter font-bold uppercase text-white/90 md:text-2xl">
               Explore the grid to discover the people building these products,
               the industries they work in, and the ideas behind them.
             </p>
@@ -59,24 +61,27 @@ export default function AboutPage() {
         </div>
 
         <section className="mt-16 max-w-4xl border-t border-white/25 pt-7">
-          <p className="mb-4 text-sm font-bold uppercase tracking-wide text-white/75">
+         
+
+          <p className="mb-5 text-xs font-semibold uppercase tracking-wide bbh text-white/70">
             Important information
           </p>
-          <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl">
+
+          <h1 className="text-xl max-w-xl font-bold uppercase  bbh leading-[0.98] tracking-tight sm:text-6xl md:text-4xl">
             About the information on this site
-          </h2>
-          <div className="mt-6 space-y-4 text-sm leading-relaxed text-white/75 md:text-base">
-            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+          </h1>
+          <div className="mt-6 space-y-4 text-sm leading-relaxe text-white/75 md:text-base">
+            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-xs">
               Veyra Group is an independent company-discovery website. Company
               names and logos belong to their respective owners; their inclusion
               does not imply affiliation, sponsorship, or endorsement.
             </p>
-            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-xs">
               Site content and market information are for general informational
               purposes only. They are not financial, investment, legal, or tax
               advice, and are not a recommendation to buy or sell any asset.
             </p>
-            <p className="max-w-xl mb-10 text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+            <p className="max-w-xl mb-10 text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-xs">
               Market data and company information may be delayed, incomplete, or
               inaccurate. Verify information independently and consult a
               qualified professional before relying on it or making decisions.
@@ -98,7 +103,6 @@ export default function AboutPage() {
         <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
           © 2026 Veyra group
         </p>
-
       </footer>
     </main>
   );
