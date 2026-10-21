@@ -167,7 +167,7 @@ export default function PageReveal({
     <div ref={rootRef} aria-busy="true">
       <div
         data-page-content
-        className="relative z-[1000]"
+        className="relative z-10"
         style={{ clipPath: PAGE_HIDDEN }}
       >
         {children}
