@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 
 const MUX_PLAYBACK_ID = "s00AcBh8SwqiRssd7F017X7i01jYBOe5scgDrUyZYybOMg";
 const MUX_INTRO_VIDEO = "mux-intro-video";
+const VIDEO_READY_TIMEOUT_MS = 10_000;
 
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
@@ -93,46 +94,41 @@ export default function PageReveal({
       const finish = () => {
         if (settled) return;
         settled = true;
-        player.removeEventListener("loadedmetadata", checkBuffered);
-        player.removeEventListener("durationchange", checkBuffered);
-        player.removeEventListener("progress", checkBuffered);
-        player.removeEventListener("canplaythrough", checkBuffered);
+        clearTimeout(timeoutId);
+        player.removeEventListener("canplay", handleVideoReady);
+        player.removeEventListener("playing", handleVideoReady);
         player.removeEventListener("error", handleVideoError);
         resolve();
       };
-      const checkBuffered = () => {
-        const duration = player.duration;
-        if (!Number.isFinite(duration) || duration <= 0) return;
-
-        const buffered = player.buffered;
-        for (let index = 0; index < buffered.length; index += 1) {
-          if (buffered.end(index) >= duration - 0.15) {
-            finish();
-            return;
-          }
-        }
-      };
-      const handleVideoError = () => {
-        console.error("The Mux intro video failed to load completely.");
+      const handleVideoReady = () => finish();
+      const handleVideoTimeout = () => {
+        setVideoNeedsTap(true);
+        console.warn(
+          "The Mux intro video did not become playable before the reveal timeout.",
+        );
         finish();
       };
+      const handleVideoError = () => {
+        console.error("The Mux intro video failed to load.");
+        finish();
+      };
+      const timeoutId = setTimeout(handleVideoTimeout, VIDEO_READY_TIMEOUT_MS);
 
       cancelVideoWait = () => {
         if (settled) return;
         settled = true;
-        player.removeEventListener("loadedmetadata", checkBuffered);
-        player.removeEventListener("durationchange", checkBuffered);
-        player.removeEventListener("progress", checkBuffered);
-        player.removeEventListener("canplaythrough", checkBuffered);
+        clearTimeout(timeoutId);
+        player.removeEventListener("canplay", handleVideoReady);
+        player.removeEventListener("playing", handleVideoReady);
         player.removeEventListener("error", handleVideoError);
         resolve();
       };
-      player.addEventListener("loadedmetadata", checkBuffered);
-      player.addEventListener("durationchange", checkBuffered);
-      player.addEventListener("progress", checkBuffered);
-      player.addEventListener("canplaythrough", checkBuffered);
+      player.addEventListener("canplay", handleVideoReady);
+      player.addEventListener("playing", handleVideoReady);
       player.addEventListener("error", handleVideoError);
-      checkBuffered();
+      if (player.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        finish();
+      }
     });
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");

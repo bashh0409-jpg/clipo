@@ -33,6 +33,7 @@ interface CellData {
   title: string;
   url: string;
   xUrl?: string;
+  instagramUrl?: string;
   linkedinUrl?: string;
   discordUrl?: string;
   reveal: string;
@@ -68,6 +69,7 @@ const CELLS: CellData[] = [
     title: "Money transfer and financial services",
     url: "https://wise.com/",
     xUrl: "https://x.com/Wise",
+    instagramUrl: "https://www.instagram.com/wise/",
     linkedinUrl: "https://www.linkedin.com/company/wiseaccount",
     reveal:
       "Wise makes sending, receiving, and holding money across currencies cheaper and more transparent, for both individuals and businesses.",
@@ -86,6 +88,7 @@ const CELLS: CellData[] = [
     company: "Taxfix",
     title: "Tax preparation software",
     url: "https://taxfix.de/en/",
+    instagramUrl: "https://www.instagram.com/taxfix/",
     linkedinUrl: "https://www.linkedin.com/company/taxfix",
     reveal:
       "Taxfix lets users file tax returns from an app or the web by answering simple questions, the way a tax advisor would, while its tax engine works out the best refund.",
@@ -103,6 +106,7 @@ const CELLS: CellData[] = [
     company: "Syfe",
     title: "Investment management",
     url: "https://www.syfe.com/",
+    instagramUrl: "https://www.instagram.com/syfe.sg/",
     linkedinUrl: "https://www.linkedin.com/company/syfe",
     reveal:
       "Syfe is a digital wealth management platform offering managed portfolios and self-directed investing, all handled online.",
@@ -121,6 +125,7 @@ const CELLS: CellData[] = [
     company: "Neo Financial",
     title: "Digital banking and consumer finance",
     url: "https://neofinancial.com/",
+    instagramUrl: "https://www.instagram.com/neofinancial/",
     linkedinUrl: "https://www.linkedin.com/company/neofinancial",
     reveal:
       "Neo Financial is a Canadian fintech that puts a cash back credit card, no-fee accounts, managed investments, and digital mortgages into a single app.",
@@ -140,6 +145,7 @@ const CELLS: CellData[] = [
     title: "Digital banking",
     url: "https://www.revolut.com/",
     xUrl: "https://x.com/Revolut",
+    instagramUrl: "https://www.instagram.com/revolut/",
     linkedinUrl: "https://www.linkedin.com/company/revolut",
     reveal:
       "Revolut is a global financial app combining everyday banking, currency exchange, trading, and business accounts under one roof.",
@@ -157,6 +163,7 @@ const CELLS: CellData[] = [
     company: "Mondu",
     title: "B2B payments",
     url: "https://www.mondu.ai/",
+    instagramUrl: "https://www.instagram.com/mondu.ai/",
     linkedinUrl: "https://www.linkedin.com/company/mondu",
     reveal:
       "Mondu provides buy-now-pay-later and invoice payment options for business buyers, while sellers get paid upfront and the credit risk moves to Mondu.",
@@ -173,6 +180,7 @@ const CELLS: CellData[] = [
     company: "Atlas",
     title: "Premium credit cards",
     url: "https://atlascard.com/",
+    instagramUrl: "https://www.instagram.com/atlascard/",
     linkedinUrl: "https://www.linkedin.com/company/atlas-card",
     reveal:
       "Atlas is a members-only charge card built around last-minute access to sought-after dining, travel, and event experiences.",
@@ -190,6 +198,7 @@ const CELLS: CellData[] = [
     company: "Majority",
     title: "Digital banking",
     url: "https://www.majority.com/",
+    instagramUrl: "https://www.instagram.com/majority/",
     linkedinUrl: "https://www.linkedin.com/company/majority",
     reveal:
       "Majority is a mobile banking app aimed at immigrant communities, combining everyday banking with low-cost international money transfers.",
@@ -207,6 +216,7 @@ const CELLS: CellData[] = [
     title: "Business banking",
     url: "https://qonto.com/",
     xUrl: "https://x.com/Qonto",
+    instagramUrl: "https://www.instagram.com/qonto/",
     linkedinUrl: "https://www.linkedin.com/company/qonto",
     reveal:
       "Qonto is a European business finance platform for SMEs and freelancers, with business accounts, payment cards, expense management, invoicing, and accounting tools.",
@@ -225,6 +235,7 @@ const CELLS: CellData[] = [
     title: "Digital asset investment",
     url: "https://www.bitpanda.com/",
     xUrl: "https://x.com/bitpanda",
+    instagramUrl: "https://www.instagram.com/bitpanda/",
     linkedinUrl: "https://www.linkedin.com/company/bitpanda",
     reveal:
       "Bitpanda is a European investment platform offering cryptocurrencies, stocks, ETFs, and precious metals, with availability varying by market.",
@@ -242,6 +253,7 @@ const CELLS: CellData[] = [
     company: "BukuWarung",
     title: "Small-business fintech",
     url: "https://bukuwarung.com/",
+    instagramUrl: "https://www.instagram.com/bukuwarung/",
     linkedinUrl: "https://www.linkedin.com/company/bukuwarung",
     reveal:
       "BukuWarung is an Indonesian platform that helps micro and small merchants handle bookkeeping, digital payments, and day-to-day business operations.",
@@ -260,6 +272,7 @@ const CELLS: CellData[] = [
     title: "Revenue-based financing",
     url: "https://velocity.in",
     xUrl: "https://x.com/velocity_in",
+    instagramUrl: "https://www.instagram.com/velocity.in/",
     linkedinUrl: "https://www.linkedin.com/company/velocity-in",
     reveal:
       "Velocity gives digital-first Indian businesses revenue-based financing and eCommerce analytics, alongside a corporate credit card and a payments management platform.",
@@ -277,6 +290,7 @@ const CELLS: CellData[] = [
     title: "Small-business banking",
     url: "https://novo.co/",
     xUrl: "https://x.com/Novo_HQ",
+    instagramUrl: "https://www.instagram.com/novo_hq/",
     linkedinUrl: "https://www.linkedin.com/company/novohq",
     reveal:
       "Novo is a business banking platform for small business owners, pairing simple online accounts with tools that save time and improve cash flow.",
@@ -310,6 +324,7 @@ const CELLS: CellData[] = [
     company: "Albo",
     title: "Digital banking",
     url: "https://www.albo.mx/",
+    instagramUrl: "https://www.instagram.com/albo.mx/",
     linkedinUrl: "https://www.linkedin.com/company/albomx",
     reveal:
       "Albo is a Mexican digital bank that lets people manage everyday money entirely from an app.",
@@ -327,6 +342,7 @@ const CELLS: CellData[] = [
     company: "Bestow",
     title: "Life insurance",
     url: "https://www.bestow.com/",
+    instagramUrl: "https://www.instagram.com/bestow/",
     linkedinUrl: "https://www.linkedin.com/company/bestow",
     reveal:
       "Bestow is an insurtech that provides the technology behind digital life insurance, replacing lengthy paperwork with a fast online application.",
@@ -344,6 +360,7 @@ const CELLS: CellData[] = [
     company: "Capitec",
     title: "Retail banking and financial services",
     url: "https://www.capitecbank.co.za/",
+    instagramUrl: "https://www.instagram.com/capitecbank/",
     linkedinUrl: "https://www.linkedin.com/company/capitec-bank",
     reveal:
       "Capitec is a South African bank offering digital banking, savings, credit, payments, and everyday financial services to individuals.",
@@ -363,6 +380,7 @@ const CELLS: CellData[] = [
     company: "Standard Bank",
     title: "Commercial and retail banking",
     url: "https://www.standardbank.co.za/",
+    instagramUrl: "https://www.instagram.com/standardbanksa/",
     linkedinUrl: "https://www.linkedin.com/company/standard-bank",
     reveal:
       "Standard Bank is a major African financial services group providing personal and business banking, lending, investment, and wealth management services.",
@@ -383,6 +401,7 @@ const CELLS: CellData[] = [
     title: "Payments infrastructure",
     url: "https://stripe.com/",
     xUrl: "https://x.com/stripe",
+    instagramUrl: "https://www.instagram.com/stripe/",
     linkedinUrl: "https://www.linkedin.com/company/stripe",
     reveal:
       "Stripe provides the payments infrastructure that online businesses use to accept payments, manage subscriptions, and move money globally.",
@@ -401,6 +420,7 @@ const CELLS: CellData[] = [
     title: "Digital banking",
     url: "https://monzo.com/",
     xUrl: "https://x.com/monzo",
+    instagramUrl: "https://www.instagram.com/monzo/",
     linkedinUrl: "https://www.linkedin.com/company/monzo-bank",
     reveal:
       "Monzo is a UK digital bank built around its mobile app, offering current accounts, savings pots, and instant spending notifications.",
@@ -419,6 +439,7 @@ const CELLS: CellData[] = [
     title: "Digital banking and credit",
     url: "https://nubank.com.br/",
     xUrl: "https://x.com/nubank",
+    instagramUrl: "https://www.instagram.com/nubank/",
     linkedinUrl: "https://www.linkedin.com/company/nubank",
     reveal:
       "Nubank is a Latin American digital bank serving millions of customers in Brazil, Mexico, and Colombia with credit cards, accounts, and loans.",
@@ -438,6 +459,7 @@ const CELLS: CellData[] = [
     title: "Buy now, pay later",
     url: "https://www.klarna.com/",
     xUrl: "https://x.com/klarna",
+    instagramUrl: "https://www.instagram.com/klarna/",
     linkedinUrl: "https://www.linkedin.com/company/klarna",
     reveal:
       "Klarna is a Swedish payments company known for letting shoppers pay later or in instalments at online and in-store merchants.",
@@ -456,6 +478,7 @@ const CELLS: CellData[] = [
     company: "Absa",
     title: "Banking and financial services",
     url: "https://www.absa.co.za/",
+    instagramUrl: "https://www.instagram.com/absasouthafrica/",
     linkedinUrl: "https://www.linkedin.com/company/absa",
     reveal:
       "Absa is a major African financial services group offering personal and business banking, lending, insurance, and investment products.",
@@ -475,6 +498,7 @@ const CELLS: CellData[] = [
     company: "Investec",
     title: "International banking and wealth management",
     url: "https://www.investec.com/",
+    instagramUrl: "https://www.instagram.com/investec/",
     linkedinUrl: "https://www.linkedin.com/company/investec",
     reveal:
       "Investec is an international financial services group specialising in private banking, wealth management, and investment services.",
@@ -494,6 +518,7 @@ const CELLS: CellData[] = [
     company: "Discovery Bank",
     title: "Digital banking and financial services",
     url: "https://www.discovery.co.za/",
+    instagramUrl: "https://www.instagram.com/discovery_sa/",
     linkedinUrl: "https://www.linkedin.com/company/discovery-bank",
     reveal:
       "Discovery Bank is a digital bank that combines transactional accounts, savings, credit cards, and personalised financial rewards.",
@@ -512,6 +537,7 @@ const CELLS: CellData[] = [
     company: "TymeBank",
     title: "Digital banking",
     url: "https://www.tymebank.co.za/",
+    instagramUrl: "https://www.instagram.com/tymebank/",
     linkedinUrl: "https://www.linkedin.com/company/tymebank",
     reveal:
       "TymeBank is a digital banking provider offering accessible transactional accounts, savings products, and business banking services.",
@@ -530,6 +556,7 @@ const CELLS: CellData[] = [
     company: "OM Bank",
     title: "Digital banking and financial services",
     url: "https://www.oldmutual.co.za/",
+    instagramUrl: "https://www.instagram.com/oldmutualsa/",
     linkedinUrl: "https://www.linkedin.com/company/om-bank",
     reveal:
       "OM Bank is associated with Old Mutual's financial services ecosystem, focused on making everyday banking and financial products more accessible to customers.",
@@ -548,6 +575,7 @@ const CELLS: CellData[] = [
     title: "Corporate cards and spend management",
     url: "https://ramp.com/",
     xUrl: "https://x.com/tryramp",
+    instagramUrl: "https://www.instagram.com/tryramp/",
     linkedinUrl: "https://www.linkedin.com/company/ramp",
     reveal:
       "Ramp is a corporate card and spend management platform that automates expense tracking, approvals, and bill payments for finance teams.",
@@ -566,6 +594,7 @@ const CELLS: CellData[] = [
     title: "Retail and business banking",
     url: "https://www.fnb.co.za/",
     xUrl: "https://x.com/FNBSA",
+    instagramUrl: "https://www.instagram.com/fnbsa/",
     linkedinUrl: "https://www.linkedin.com/company/fnb",
     reveal:
       "FNB is a South African bank offering digital banking, transactional accounts, lending, investments, insurance, and financial services for individuals and businesses.",
@@ -585,6 +614,7 @@ const CELLS: CellData[] = [
     title: "Banking and financial services",
     url: "https://www.nedbank.co.za/",
     xUrl: "https://x.com/Nedbank",
+    instagramUrl: "https://www.instagram.com/nedbank/",
     linkedinUrl: "https://www.linkedin.com/company/nedbank",
     reveal:
       "Nedbank is a South African financial services group providing personal and business banking, lending, investment, and wealth management solutions.",
@@ -1063,6 +1093,43 @@ function DetailsSidebar({
                     </svg>
                   </a>
 
+                  {cell.instagramUrl && (
+                    <a
+                      href={cell.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${cell.company} on Instagram`}
+                      className="mb-2 text-sm font-medium tracking-tight text-[#999] hover:text-black duration-500 transition-color"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="3"
+                          width="18"
+                          height="18"
+                          rx="5"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="4"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                        />
+                        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+                      </svg>
+                    </a>
+                  )}
+
                   {cell.xUrl && (
                     <a
                       href={cell.xUrl}
@@ -1112,7 +1179,7 @@ function DetailsSidebar({
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${cell.company} stocks`}
-                      className="mb-2 text-sm font-medium tracking-tight text-[#999] hover:text-black duration-500 transition-color"
+                      className="mb-2 text-sm gap-1 flex items-center font-medium tracking-tight text-[#999] hover:text-black duration-500 transition-color"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1122,7 +1189,7 @@ function DetailsSidebar({
                         fill="currentColor"
                       >
                         <path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-480h480q22 0 42 5t38 16v-21q0-33-23.5-56.5T720-720H240q-33 0-56.5 23.5T160-640v21q18-11 38-16t42-5Zm-74 130 445 108q9 2 18 0t17-8l139-116q-11-15-28-24.5t-37-9.5H240q-26 0-45.5 13.5T166-510Z" />
-                      </svg>
+                      </svg>Stocks
                     </a>
                   )}
                   {cell.discordUrl && (
