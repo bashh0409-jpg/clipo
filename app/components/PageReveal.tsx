@@ -4,7 +4,7 @@ import Image from "next/image";
 import MuxPlayer, {
   type MuxPlayerRefAttributes,
 } from "@mux/mux-player-react";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
 
@@ -35,6 +35,7 @@ export default function PageReveal({
 }: Readonly<{ children: React.ReactNode }>) {
   const rootRef = useRef<HTMLDivElement>(null);
   const introVideoRef = useRef<MuxPlayerRefAttributes | null>(null);
+  const [videoNeedsTap, setVideoNeedsTap] = useState(false);
   const pathname = usePathname();
   const initialPathnameRef = useRef(pathname);
 
@@ -68,6 +69,7 @@ export default function PageReveal({
     html.style.overflow = "hidden";
     let cancelled = false;
     let handleWindowLoad: (() => void) | undefined;
+    let cancelVideoWait = () => {};
     const windowLoaded =
       document.readyState === "complete"
         ? Promise.resolve()
@@ -80,6 +82,58 @@ export default function PageReveal({
         image.decode().catch(() => undefined),
       ),
     );
+    const videoReady = new Promise<void>((resolve) => {
+      const player = introVideoRef.current;
+      if (!player) {
+        resolve();
+        return;
+      }
+
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        player.removeEventListener("loadedmetadata", checkBuffered);
+        player.removeEventListener("durationchange", checkBuffered);
+        player.removeEventListener("progress", checkBuffered);
+        player.removeEventListener("canplaythrough", checkBuffered);
+        player.removeEventListener("error", handleVideoError);
+        resolve();
+      };
+      const checkBuffered = () => {
+        const duration = player.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        const buffered = player.buffered;
+        for (let index = 0; index < buffered.length; index += 1) {
+          if (buffered.end(index) >= duration - 0.15) {
+            finish();
+            return;
+          }
+        }
+      };
+      const handleVideoError = () => {
+        console.error("The Mux intro video failed to load completely.");
+        finish();
+      };
+
+      cancelVideoWait = () => {
+        if (settled) return;
+        settled = true;
+        player.removeEventListener("loadedmetadata", checkBuffered);
+        player.removeEventListener("durationchange", checkBuffered);
+        player.removeEventListener("progress", checkBuffered);
+        player.removeEventListener("canplaythrough", checkBuffered);
+        player.removeEventListener("error", handleVideoError);
+        resolve();
+      };
+      player.addEventListener("loadedmetadata", checkBuffered);
+      player.addEventListener("durationchange", checkBuffered);
+      player.addEventListener("progress", checkBuffered);
+      player.addEventListener("canplaythrough", checkBuffered);
+      player.addEventListener("error", handleVideoError);
+      checkBuffered();
+    });
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");
       let activeTimeline: gsap.core.Timeline | null = null;
@@ -150,11 +204,14 @@ export default function PageReveal({
         activeTimeline.play();
       };
 
-      void Promise.all([windowLoaded, document.fonts.ready, pageImagesLoaded]).then(
-        () => {
-          if (!cancelled) playImageSequence();
-        },
-      );
+      void Promise.all([
+        windowLoaded,
+        document.fonts.ready,
+        pageImagesLoaded,
+        videoReady,
+      ]).then(() => {
+        if (!cancelled) playImageSequence();
+      });
 
       return () => activeTimeline?.kill();
     }, root);
@@ -162,6 +219,7 @@ export default function PageReveal({
     return () => {
       cancelled = true;
       ctx.revert();
+      cancelVideoWait();
       html.style.overflow = previousOverflow;
       if (handleWindowLoad) {
         window.removeEventListener("load", handleWindowLoad);
@@ -184,46 +242,58 @@ export default function PageReveal({
 
       <div
         data-page-curtain
-        aria-hidden="true"
         className="pointer-events-none invisible fixed inset-0 z-[200] overflow-hidden bg-[#fff]"
       >
         {INTRO_IMAGES.map((image) => (
           <div
             key={image}
             data-intro-image
-            className="invisible absolute left-1/2 top-1/2 aspect-[4/5] w-[min(35vw,35vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden will-change-[clip-path]"
+            className="invisible absolute left-1/2 top-1/2 aspect-[4/5] w-[min(65vw,60vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden will-change-[clip-path] sm:w-[min(35vw,35vh)]"
             style={{ clipPath: "inset(50%)" }}
           >
             {image === MUX_INTRO_VIDEO ? (
-              <MuxPlayer
-                ref={introVideoRef}
-                playbackId={MUX_PLAYBACK_ID}
-                streamType="on-demand"
-                autoPlay="muted"
-                muted
-                loop
-                playsInline
-                preload="auto"
-                poster=""
-                placeholder=""
-                aria-hidden="true"
-                data-intro-video
-                onCanPlay={() => {
-                  const player = introVideoRef.current;
-                  if (!player) return;
-                  player.muted = true;
-                  void player.play().catch((error: unknown) => {
-                    console.error("The Mux intro video could not start playback.", error);
-                  });
-                }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  "--media-object-fit": "cover",
-                  "--media-object-position": "center",
-                }}
-                className="absolute inset-0 h-full w-full"
-              />
+              <>
+                <MuxPlayer
+                  ref={introVideoRef}
+                  playbackId={MUX_PLAYBACK_ID}
+                  streamType="on-demand"
+                  autoPlay="muted"
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  poster=""
+                  placeholder=""
+                  aria-label="Veyra introduction video"
+                  data-intro-video
+                  onCanPlay={() => {
+                    const player = introVideoRef.current;
+                    if (!player) return;
+                    player.muted = true;
+                    void player.play().catch((error: unknown) => {
+                      setVideoNeedsTap(true);
+                      console.error(
+                        "The Mux intro video could not start playback.",
+                        error,
+                      );
+                    });
+                  }}
+                  onPlaying={() => setVideoNeedsTap(false)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    "--media-object-fit": "cover",
+                    "--media-object-position": "center",
+                    "--media-control-bar-display": "none",
+                  }}
+                  className="absolute inset-0 h-full w-full"
+                />
+                {videoNeedsTap && (
+                  <span className="sr-only">
+                    Video playback needs a tap to start.
+                  </span>
+                )}
+              </>
             ) : (
               <Image
                 src={image}
@@ -237,12 +307,33 @@ export default function PageReveal({
           </div>
         ))}
 
+        {videoNeedsTap && (
+          <button
+            type="button"
+            className="pointer-events-auto absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded-full bg-black/75 px-5 py-3 text-sm font-medium text-white shadow-lg backdrop-blur-sm"
+            onClick={() => {
+              const player = introVideoRef.current;
+              if (!player) return;
+              player.muted = true;
+              void player.play().catch((error: unknown) => {
+                console.error(
+                  "The Mux intro video could not start after tapping play.",
+                  error,
+                );
+              });
+            }}
+          >
+            Tap to load intro
+          </button>
+        )}
+
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 aspect-[4/1] w-[min(35vw,420px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
           <Image
             src="/logos/veyra.svg"
             alt=""
             fill
             sizes="30vw"
+            aria-hidden="true"
             className="object-cover"
           />
         </div>
