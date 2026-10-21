@@ -35,6 +35,7 @@ export default function AboutPage() {
             Veyra group is a collection of companies and products making
             everyday experiences simpler, smarter, and more connected.
           </p>
+
           <div className="max-w-xl space-y-5 text-sm leading-relaxed text-white/75 md:text-base">
             <p className="max-w-xl text-xl leading-tight tracking-tight font-bold uppercase text-white/90 md:text-2xl">
               From moving money across borders to managing a business, filing
@@ -56,15 +57,48 @@ export default function AboutPage() {
             </Link>
           </div>
         </div>
+
+        <section className="mt-16 max-w-4xl border-t border-white/25 pt-7">
+          <p className="mb-4 text-sm font-bold uppercase tracking-wide text-white/75">
+            Important information
+          </p>
+          <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl">
+            About the information on this site
+          </h2>
+          <div className="mt-6 space-y-4 text-sm leading-relaxed text-white/75 md:text-base">
+            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+              Veyra Group is an independent company-discovery website. Company
+              names and logos belong to their respective owners; their inclusion
+              does not imply affiliation, sponsorship, or endorsement.
+            </p>
+            <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+              Site content and market information are for general informational
+              purposes only. They are not financial, investment, legal, or tax
+              advice, and are not a recommendation to buy or sell any asset.
+            </p>
+            <p className="max-w-xl mb-10 text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+              Market data and company information may be delayed, incomplete, or
+              inaccurate. Verify information independently and consult a
+              qualified professional before relying on it or making decisions.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="max-w-xl  text-justify underline text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm"
+          >
+            Contact us about this information
+          </Link>
+        </section>
       </section>
 
-      <footer className="relative z-10 flex-co mx-auto mt-16 flex w-full max-w-7xl justify-between border-t border-white/25 pt-4 text-xs text-white/60">
-        <p className="max-w-xl text-lg leading-tight tracking-tight font-bold uppercase text-white/90 md:text-lg">
+      <footer className="relative z-10 mx-auto mt-16 flex w-full max-w-7xl flex-wrap justify-between gap-4 border-t border-white/25 pt-4 text-xs text-white/60">
+        <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
           Companies, products, and ideas.
         </p>
-        <p className="max-w-xl text-lg leading-tight tracking-tight font-bold uppercase text-white/90 md:text-lg">
-          2026 Veyra group All rights reserved.
+        <p className="max-w-xl text-justify text-sm leading-tight tracking-tight font-bold uppercase text-white/90 md:text-sm">
+          © 2026 Veyra group
         </p>
+
       </footer>
     </main>
   );
