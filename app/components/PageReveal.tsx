@@ -18,7 +18,7 @@ const INTRO_IMAGES = [
   "/start/cosmos_2024599819.webp",
   "/start/cosmos_1980853716.webp",
 
-  "/start/cosmos_512150715.mp4",
+  "/start/cosmos_512150715-mobile.mp4",
 ] as const;
 
 const PAGE_HIDDEN = "inset(100% 0% 0% 0%)";
@@ -190,12 +190,21 @@ export default function PageReveal({
             {image.endsWith(".mp4") ? (
               <video
                 src={image}
-                autoPlay
-                muted
-                loop
-                playsInline
+                poster="/start/cosmos_1980853716.webp"
+                autoPlay={true}
+                muted={true}
+                loop={true}
+                playsInline={true}
                 preload="auto"
                 aria-hidden="true"
+                data-intro-video
+                onCanPlay={(event) => {
+                  event.currentTarget.defaultMuted = true;
+                  event.currentTarget.muted = true;
+                  void event.currentTarget.play().catch((error: unknown) => {
+                    console.error("The intro video could not start playback.", error);
+                  });
+                }}
                 className="absolute inset-0 h-full w-full object-cover"
               />
             ) : (
