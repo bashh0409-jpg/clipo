@@ -622,16 +622,6 @@ function Cell({ cell, onSeeMore }: CellProps) {
           { clipPath: "inset(100% 0% 0% 0%)" },
           { clipPath: "inset(0% 0% 0% 0%)" },
           0,
-        )
-        .fromTo(
-          "[data-reveal] > *",
-          { clipPath: "inset(0% 0% 100% 0%)" },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 0.65,
-            stagger: 0.12,
-          },
-          0.3,
         );
     }, rootRef);
 
