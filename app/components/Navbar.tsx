@@ -81,9 +81,9 @@ export default function Navbar() {
   }, []);
 
   // Keep the pill on the active route.
-  // It does not respond to hover or focus.
- useEffect(() => {
-   const nav = navRef.current;
+   // It does not respond to hover or focus.
+  useEffect(() => {
+    const nav = navRef.current;
    const pill = pillRef.current;
 
    if (!nav || !pill) return;

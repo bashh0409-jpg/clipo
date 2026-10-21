@@ -6,6 +6,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Logo from "./components/Logo";
 import SmoothScroll from "./components/SmoothScroll";
+import PageReveal from "./components/PageReveal";
+import PageTransition from "./components/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +39,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
-        {children}
+        <PageReveal>{children}</PageReveal>
+        <PageTransition />
 
         <Navbar />
         <Logo />

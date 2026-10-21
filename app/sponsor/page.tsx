@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MouseFollowerImage from "../components/MouseFollowerImage";
 
 export const metadata: Metadata = {
   title: "Contact | Veyra group",
@@ -7,6 +8,8 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40"></main>
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#010c84] px-6 pb-10 pt-32 text-white md:px-12 md:pt-40">
+      <MouseFollowerImage />
+    </main>
   );
 }

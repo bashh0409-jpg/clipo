@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { usePathname } from "next/navigation";
 
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
@@ -27,8 +28,10 @@ export default function PageReveal({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const initialPathnameRef = useRef(pathname);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
@@ -36,6 +39,13 @@ export default function PageReveal({
     const curtain = root.querySelector<HTMLElement>("[data-page-curtain]");
     const progress = root.querySelector<HTMLElement>("[data-intro-progress]");
     if (!page || !curtain || !progress) return;
+
+    if (initialPathnameRef.current !== "/") {
+      gsap.set(page, { clearProps: "clipPath,zIndex" });
+      gsap.set(curtain, { autoAlpha: 0 });
+      root.removeAttribute("aria-busy");
+      return;
+    }
 
     // Reduced motion: skip the intro entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -49,7 +59,7 @@ export default function PageReveal({
     const html = document.documentElement;
     const previousOverflow = html.style.overflow;
     html.style.overflow = "hidden";
-    let resourcesReady = false;
+    let cancelled = false;
     let handleWindowLoad: (() => void) | undefined;
     const windowLoaded =
       document.readyState === "complete"
@@ -63,17 +73,12 @@ export default function PageReveal({
         image.decode().catch(() => undefined),
       ),
     );
-    void Promise.all([windowLoaded, document.fonts.ready, pageImagesLoaded]).then(
-      () => {
-        resourcesReady = true;
-      },
-    );
-
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");
       let activeTimeline: gsap.core.Timeline | null = null;
 
       gsap.set(page, { clipPath: PAGE_HIDDEN });
+      gsap.set(curtain, { autoAlpha: 1 });
       gsap.set(images, {
         autoAlpha: 0,
         clipPath: "inset(50%)",
@@ -108,7 +113,7 @@ export default function PageReveal({
             page,
             {
               clipPath: PAGE_VISIBLE,
-              duration: 1.4,
+              duration: 2,
               ease: "expo.inOut",
             },
             "<",
@@ -118,18 +123,7 @@ export default function PageReveal({
       const playImageSequence = () => {
         activeTimeline = gsap.timeline({
           defaults: { ease: "power2.inOut" },
-          onComplete: () => {
-            if (resourcesReady) {
-              completeReveal();
-              return;
-            }
-
-            gsap.set(images, {
-              autoAlpha: 0,
-              clipPath: "inset(50%)",
-            });
-            playImageSequence();
-          },
+          onComplete: completeReveal,
         });
 
         // Each new square opens over the previous image, which remains underneath.
@@ -149,12 +143,17 @@ export default function PageReveal({
         activeTimeline.play();
       };
 
-      playImageSequence();
+      void Promise.all([windowLoaded, document.fonts.ready, pageImagesLoaded]).then(
+        () => {
+          if (!cancelled) playImageSequence();
+        },
+      );
 
       return () => activeTimeline?.kill();
     }, root);
 
     return () => {
+      cancelled = true;
       ctx.revert();
       html.style.overflow = previousOverflow;
       if (handleWindowLoad) {
@@ -164,11 +163,14 @@ export default function PageReveal({
   }, []);
 
   return (
-    <div ref={rootRef} aria-busy="true">
+    <div
+      ref={rootRef}
+      aria-busy="true"
+      className="relative min-h-screen w-full overflow-x-clip bg-[#010c84]"
+    >
       <div
         data-page-content
-        className="relative z-10"
-        style={{ clipPath: PAGE_HIDDEN }}
+        className="relative z-10 min-h-screen w-full"
       >
         {children}
       </div>
@@ -176,7 +178,7 @@ export default function PageReveal({
       <div
         data-page-curtain
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[200] overflow-hidden bg-[#fff]"
+        className="pointer-events-none invisible fixed inset-0 z-[200] overflow-hidden bg-[#fff]"
       >
         {INTRO_IMAGES.map((image) => (
           <div
@@ -226,6 +228,7 @@ export default function PageReveal({
           />
         </div>
       </div>
+
     </div>
   );
 }

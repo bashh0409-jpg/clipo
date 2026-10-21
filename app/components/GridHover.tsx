@@ -1190,6 +1190,7 @@ export default function GridHover() {
       </main>
 
       <DetailsSidebar
+        key={sidebarContent?.id ?? "closed"}
         cell={sidebarContent}
         isOpen={selected !== null}
         backgroundRef={backgroundRef}
