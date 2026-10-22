@@ -102,13 +102,7 @@ export default function PinnedAboutSections({
               ))
             ) : (
               <div ref={contentRef}>
-                <p className="bbh mb-6 text-xs font-semibold uppercase tracking-[0.25em] text-white/60">
-                  About Veyra
-                </p>
-                <p className="bbh mb-5 text-sm font-semibold text-[#F5D76A]">
-                  0{activeIndex + 1} <span className="text-white/40">/</span>{" "}
-                  0{sections.length}
-                </p>
+                
                 <h2
                   id={`h-${activeSection.id}`}
                   className="bbh text-3xl font-bold uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-7xl"
@@ -117,7 +111,7 @@ export default function PinnedAboutSections({
                 </h2>
                 <p className="mx-auto mt-7 max-w-md text-base font-medium leading-6 tracking-tight text-white/90 md:text-lg">
                   {activeSection.body}
-                  <Mark n={activeSection.note} />
+                 
                 </p>
                 <div
                   className="mx-auto mt-10 flex w-32 gap-2"
