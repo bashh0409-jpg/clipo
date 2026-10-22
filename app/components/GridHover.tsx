@@ -11,13 +11,14 @@ import { createPortal } from "react-dom";
 import type { RefObject } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { Fraunces } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { StockPanel } from "./StockPanel";
 gsap.registerPlugin(SplitText);
 
-const companyFont = Fraunces({
+const companyFont = Playfair_Display({
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
 });
 
@@ -169,6 +170,7 @@ const CELLS: CellData[] = [
       "Mondu provides buy-now-pay-later and invoice payment options for business buyers, while sellers get paid upfront and the credit risk moves to Mondu.",
     detail: "Flexible payment options for businesses",
     location: "Berlin, Germany",
+    ceo: "Malte Huffmann",
     availability: "Selected European markets",
     audience: "Business buyers, merchants, and marketplaces",
     founded: 2021,
@@ -187,6 +189,7 @@ const CELLS: CellData[] = [
     detail: "Members-only charge card and experience access",
     location: "New York, United States",
     availability: "United States",
+    ceo: "Patrick Mrozowski",
     xUrl: "https://twitter.com/atlascard",
     audience: "Members seeking premium experiences",
     founded: 2021,
@@ -204,6 +207,7 @@ const CELLS: CellData[] = [
       "Majority is a mobile banking app aimed at immigrant communities, combining everyday banking with low-cost international money transfers.",
     detail: "Banking services and international money transfers",
     location: "Stockholm, Sweden",
+    ceo: "Magnus Larsson",
     availability: "United States",
     audience: "Migrant communities and their families",
     founded: 2019,
@@ -332,6 +336,7 @@ const CELLS: CellData[] = [
     location: "Mexico City, Mexico",
     availability: "Mexico",
     xUrl: "https://x.com/albomx",
+    ceo: "Angel Sahagún",
     audience: "Individuals and small businesses",
     founded: 2016,
     stage: "Private",
@@ -564,6 +569,7 @@ const CELLS: CellData[] = [
     location: "Cape Town, South Africa",
     availability: "South Africa",
     audience: "Individuals and businesses",
+    ceo: "Tsakani Clarence Nethengwe",
     xUrl: "https://x.com/OldMutualSA",
     founded: 2025,
     stage: "Private · Old Mutual subsidiary",
@@ -632,12 +638,12 @@ const CELLS: CellData[] = [
     imgSrc: "/logos/veyra.svg",
     company: "Veyra group",
     title: "Portfolio group",
-    url: "https://veyragroup.vercel.app/",
+    url: "https://veyra.thewisestudio.xyz/",
     reveal:
       "Veyra group is a portfolio of companies, products, and ideas that make everyday life simpler, smarter, and more connected. From moving money across borders to running a business, filing taxes, or investing for the future, each company in the group tackles a different real-world challenge. Veyra's mission is simple: good ideas deserve to be seen. Veyra is a portfolio group bringing together companies, products, and ideas focused on making everyday experiences simpler, smarter, and more connected.",
     detail: "Portfolio and company discovery",
     location: "Pietermaritzburg, South Africa",
-    ceo: "Wandile Yanda Langa",
+    ceo: "Wandile M. Y. Langa",
     availability: "Explore individual portfolio company profiles",
     audience: "People exploring companies, products, and ideas",
     founded: 2026,
@@ -744,6 +750,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       }}
       className="relative aspect-square min-w-0 cursor-pointer overflow-hidden outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
+      
       <div
         data-base
         className="pointer-events-none absolute inset-0 z-0 flex items-center bg-[#202ded]  justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
@@ -771,13 +778,13 @@ function Cell({ cell, onSeeMore }: CellProps) {
           className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#202ded]"
         >
           <p
-            className={`${companyFont.className} text-4xl font-medium capitalize tracking-tighter`}
+            className={`${companyFont.className} italic text-4xl font-medium capitalize tracking-tighter`}
           >
             {cell.company}
           </p>
           {/* Clamped to 6 lines so the button always stays in view; the full text lives in the sidebar.
               Was "line-clamp-" (invalid class), so no clamp was actually applied. */}
-          <p className="line-clamp-6 hidden md:block whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#999]">
+          <p className="line-clamp-6  hidden md:block whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#999]">
             {cell.reveal}
           </p>
 
@@ -1034,7 +1041,7 @@ function DetailsSidebar({
               <h2
                 id="details-title"
                 data-item
-                className={`${companyFont.className} text-4xl font-medium capitalize leading-none tracking-tighter`}
+                className={`${companyFont.className} italic text-4xl font-medium capitalize leading-none tracking-tighter`}
               >
                 {cell.company}
               </h2>
