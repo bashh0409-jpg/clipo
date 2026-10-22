@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SponsorPage() {
   return (
     <main className="relative min-h-screen w-full text-white">
-      <div aria-hidden="true" className="fixed inset-0 z-0 bg-black/45" />
+      <div aria-hidden="true" className="fixed inset-0 z-0" />
       <section
         className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-20"
       >

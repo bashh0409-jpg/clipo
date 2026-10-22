@@ -49,7 +49,7 @@ export default function AboutPage() {
   return (
     <main className="relative flex min-h-screen flex-col text-white">
       {/* Dark scrim keeps body text readable over the video */}
-      <div aria-hidden="true" className="fixed inset-0 z-0 bg-black/45" />
+      <div aria-hidden="true" className="fixed inset-0 z-0 " />
       <MouseFollowerImage />
 
       {/* ───────── HERO ───────── */}
