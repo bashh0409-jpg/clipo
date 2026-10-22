@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import SequentialVideoBackground from "../components/SequentialVideoBackground";
 import { CONTACT_HREF } from "@/lib/contact";
 
 export const metadata: Metadata = {
@@ -10,8 +9,7 @@ export const metadata: Metadata = {
 
 export default function SponsorPage() {
   return (
-    <main className="relative min-h-screen w-full bg-[#010c84] text-white">
-      <SequentialVideoBackground />
+    <main className="relative min-h-screen w-full text-white">
       <div aria-hidden="true" className="fixed inset-0 z-0 bg-black/45" />
       <section
         className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-20"

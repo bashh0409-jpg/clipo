@@ -8,6 +8,8 @@ import Logo from "./components/Logo";
 import SmoothScroll from "./components/SmoothScroll";
 import PageReveal from "./components/PageReveal";
 import PageTransition from "./components/PageTransition";
+import SequentialVideoBackground from "./components/SequentialVideoBackground";
+import Sidebar from "./components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +25,7 @@ const bbhBartle = BBH_Bartle({
   weight: "400",
   variable: "--font-bartle",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -45,12 +48,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <SequentialVideoBackground />
         <SmoothScroll />
         <PageReveal>{children}</PageReveal>
         <PageTransition />
 
         <Navbar />
         <Logo />
+        <Sidebar/>
         <SpeedInsights />
         <Analytics />
       </body>

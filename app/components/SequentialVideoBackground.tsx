@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const videos = [
   "/start/cosmos_1355130040.mp4",
@@ -8,9 +9,15 @@ const videos = [
   "/start/cosmos_512150715.mp4",
 ];
 
+const backgroundPaths = new Set(["/about", "/contact", "/sponsor"]);
+
 export default function SequentialVideoBackground() {
+  const pathname = usePathname();
   const [videoIndex, setVideoIndex] = useState(0);
   const src = videos[videoIndex];
+  const isActive = backgroundPaths.has(pathname);
+
+  if (!isActive) return null;
 
   return (
     <video

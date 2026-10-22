@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import MouseFollowerImage from "../components/MouseFollowerImage";
-import SequentialVideoBackground from "../components/SequentialVideoBackground";
 import PinnedAboutSections from "../components/PinnedAboutSections";
 import { CONTACT_HREF } from "@/lib/contact";
 
@@ -49,7 +48,6 @@ const sections = [
 export default function AboutPage() {
   return (
     <main className="relative flex min-h-screen flex-col text-white">
-      <SequentialVideoBackground />
       {/* Dark scrim keeps body text readable over the video */}
       <div aria-hidden="true" className="fixed inset-0 z-0 bg-black/45" />
       <MouseFollowerImage />

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ContactForm from "./ContactForm";
-import SequentialVideoBackground from "../components/SequentialVideoBackground";
 
 export const metadata: Metadata = {
   title: "Contact | Veyra group",
@@ -9,8 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center bg-[#191817] px-5 pb-10 pt-10 text-white sm:px-6 sm:pt-12">
-      <SequentialVideoBackground />
+    <main className="relative flex min-h-screen flex-col items-center px-5 pb-10 pt-10 text-white sm:px-6 sm:pt-12">
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 bg-black/55"

@@ -255,7 +255,7 @@ export default function PageReveal({
     <div
       ref={rootRef}
       aria-busy="true"
-      className="relative min-h-screen w-full overflow-x-clip bg-[#010c84]"
+      className="relative min-h-screen w-full overflow-x-clip"
     >
       <div
         data-page-content

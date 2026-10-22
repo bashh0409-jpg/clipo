@@ -48,4 +48,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+Vercel provisions HTTPS for assigned domains and redirects HTTP requests to HTTPS. The app sends an HSTS header so browsers continue using HTTPS after the first secure visit. For other hosting providers, configure a valid TLS certificate and an HTTP-to-HTTPS redirect at the hosting layer; HSTS does not replace either requirement.
+
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
