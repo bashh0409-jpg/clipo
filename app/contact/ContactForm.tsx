@@ -55,9 +55,10 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
     >
       <div>
-        <label htmlFor="contact-name" className="sr-only">
+        
+        <p className="line-clamp-6 my-2 whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#fff]">
           Full name
-        </label>
+        </p>
         <input
           autoComplete="name"
           className={fieldClassName}
@@ -65,15 +66,14 @@ export default function ContactForm() {
           maxLength={100}
           name="name"
           disabled={submissionState === "submitting"}
-          placeholder="Full name"
           required
         />
       </div>
 
       <div>
-        <label htmlFor="contact-email" className="sr-only">
+        <p className="line-clamp-6 my-2 whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#fff]">
           Email address
-        </label>
+        </p>
         <input
           autoComplete="email"
           className={fieldClassName}
@@ -81,23 +81,23 @@ export default function ContactForm() {
           maxLength={254}
           name="email"
           disabled={submissionState === "submitting"}
-          placeholder="Email address"
+          placeholder=""
           required
           type="email"
         />
       </div>
 
       <div>
-        <label htmlFor="contact-message" className="sr-only">
+        <p className="line-clamp-6 my-2 whitespace-pre-line text-justify text-sm font-medium leading-tight tracking-tight text-[#fff]">
           How can we help?
-        </label>
+        </p>
         <textarea
           className={`${fieldClassName} min-h-32 max-h-60 resize-y`}
           id="contact-message"
           maxLength={5000}
           name="message"
           disabled={submissionState === "submitting"}
-          placeholder="How can we help?"
+          placeholder=""
           required
           rows={4}
         />
