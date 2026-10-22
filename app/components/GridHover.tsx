@@ -782,7 +782,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
             Click to see more details about{" "}
             <span className="capitalize">{cell.company}</span>
           </p>
-
+       
           <button
             type="button"
             aria-haspopup="dialog"
@@ -792,9 +792,10 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
+            className="mt-auto  flex hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
           >
-            See more
+            More Info
+            
           </button>
         </div>
       </div>

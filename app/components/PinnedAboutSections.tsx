@@ -109,7 +109,7 @@ export default function PinnedAboutSections({
                 >
                   {activeSection.title}
                 </h2>
-                <p className="mx-auto mt-7 max-w-md text-base font-medium leading-6 tracking-tight text-white/90 md:text-lg">
+                <p className="mx-auto mt-7 max-w-md text-base font-medium leading-5 tracking-tight text-white/90 md:text-lg">
                   {activeSection.body}
                  
                 </p>
