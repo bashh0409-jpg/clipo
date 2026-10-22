@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SequentialVideoBackground from "../components/SequentialVideoBackground";
 
 export const metadata: Metadata = {
   title: "Sponsor | Veyra group",
@@ -9,26 +10,12 @@ export const metadata: Metadata = {
 
 export default function SponsorPage() {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-[#010c84] text-white">
+    <main className="relative min-h-screen w-full bg-[#010c84] text-white">
+      <SequentialVideoBackground />
+      <div aria-hidden="true" className="fixed inset-0 z-0 bg-black/45" />
       <section
-        className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center px-6 py-20"
-        style={{ backgroundImage: "url('/images/about-bg.jpg')" }}
+        className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-20"
       >
-        <video
-          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-          src="/start/cosmos_512150715.mp4"
-          poster="/images/about-bg.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-        />
-
-        {/* Overlay keeps text legible over the moving background. */}
-        <div aria-hidden="true" className="absolute inset-0 " />
-
         <div className="relative z-10 flex w-full flex-col items-center text-center">
           <h1 className="bbh flex w-full flex-col items-center justify-center font-black uppercase leading-[0.85] tracking-tighter text-white md:flex-row md:gap-[0.15em]">
             <span className="text-[24vw] md:text-[8vw]">Veyra</span>
@@ -53,7 +40,7 @@ export default function SponsorPage() {
 
             <Link
               href="/contact"
-              className="mt-6 inline-flex items-center bg-[#F5D76A] px-4 py-3 text-xs font-semibold uppercase text-[#171717] transition-colors hover:bg-white"
+              className="mt-6 inline-flex items-center bg-[#F5D76A] px-4 py-2 hover:rounded-full transition duration-300 text-xs font-semibold uppercase text-[#171717] transition-colors hover:bg-white"
             >
               Contact us
             </Link>

@@ -47,18 +47,16 @@ export default function ContactForm() {
   
 
   const fieldClassName =
-    "w-full border-b border-white bg-transparent px-0 py-3 text-base ttext-sm font-bold  tracking-tight text-white/90 md:text-lg outline-none transition-colors placeholder:text-white/45 focus:border-[#F5D76A]";
+    "w-full rounded border border-white/[0.08] bg-[#fcfcfc] px-3 py-2 text-sm font-medium tracking-tight text-black outline-none transition-colors placeholder:text-black/55 focus:border-white/30 ";
 
   return (
-    <form className="space-y-8" onSubmit={handleSubmit}>
+    <form
+      className="mt-10 w-full max-w-[400px] space-y-2"
+      onSubmit={handleSubmit}
+    >
       <div>
-        <label
-          htmlFor="contact-name"
-          className="mb-2 block text-xs font-bold uppercase tracking-wide text-white/75"
-        >
-          <p className=" text-sm font-bold uppercase tracking-tight text-white/90 md:text-lg">
-            your name
-          </p>
+        <label htmlFor="contact-name" className="sr-only">
+          Full name
         </label>
         <input
           autoComplete="name"
@@ -66,19 +64,15 @@ export default function ContactForm() {
           id="contact-name"
           maxLength={100}
           name="name"
-          placeholder="Jane Smith"
+          disabled={submissionState === "submitting"}
+          placeholder="Full name"
           required
         />
       </div>
 
       <div>
-        <label
-          htmlFor="contact-email"
-          className="mb-2 block text-xs font-bold uppercase tracking-wide text-white/75"
-        >
-          <p className=" text-sm font-bold uppercase tracking-tight text-white/90 md:text-lg">
-            your email
-          </p>
+        <label htmlFor="contact-email" className="sr-only">
+          Email address
         </label>
         <input
           autoComplete="email"
@@ -86,48 +80,52 @@ export default function ContactForm() {
           id="contact-email"
           maxLength={254}
           name="email"
-          placeholder="jane@example.com"
+          disabled={submissionState === "submitting"}
+          placeholder="Email address"
           required
           type="email"
         />
       </div>
 
       <div>
-        <label
-          htmlFor="contact-message"
-          className="mb-2 block text-xs font-bold uppercase tracking-wide text-white/75"
-        >
-          <p className=" text-sm font-bold uppercase tracking-tight text-white/90 md:text-lg">
-            How can we help you?
-          </p>
+        <label htmlFor="contact-message" className="sr-only">
+          How can we help?
         </label>
         <textarea
-          className={`${fieldClassName} min-h-32 resize-y`}
+          className={`${fieldClassName} min-h-32 max-h-60 resize-y`}
           id="contact-message"
           maxLength={5000}
           name="message"
-          placeholder="Tell us a little about what you have in mind..."
+          disabled={submissionState === "submitting"}
+          placeholder="How can we help?"
           required
           rows={4}
         />
       </div>
 
       <button
-        className="inline-flex items-center gap-3 bg-[#F5D76A] px-4 cursor-pointer py-2 text-sm font-bold uppercase tracking-wide text-[#171717] transition-transform focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:cursor-wait disabled:opacity-60"
+        className="inline-flex w-full items-center bbh tracking-tight justify-center rounded-md bg-[#ded8cb] px-4 py-2 text-xs font-semibold text-[#191817] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:cursor-wait disabled:opacity-60"
         disabled={submissionState === "submitting"}
         type="submit"
       >
-        <p className=" text-sm font-bold uppercase tracking-tight md:text-lg">
-          {submissionState === "submitting" ? "Sending..." : "Send message"}
-        </p>
+        {submissionState === "submitting" ? "Sending..." : "Send message"}
       </button>
 
-      <p className=" text-sm font-bold uppercase tracking-tight text-white/90 md:text-sm">
+      <p
+        aria-live="polite"
+        className={`min-h-5 pt-1 text-sm leading-tight tracking-tight font-medium ${
+          submissionState === "error"
+            ? "text-red-200"
+            : submissionState === "sent"
+              ? "text-[#ded8cb]"
+              : "text-white/70"
+        }`}
+        role={submissionState === "error" ? "alert" : "status"}
+      >
         {submissionState === "sent" &&
           "Thanks for reaching out. Your message is on its way."}
         {submissionState === "error" && errorMessage}
       </p>
-     
     </form>
   );
 }
