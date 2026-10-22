@@ -159,11 +159,11 @@ export default function Navbar() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-[150] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[150] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
     >
       <div
         ref={navRef}
-        className="relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
+        className="pointer-events-auto relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
       >
         
 

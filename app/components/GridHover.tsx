@@ -750,7 +750,6 @@ function Cell({ cell, onSeeMore }: CellProps) {
       }}
       className="relative aspect-square min-w-0 cursor-pointer overflow-hidden outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
-      
       <div
         data-base
         className="pointer-events-none absolute inset-0 z-0 flex items-center bg-[#202ded]  justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
@@ -792,20 +791,43 @@ function Cell({ cell, onSeeMore }: CellProps) {
             Click to see more details about{" "}
             <span className="capitalize">{cell.company}</span>
           </p>
+          <div className="mt-auto flex w-full min-w-0 items-center justify-between gap-2">
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label={`See more about ${cell.company}`}
+              onClick={(e) => {
+                // Prevent the card's touch handler from opening the sidebar again.
+                e.stopPropagation();
+                onSeeMore(cell);
+              }}
+              className="flex shrink-0 items-center whitespace-nowrap py-1.5 text-sm font-medium tracking-tighter text-[#999] underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
+            >
+              More info
+            </button>
 
-          <button
-            type="button"
-            aria-haspopup="dialog"
-            aria-label={`See more about ${cell.company}`}
-            onClick={(e) => {
-              // Prevent the card's touch handler from opening the sidebar again.
-              e.stopPropagation();
-              onSeeMore(cell);
-            }}
-            className="mt-auto  flex hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
-          >
-            More Info
-          </button>
+            <a
+              href={cell.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${cell.company} website`}
+              className="flex min-w-0 flex-1 items-center justify-end gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-black"
+            >
+              <span className="truncate text-right">
+                {`www.${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "")}`}
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="16px"
+                viewBox="0 -960 960 960"
+                width="16px"
+                fill="currentColor"
+              >
+                <path d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z" />
+              </svg>
+              
+            </a>
+          </div>
         </div>
       </div>
     </div>
