@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { CONTACT_HREF } from "@/lib/contact";
 
 interface NavIconProps {
   size: number;
@@ -16,7 +17,7 @@ const NAV_ITEMS = [
   { label: "Work", href: "/", icon: WorkIcon },
   { label: "Sponsor", href: "/sponsor", icon: SponsorIcon },
   { label: "About", href: "/about", icon: InfoIcon },
-  { label: "Contact", href: "/contact", icon: ContactIcon },
+  { label: "Contact", href: CONTACT_HREF, icon: ContactIcon },
 ] as const;
 
 export default function Navbar() {
@@ -175,20 +176,15 @@ export default function Navbar() {
         {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
           const isActive =
             href === pathname ||
-            (href !== "/" && pathname.startsWith(`${href}/`));
+            (!href.startsWith("mailto:") &&
+              href !== "/" &&
+              pathname.startsWith(`${href}/`));
+          const className = `group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap- rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
+            isActive ? "text-black" : "text-[#999]"
+          }`;
 
-          return (
-            <Link
-              key={label}
-              href={href}
-              aria-label={label}
-              data-nav-item
-              data-active={isActive}
-              aria-current={isActive ? "page" : undefined}
-              className={`group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap- rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
-                isActive ? "text-black" : "text-[#999]"
-              }`}
-            >
+          const content = (
+            <>
               <Icon
                 size={18}
                 strokeWidth={2}
@@ -198,6 +194,31 @@ export default function Navbar() {
               <span className="text-[10px] hidden font-medium leading-none md:hidden">
                 {label}
               </span>
+            </>
+          );
+
+          return href.startsWith("mailto:") ? (
+            <a
+              key={label}
+              href={href}
+              aria-label={label}
+              data-nav-item
+              data-active={isActive}
+              className={className}
+            >
+              {content}
+            </a>
+          ) : (
+            <Link
+              key={label}
+              href={href}
+              aria-label={label}
+              data-nav-item
+              data-active={isActive}
+              aria-current={isActive ? "page" : undefined}
+              className={className}
+            >
+              {content}
             </Link>
           );
         })}

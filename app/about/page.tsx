@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import MouseFollowerImage from "../components/MouseFollowerImage";
 import SequentialVideoBackground from "../components/SequentialVideoBackground";
 import PinnedAboutSections from "../components/PinnedAboutSections";
+import { CONTACT_HREF } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "About | Veyra group",
@@ -108,12 +108,12 @@ export default function AboutPage() {
               </li>
             ))}
           </ol>
-          <Link
-            href="/contact"
+          <a
+            href={CONTACT_HREF}
             className="mt-8 inline-block bbh text-xs font-bold text-white/90 underline decoration-[#F5D76A] decoration-2 underline-offset-4 transition-colors hover:text-[#F5D76A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Contact us
-          </Link>
+          </a>
         </aside>
       </section>
 

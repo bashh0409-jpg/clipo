@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import SequentialVideoBackground from "../components/SequentialVideoBackground";
+import { CONTACT_HREF } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Sponsor | Veyra group",
@@ -38,12 +38,12 @@ export default function SponsorPage() {
               Get in touch to discuss options and availability.
             </p>
 
-            <Link
-              href="/contact"
+            <a
+              href={CONTACT_HREF}
               className="mt-6 inline-flex items-center bg-[#F5D76A] px-4 py-2 hover:rounded-full transition duration-300 text-xs font-semibold uppercase text-[#171717] transition-colors hover:bg-white"
             >
               Contact us
-            </Link>
+            </a>
           </div>
         </div>
       </section>

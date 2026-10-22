@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import MouseFollowerImage from "../components/MouseFollowerImage";
+import { CONTACT_HREF } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "About | Veyra group",
@@ -81,12 +82,12 @@ export default function AboutPage() {
               qualified professional before relying on it or making decisions.
             </p>
           </div>
-          <Link
-            href="/contact"
+          <a
+            href={CONTACT_HREF}
             className="mx-auto max-w-xl text-center text-sm font-bold uppercase leading-tight tracking-tight text-white/90 underline md:text-sm"
           >
             Contact us about this information
-          </Link>
+          </a>
         </section>
       </section>
 
