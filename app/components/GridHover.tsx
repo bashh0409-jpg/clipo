@@ -694,7 +694,10 @@ function Cell({ cell, onSeeMore }: CellProps) {
   const setWipeVisible = (visible: boolean) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
-      if (wipe) gsap.set(wipe, { clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)" });
+      if (wipe)
+        gsap.set(wipe, {
+          clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)",
+        });
       return;
     }
 
@@ -739,7 +742,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
         close();
       }}
-      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#010c84] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
+      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#202ded] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
       <div
         data-base
@@ -765,7 +768,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       >
         <div
           data-reveal
-          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#010c84]"
+          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#202ded]"
         >
           <p
             className={`${companyFont.className} text-4xl font-medium capitalize tracking-tighter`}
@@ -782,7 +785,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
             Click to see more details about{" "}
             <span className="capitalize">{cell.company}</span>
           </p>
-       
+
           <button
             type="button"
             aria-haspopup="dialog"
@@ -792,10 +795,9 @@ function Cell({ cell, onSeeMore }: CellProps) {
               e.stopPropagation();
               onSeeMore(cell);
             }}
-            className="mt-auto  flex hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
+            className="mt-auto  flex hidde tracking-tighter self-start text-[#999] rounded-full  py-1.5 text-sm font-medium underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
           >
             More Info
-            
           </button>
         </div>
       </div>
@@ -822,7 +824,9 @@ function DetailsSidebar({
   useEffect(() => {
     if (!portalReady || !cell) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     const splitText = reducedMotion
       ? null
       : SplitText.create(
@@ -1005,15 +1009,14 @@ function DetailsSidebar({
         tabIndex={-1}
         data-lenis-prevent
         style={{ clipPath: "inset(0% 100% 0% 0%)" }}
-        className="invisible fixed left-0 top-0 z-[1001] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#010c84]"
+        className="invisible fixed left-0 top-0 z-[1001] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#202ded]"
       >
         {cell && (
           <>
-
             <Link
               href="/"
               aria-label="Veyra group home"
-              className="inline-flex fixed z-100 items-center gap-1 text-xs font-bbh-bartle uppercase tracking-tighter text-[#999] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#010c84]"
+              className="inline-flex fixed z-100 items-center gap-1 text-xs font-bbh-bartle uppercase tracking-tighter text-[#999] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#202ded]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1027,7 +1030,6 @@ function DetailsSidebar({
               </svg>
               Veyra
             </Link>{" "}
-  
             <div className="gap-2 mt-10 flex  flex-col">
               <h2
                 id="details-title"
@@ -1197,7 +1199,12 @@ function DetailsSidebar({
                           stroke="currentColor"
                           strokeWidth="1.8"
                         />
-                        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+                        <circle
+                          cx="17.5"
+                          cy="6.5"
+                          r="1.1"
+                          fill="currentColor"
+                        />
                       </svg>
                     </a>
                   )}
@@ -1261,7 +1268,8 @@ function DetailsSidebar({
                         fill="currentColor"
                       >
                         <path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-480h480q22 0 42 5t38 16v-21q0-33-23.5-56.5T720-720H240q-33 0-56.5 23.5T160-640v21q18-11 38-16t42-5Zm-74 130 445 108q9 2 18 0t17-8l139-116q-11-15-28-24.5t-37-9.5H240q-26 0-45.5 13.5T166-510Z" />
-                      </svg>Stocks
+                      </svg>
+                      Stocks
                     </a>
                   )}
                   {cell.discordUrl && (
@@ -1293,7 +1301,7 @@ function DetailsSidebar({
                     type="button"
                     onClick={onClose}
                     aria-label="Close details"
-                    className="bg-[#010c84] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#010c84]"
+                    className="bg-[#202ded] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
