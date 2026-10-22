@@ -742,11 +742,11 @@ function Cell({ cell, onSeeMore }: CellProps) {
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
         close();
       }}
-      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden bg-[#202ded] outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
+      className="relative aspect-square min-w-0 cursor-pointer overflow-hidden outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
     >
       <div
         data-base
-        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center bg-[#202ded]  justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
