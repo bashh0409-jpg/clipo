@@ -1067,18 +1067,9 @@ function DetailsSidebar({
               >
                 {cell.company}
               </h2>
-              <h2 className="text-sm hidden font-medium mt-2 tracking-tight text-[#999]">
-                About{" "}
-                <a
-                  href={cell.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline cursor-pointer capitalize"
-                >
-                  {" "}
-                  {cell.company}
-                </a>
-              </h2>
+              <a href={cell.url} className="mb-1 hidden hover:text-black hover:underline cursor-pointer text-sm leading-tight font-medium tracking-tight text-[#999]">
+             {`https://${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "")}`}
+              </a>
               <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                 {cell.reveal} Availability and eligibility can vary by product.
                 Check with the provider for current details.
