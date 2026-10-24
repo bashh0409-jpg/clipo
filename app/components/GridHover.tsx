@@ -36,7 +36,7 @@ interface CellData {
   xUrl?: string;
   instagramUrl?: string;
   linkedinUrl?: string;
-  discordUrl?: string;
+  youtubeUrl?: string;
   reveal: string;
   detail: string;
   location: string; // HQ city, country
@@ -380,6 +380,45 @@ const CELLS: CellData[] = [
     stockUrl: "https://www.google.com/finance/quote/CPI:JSE",
   },
   {
+    id: "yoco",
+    imgSrc: "/logos/yoco.svg",
+    company: "Yoco",
+    title: "Payments and business tools",
+    url: "https://www.yoco.com/",
+    reveal:
+      "Yoco provides card machines, online payments, and business tools that help small businesses accept payments and manage sales.",
+    detail: "Card payments, online checkout, and tools for small businesses",
+    location: "Cape Town, South Africa",
+    availability: "South Africa",
+    audience: "Small businesses and merchants",
+    founded: 2015,
+    ceo: "Carsten Höltkemeyer",
+    stage: "Private",
+    xUrl: "https://twitter.com/Yoco_ZA",
+    instagramUrl: "https://www.instagram.com/yoco_za/ ",
+    linkedinUrl: "https://www.linkedin.com/company/yoco/",
+    youtubeUrl: "https://www.youtube.com/channel/UCjcas3l1Uh5NKavSIHunwwA",
+  },
+  {
+    id: "chipper-cash",
+    imgSrc: "/logos/chipper.svg",
+    company: "Chipper Cash",
+    title: "Mobile and cross-border payments",
+    url: "https://www.chippercash.com/",
+    reveal:
+      "Chipper Cash is a financial technology company offering mobile payment and cross-border money transfer services across several African markets.",
+    detail: "Mobile payments and cross-border transfers",
+    location: "San Francisco, United States",
+    availability: "Selected African markets",
+    audience: "Consumers and businesses",
+    founded: 2018,
+    ceo: "Ham Serunjogi",
+    stage: "Private",
+    youtubeUrl: "https://www.youtube.com/channel/UCV8JsFe389TSrTuuXMZS6Ww",
+    xUrl: "https://twitter.com/chippercashapp",
+    instagramUrl: "https://www.instagram.com/chippercashapp",
+  },
+  {
     id: "standard-bank",
     imgSrc: "/logos/standardbank.svg",
     company: "Standard Bank",
@@ -400,6 +439,28 @@ const CELLS: CellData[] = [
     stockUrl: "https://www.google.com/finance/quote/SBK:JSE",
   },
   {
+    id: "polar",
+    imgSrc: "/logos/polar.svg",
+    company: "Polar",
+    title: "Developer billing and payment infrastructure",
+    url: "https://polar.sh/",
+    xUrl: "https://x.com/polar_sh",
+    linkedinUrl: "https://www.linkedin.com/company/polar-sh",
+    reveal:
+      "Polar is an open-source billing platform that helps software developers and AI companies monetize their products through subscriptions, usage-based billing, one-time payments, and credits. It also acts as a Merchant of Record, handling global sales tax and billing operations.",
+    detail:
+      "Usage-based billing, subscriptions, checkout, payment processing, credits, and tax compliance",
+    location: "Stockholm, Sweden · Remote team",
+    availability:
+      "Available internationally, subject to supported markets and payment requirements",
+    audience:
+      "Developers, indie hackers, SaaS businesses, etc.",
+    founded: 2022,
+    stage: "Private · Venture-backed",
+    ceo: "Birk Jernström",
+    stockUrl: undefined,
+  },
+  {
     id: "stripe",
     imgSrc: "/logos/stripe.svg",
     company: "Stripe",
@@ -417,6 +478,24 @@ const CELLS: CellData[] = [
     founded: 2010,
     stage: "Private",
     ceo: "Patrick Collison",
+  },
+  {
+    id: "airwallex",
+    imgSrc: "/logos/airwaxel.svg",
+    company: "Airwallex",
+    title: "Global business payments",
+    url: "https://www.airwallex.com/",
+    reveal:
+      "Airwallex provides cross-border payments, business accounts, cards, and financial operations tools for businesses operating internationally.",
+    detail: "Cross-border payments and global business accounts",
+    location: "Melbourne, Australia",
+    availability: "Multiple countries; products vary by market",
+    audience: "Businesses operating internationally",
+    founded: 2015,
+    stage: "Private",
+    ceo: "Jack Zhang",
+    xUrl: "https://twitter.com/airwallex",
+    linkedinUrl: "https://linkedin.com/company/airwallex",
   },
   {
     id: "monzo",
@@ -825,7 +904,6 @@ function Cell({ cell, onSeeMore }: CellProps) {
               >
                 <path d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z" />
               </svg>
-              
             </a>
           </div>
         </div>
@@ -1295,25 +1373,32 @@ function DetailsSidebar({
                       Stocks
                     </a>
                   )}
-                  {cell.discordUrl && (
+                  {cell.youtubeUrl && (
                     <a
-                      href={cell.discordUrl}
+                      href={cell.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`${cell.company} on Discord`}
+                      aria-label={`${cell.company} on YouTube`}
                       className="mb-2 text-sm font-medium tracking-tight text-[#999] hover:text-black duration-500 transition-color"
                     >
                       <svg
                         width="20"
                         height="20"
-                        viewBox="0 0 20 20"
-                        fill=""
+                        viewBox="0 0 24 24"
+                        fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
                       >
                         <path
+                          style={{ display: "none" }}
                           d="M15.797 4.40653C17.6793 7.17402 18.6089 10.2957 18.2614 13.8894C18.26 13.9046 18.252 13.9186 18.2395 13.9278C16.8141 14.9744 15.4331 15.6096 14.0714 16.0309C14.0608 16.0341 14.0495 16.0339 14.039 16.0304C14.0285 16.0268 14.0194 16.0201 14.0129 16.0111C13.6983 15.5734 13.4125 15.1119 13.162 14.6273C13.1477 14.5988 13.1608 14.5644 13.1904 14.5532C13.6443 14.3821 14.076 14.1771 14.4912 13.9344C14.5239 13.9153 14.526 13.8684 14.4958 13.8459C14.4077 13.7805 14.3204 13.7117 14.2368 13.643C14.2212 13.6303 14.2002 13.6278 14.1825 13.6363C11.4868 14.8811 8.53393 14.8811 5.80644 13.6363C5.78873 13.6284 5.76769 13.6311 5.75248 13.6436C5.66914 13.7123 5.58164 13.7805 5.49435 13.8459C5.46414 13.8684 5.46664 13.9153 5.49956 13.9344C5.91477 14.1726 6.34643 14.3821 6.79977 14.554C6.82914 14.5653 6.8431 14.5988 6.82852 14.6273C6.58352 15.1126 6.29768 15.574 5.97727 16.0117C5.96331 16.0294 5.94039 16.0376 5.91873 16.0309C4.56352 15.6096 3.18248 14.9744 1.75707 13.9278C1.74519 13.9186 1.73665 13.904 1.7354 13.8888C1.44498 10.7803 2.03686 7.63277 4.19748 4.4059C4.20269 4.39736 4.2106 4.39069 4.21977 4.38674C5.28289 3.89882 6.42185 3.53986 7.61227 3.33486C7.63393 3.33153 7.6556 3.34153 7.66685 3.3607C7.81393 3.62111 7.98206 3.95507 8.09581 4.22799C9.3506 4.03632 10.625 4.03632 11.906 4.22799C12.0198 3.9609 12.1821 3.62111 12.3285 3.3607C12.3337 3.35119 12.3418 3.34357 12.3516 3.33893C12.3614 3.33429 12.3724 3.33287 12.3831 3.33486C13.5741 3.54049 14.7131 3.89945 15.7754 4.38674C15.7848 4.39069 15.7925 4.39736 15.797 4.40653ZM8.73372 10.3169C8.74685 9.39798 8.07685 8.63756 7.23581 8.63756C6.40164 8.63756 5.7381 9.39131 5.7381 10.3169C5.7381 11.2424 6.41477 11.9961 7.23581 11.9961C8.07018 11.9961 8.73372 11.2424 8.73372 10.3169ZM14.2716 10.3169C14.2848 9.39798 13.6148 8.63756 12.7739 8.63756C11.9395 8.63756 11.276 9.39131 11.276 10.3169C11.276 11.2424 11.9527 11.9961 12.7739 11.9961C13.6148 11.9961 14.2716 11.2424 14.2716 10.3169Z"
                           fill="currentColor"
                         ></path>
+                        <path
+                          d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8Z"
+                          fill="currentColor"
+                        />
+                        <path d="m9.6 15.6 6.2-3.6-6.2-3.6v7.2Z" fill="white" />
                       </svg>
                     </a>
                   )}
