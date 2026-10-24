@@ -156,7 +156,7 @@ const CELLS: CellData[] = [
     audience: "Individuals and businesses",
     founded: 2015,
     stage: "Private",
-    ceo: "Nik Storonsky",
+    ceo: "Nikolay (Nik) Storonsky",
   },
   {
     id: "mondu",
