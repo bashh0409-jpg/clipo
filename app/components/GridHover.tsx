@@ -1063,12 +1063,15 @@ function DetailsSidebar({
               <h2
                 id="details-title"
                 data-item
-                className={`${companyFont.className} italic text-4xl font-medium capitalize leading-none tracking-tighter`}
+                className={`${companyFont.className} text-4xl font-medium italic capitalize leading-[1.25] tracking-tighter py-1`}
               >
                 {cell.company}
               </h2>
-              <a href={cell.url} className="mb-1 hidden hover:text-black hover:underline cursor-pointer text-sm leading-tight font-medium tracking-tight text-[#999]">
-             {`https://${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "")}`}
+              <a
+                href={cell.url}
+                className="mb-1 hidden hover:text-black hover:underline cursor-pointer text-sm leading-tight font-medium tracking-tight text-[#999]"
+              >
+                {`https://${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "")}`}
               </a>
               <h2 className="mb-2 text-sm leading-tight font-medium tracking-tight text-[#999]">
                 {cell.reveal} Availability and eligibility can vary by product.
