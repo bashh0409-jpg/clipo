@@ -337,7 +337,8 @@ function Sparkline({ values, tone, format }: SparklineProps) {
           fill="currentColor"
           className="opacity-0 transition-opacity group-data-[active=true]:opacity-100"
         />
-      </svg>
+      </svg>{" "}
+     
     </div>
   );
 }

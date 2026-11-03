@@ -102,7 +102,6 @@ export default function PinnedAboutSections({
               ))
             ) : (
               <div ref={contentRef}>
-                
                 <h2
                   id={`h-${activeSection.id}`}
                   className="bbh text-3xl font-bold uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-7xl"
@@ -111,7 +110,6 @@ export default function PinnedAboutSections({
                 </h2>
                 <p className="mx-auto mt-7 max-w-md text-base font-medium leading-5 tracking-tight text-white/90 md:text-lg">
                   {activeSection.body}
-                 
                 </p>
                 <div
                   className="mx-auto mt-10 flex w-32 gap-2"
@@ -121,9 +119,7 @@ export default function PinnedAboutSections({
                     <span
                       key={section.id}
                       className={`h-0.5 flex-1 transition-colors duration-300 ${
-                        index <= activeIndex
-                          ? "bg-[#F5D76A]"
-                          : "bg-white/30"
+                        index <= activeIndex ? "bg-[#F5D76A]" : "bg-white/30"
                       }`}
                     />
                   ))}
@@ -140,7 +136,7 @@ export default function PinnedAboutSections({
       <div className="relative z-10 flex justify-center px-6 pb-20 text-center">
         <Link
           href="/"
-          className="inline-flex items-center bg-[#F5D76A] px-4 py-2 text-xs font-semibold uppercase text-[#171717] transition-all duration-300 hover:rounded-full hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
         >
           Explore the grid
         </Link>

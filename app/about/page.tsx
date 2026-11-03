@@ -70,13 +70,13 @@ export default function AboutPage() {
             Good ideas deserve to be seen. Veyra helps you discover the
             companies and products behind them.
           </p>
-          <a
+          
+        </div><a
             href="#about"
-            className="mt-6 inline-flex items-center bg-[#F5D76A] px-4 py-2 text-xs font-semibold uppercase text-[#171717] transition-all duration-300 hover:rounded-full hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
           >
             Read more
           </a>
-        </div>
       </section>
 
       {/* ───────── ABOUT CONTENT ───────── */}
@@ -106,13 +106,13 @@ export default function AboutPage() {
               </li>
             ))}
           </ol>
-          <a
-            href={CONTACT_HREF}
-            className="mt-8 inline-block bbh text-xs font-bold text-white/90 underline decoration-[#F5D76A] decoration-2 underline-offset-4 transition-colors hover:text-[#F5D76A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            Contact us
-          </a>
-        </aside>
+        </aside>{" "}
+        <a
+          href={CONTACT_HREF}
+          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
+        >
+          Contact us
+        </a>
       </section>
 
       {/* ───────── CENTERED STATEMENT ───────── */}
@@ -125,7 +125,6 @@ export default function AboutPage() {
           Simpler. Smarter. More connected.
         </p>
       </section>
-
     </main>
   );
 }

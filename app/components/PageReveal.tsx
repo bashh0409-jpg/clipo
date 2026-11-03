@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 
 const MUX_PLAYBACK_ID = "s00AcBh8SwqiRssd7F017X7i01jYBOe5scgDrUyZYybOMg";
 const MUX_INTRO_VIDEO = "mux-intro-video";
-const VIDEO_READY_TIMEOUT_MS = 10_000;
+const VIDEO_READY_TIMEOUT_MS = 4_000;
 
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
@@ -39,6 +39,7 @@ export default function PageReveal({
   const [videoNeedsTap, setVideoNeedsTap] = useState(false);
   const pathname = usePathname();
   const initialPathnameRef = useRef(pathname);
+  const [isInitialHomePage] = useState(pathname === "/");
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -78,17 +79,9 @@ export default function PageReveal({
     const previousOverflow = html.style.overflow;
     html.style.overflow = "hidden";
     let cancelled = false;
-    let handleWindowLoad: (() => void) | undefined;
     let cancelVideoWait = () => {};
-    const windowLoaded =
-      document.readyState === "complete"
-        ? Promise.resolve()
-        : new Promise<void>((resolve) => {
-            handleWindowLoad = () => resolve();
-            window.addEventListener("load", handleWindowLoad, { once: true });
-          });
     const pageImagesLoaded = Promise.all(
-      Array.from(document.images, (image) =>
+      Array.from(curtain.querySelectorAll("img"), (image) =>
         image.decode().catch(() => undefined),
       ),
     );
@@ -165,14 +158,14 @@ export default function PageReveal({
         });
 
         activeTimeline
-          .to({}, { duration: 3 })
+          .to({}, { duration: 0.45 })
           .to(lastImage, {
             width: window.innerWidth,
             height: window.innerHeight,
-            duration: 1.25,
+            duration: 0.9,
             ease: "expo.inOut",
           })
-          .to({}, { duration: 0.15 })
+          .to({}, { duration: 0.1 })
           .set(page, { zIndex: 201 })
           .to(progress, { autoAlpha: 0, duration: 0.3 }, "<")
           .fromTo(
@@ -180,7 +173,7 @@ export default function PageReveal({
             { clipPath: PAGE_HIDDEN },
             {
               clipPath: PAGE_VISIBLE,
-              duration: 1.5,
+              duration: 0.9,
               ease: "power2.inOut",
             },
             "<",
@@ -200,7 +193,7 @@ export default function PageReveal({
             {
               autoAlpha: 1,
               clipPath: "inset(0%)",
-              duration: 0.55,
+              duration: 0.4,
               ease: "power2.out",
             },
             i === 0 ? 0.1 : ">-0.12",
@@ -211,7 +204,6 @@ export default function PageReveal({
       };
 
       void Promise.all([
-        windowLoaded,
         document.fonts.ready,
         pageImagesLoaded,
         videoReady,
@@ -229,9 +221,6 @@ export default function PageReveal({
       activeTimeline?.kill();
       cancelVideoWait();
       stopIntroVideo();
-      if (handleWindowLoad) {
-        window.removeEventListener("load", handleWindowLoad);
-      }
       gsap.set(page, { clearProps: "clipPath,zIndex,transform,filter" });
       gsap.set(curtain, { autoAlpha: 0 });
       html.style.overflow = previousOverflow;
@@ -245,9 +234,6 @@ export default function PageReveal({
       cancelVideoWait();
       reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       html.style.overflow = previousOverflow;
-      if (handleWindowLoad) {
-        window.removeEventListener("load", handleWindowLoad);
-      }
     };
   }, []);
 
@@ -255,18 +241,25 @@ export default function PageReveal({
     <div
       ref={rootRef}
       aria-busy="true"
+      data-page-reveal
+      data-intro-active={isInitialHomePage ? "true" : undefined}
       className="relative min-h-screen w-full overflow-x-clip"
     >
       <div
         data-page-content
         className="relative z-10 min-h-screen w-full"
+        style={
+          isInitialHomePage ? { clipPath: PAGE_HIDDEN } : undefined
+        }
       >
         {children}
       </div>
 
       <div
         data-page-curtain
-        className="pointer-events-none invisible fixed inset-0 z-[200] overflow-hidden bg-[#fff]"
+        className={`pointer-events-none fixed inset-0 z-[200] overflow-hidden bg-[#fff] ${
+          isInitialHomePage ? "" : "invisible"
+        }`}
       >
         {INTRO_IMAGES.map((image) => (
           <div
@@ -334,7 +327,7 @@ export default function PageReveal({
         {videoNeedsTap && (
           <button
             type="button"
-            className="pointer-events-auto absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded-full bg-black/75 px-5 py-3 text-sm font-medium text-white shadow-lg backdrop-blur-sm"
+            className="pointer-events-auto uppercase font-mono absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
             onClick={() => {
               const player = introVideoRef.current;
               if (!player) return;
@@ -347,7 +340,7 @@ export default function PageReveal({
               });
             }}
           >
-            Tap to load intro
+            Load Intro
           </button>
         )}
 
@@ -369,7 +362,6 @@ export default function PageReveal({
           />
         </div>
       </div>
-
     </div>
   );
 }

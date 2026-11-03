@@ -48,6 +48,7 @@ export default function PageTransition() {
       const page = document.querySelector<HTMLElement>("[data-page-content]");
       if (page) gsap.set(page, { clearProps: "transform,filter" });
       if (stageRef.current) gsap.set(stageRef.current, { autoAlpha: 0 });
+      window.dispatchEvent(new Event("page-transition-complete"));
     };
 
     const captureOutgoingPage = (direction: number) => {
@@ -164,6 +165,7 @@ export default function PageTransition() {
       outgoingPageRef.current = null;
       gsap.set(stage, { autoAlpha: 0 });
       gsap.set(page, { clearProps: "transform" });
+      window.dispatchEvent(new Event("page-transition-complete"));
       return;
     }
 
@@ -178,6 +180,7 @@ export default function PageTransition() {
         gsap.set(stage, { autoAlpha: 0 });
         gsap.set(page, { clearProps: "transform,filter" });
         transitionRef.current = null;
+        window.dispatchEvent(new Event("page-transition-complete"));
       },
     });
 
@@ -205,6 +208,21 @@ export default function PageTransition() {
       );
     } else {
       gsap.set(stage, { autoAlpha: 0 });
+    }
+
+    const background = document.querySelector<HTMLElement>(
+      "[data-sequential-background]",
+    );
+    if (background && pathname === "/" && previousPathname !== "/") {
+      transitionRef.current.to(
+        background,
+        {
+          x: direction * window.innerWidth,
+          duration: 0.55,
+          ease: "power2.inOut",
+        },
+        0,
+      );
     }
   }, [pathname]);
 

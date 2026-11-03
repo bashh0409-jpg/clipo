@@ -453,8 +453,7 @@ const CELLS: CellData[] = [
     location: "Stockholm, Sweden · Remote team",
     availability:
       "Available internationally, subject to supported markets and payment requirements",
-    audience:
-      "Developers, indie hackers, SaaS businesses, etc.",
+    audience: "Developers, indie hackers, SaaS businesses, etc.",
     founded: 2022,
     stage: "Private · Venture-backed",
     ceo: "Birk Jernström",
@@ -831,7 +830,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
     >
       <div
         data-base
-        className="pointer-events-none absolute inset-0 z-0 flex items-center bg-[#202ded]  justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center bg-[#050a4c]  justify-center p-4 text-center text-[clamp(1.4rem,3vw,3.25rem)] leading-none tracking-tight text-white"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -853,7 +852,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       >
         <div
           data-reveal
-          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#202ded]"
+          className="flex h-full flex-col items-stretch justify-start gap-3 p-6 text-left text-[#050a4c]"
         >
           <p
             className={`${companyFont.className} italic text-4xl font-medium capitalize tracking-tighter`}
@@ -880,9 +879,9 @@ function Cell({ cell, onSeeMore }: CellProps) {
                 e.stopPropagation();
                 onSeeMore(cell);
               }}
-              className="flex shrink-0 items-center whitespace-nowrap py-1.5 text-sm font-medium tracking-tighter text-[#999] underline cursor-pointer transition-colors duration-300 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
+              className="flex shrink-0 capitalize items-center whitespace-nowrap py-1 rounded text-sm font-medium bg-black/5 px-2 tracking-tighter hover:text-[#999] hover:bg-black/10 cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
-              More info
+              See details
             </button>
 
             <a
@@ -1116,14 +1115,14 @@ function DetailsSidebar({
         tabIndex={-1}
         data-lenis-prevent
         style={{ clipPath: "inset(0% 100% 0% 0%)" }}
-        className="invisible fixed left-0 top-0 z-[1001] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#202ded]"
+        className="invisible fixed left-0 top-0 z-[1001] flex h-dvh w-full max-w-md flex-col gap-8 overflow-y-auto bg-white p-6 text-[#050a4c]"
       >
         {cell && (
           <>
             <Link
               href="/"
               aria-label="Veyra group home"
-              className="inline-flex fixed z-100 items-center gap-1 text-xs font-bbh-bartle uppercase tracking-tighter text-[#999] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#202ded]"
+              className="inline-flex fixed z-100 items-center gap-1 text-xs font-bbh-bartle uppercase tracking-tighter text-[#999] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#050a4c]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1409,7 +1408,7 @@ function DetailsSidebar({
                     type="button"
                     onClick={onClose}
                     aria-label="Close details"
-                    className="bg-[#202ded] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#1A27B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202ded]"
+                    className="bg-[#050a4c] rounded cursor-pointer px-1 py-1 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#050a4c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
