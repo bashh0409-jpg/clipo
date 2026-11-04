@@ -8,7 +8,6 @@ import {
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
-import type { RefObject } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Playfair_Display } from "next/font/google";
@@ -21,6 +20,9 @@ const companyFont = Playfair_Display({
   style: ["normal", "italic"],
   subsets: ["latin"],
 });
+
+const WIPE_HIDDEN = "inset(100% 0% 0% 0%)";
+const WIPE_VISIBLE = "inset(0% 0% 0% 0%)";
 
 const subscribeToNothing = () => () => {};
 const getClientSnapshot = () => true;
@@ -52,12 +54,12 @@ interface CellData {
 interface CellProps {
   cell: CellData;
   onSeeMore: (cell: CellData) => void;
+  isSidebarOpen: boolean;
 }
 
 interface SidebarProps {
   cell: CellData | null;
   isOpen: boolean;
-  backgroundRef: RefObject<HTMLElement | null>;
   onClose: () => void;
 }
 
@@ -729,29 +731,10 @@ const CELLS: CellData[] = [
   },
 ];
 
-function Cell({ cell, onSeeMore }: CellProps) {
+function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
   const pointerTypeRef = useRef<string>("mouse");
-
-  useEffect(() => {
-    // Scoped context so revert() kills every tween and clears inline styles on unmount
-    const ctx = gsap.context(() => {
-      tlRef.current = gsap
-        .timeline({
-          paused: true,
-          defaults: { duration: 1, ease: "power3.out" },
-        })
-        .fromTo(
-          "[data-wipe]",
-          { clipPath: "inset(100% 0% 0% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)" },
-          0,
-        );
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
+  const dismissingRef = useRef(false);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -761,11 +744,11 @@ function Cell({ cell, onSeeMore }: CellProps) {
         rootRef.current?.matches(":hover") ||
         rootRef.current?.contains(document.activeElement) ||
         false;
-      tlRef.current?.pause().progress(visible ? 1 : 0);
       const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
       if (wipe) {
+        gsap.killTweensOf(wipe);
         gsap.set(wipe, {
-          clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)",
+          clipPath: visible ? WIPE_VISIBLE : WIPE_HIDDEN,
         });
       }
     };
@@ -776,21 +759,80 @@ function Cell({ cell, onSeeMore }: CellProps) {
   }, []);
 
   const setWipeVisible = (visible: boolean) => {
+    const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+    if (!wipe) return;
+
+    gsap.killTweensOf(wipe);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
-      if (wipe)
-        gsap.set(wipe, {
-          clipPath: visible ? "inset(0%)" : "inset(100% 0% 0% 0%)",
-        });
+      gsap.set(wipe, {
+        clipPath: visible ? WIPE_VISIBLE : WIPE_HIDDEN,
+      });
       return;
     }
 
-    if (visible) tlRef.current?.play();
-    else tlRef.current?.reverse();
+    gsap.to(wipe, {
+      clipPath: visible ? WIPE_VISIBLE : WIPE_HIDDEN,
+      duration: 0.7,
+      ease: "power2.inOut",
+      overwrite: "auto",
+    });
   };
 
   const open = () => setWipeVisible(true);
   const close = () => setWipeVisible(false);
+
+  useEffect(() => {
+    if (isSidebarOpen) return;
+
+    const root = rootRef.current;
+    if (!root) return;
+
+    const wipe = root.querySelector<HTMLElement>("[data-wipe]");
+    if (wipe) {
+      gsap.killTweensOf(wipe);
+      gsap.set(wipe, {
+        clipPath: WIPE_HIDDEN,
+      });
+    }
+
+    dismissingRef.current = false;
+    const focusVisible =
+      document.activeElement instanceof HTMLElement &&
+      root.contains(document.activeElement) &&
+      document.activeElement.matches(":focus-visible");
+    if (!root.matches(":hover") && !focusVisible) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (wipe) gsap.set(wipe, { clipPath: WIPE_VISIBLE });
+    } else if (wipe) {
+      gsap.to(wipe, {
+        clipPath: WIPE_VISIBLE,
+        duration: 0.7,
+        ease: "power2.inOut",
+        overwrite: "auto",
+      });
+    }
+  }, [isSidebarOpen]);
+
+  const dismissUp = () => {
+    dismissingRef.current = true;
+
+    const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+    if (!wipe) return;
+
+    const clipPath = "inset(0% 0% 100% 0%)";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(wipe, { clipPath });
+      return;
+    }
+
+    gsap.to(wipe, {
+      clipPath,
+      duration: 1,
+      ease: "power3.inOut",
+      overwrite: "auto",
+    });
+  };
 
   return (
     <div
@@ -803,10 +845,19 @@ function Cell({ cell, onSeeMore }: CellProps) {
         pointerTypeRef.current = e.pointerType;
       }}
       onPointerEnter={(e) => {
-        if (e.pointerType === "mouse") open();
+        if (e.pointerType === "mouse") {
+          if (dismissingRef.current) {
+            const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+            if (wipe) gsap.killTweensOf(wipe);
+            dismissingRef.current = false;
+          }
+          open();
+        }
       }}
       onPointerLeave={(e) => {
-        if (e.pointerType === "mouse") close();
+        if (e.pointerType === "mouse") {
+          if (!dismissingRef.current) close();
+        }
       }}
       // Touch devices open the details directly instead of stepping through the hover reveal.
       onClick={() => {
@@ -824,6 +875,7 @@ function Cell({ cell, onSeeMore }: CellProps) {
       onBlur={(e) => {
         // Focus moving from the cell to its own button is not "leaving", so don't collapse the reveal
         if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+        if (dismissingRef.current) return;
         close();
       }}
       className="relative aspect-square min-w-0 cursor-pointer overflow-hidden outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#F5D76A]"
@@ -844,10 +896,11 @@ function Cell({ cell, onSeeMore }: CellProps) {
       <div
         onClick={(e) => {
           e.stopPropagation();
+          dismissUp();
           onSeeMore(cell);
         }}
         data-wipe
-        style={{ clipPath: "inset(100% 0% 0% 0%)" }}
+        style={{ clipPath: WIPE_HIDDEN }}
         className="absolute inset-0 z-10 bg-white"
       >
         <div
@@ -877,11 +930,14 @@ function Cell({ cell, onSeeMore }: CellProps) {
               onClick={(e) => {
                 // Prevent the card's touch handler from opening the sidebar again.
                 e.stopPropagation();
+                dismissUp();
                 onSeeMore(cell);
               }}
-              className="flex shrink-0 capitalize items-center whitespace-nowrap py-1 rounded text-sm font-medium bg-black/5 px-2 tracking-tighter hover:text-[#999] hover:bg-black/10 cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
+              className="group flex shrink-0 duration-300 transition-colors transition capitalize items-center whitespace-nowrap py-1 rounded text-[#999] hover:text-[#050a4c] text-sm font-medium bg-black/ px-2 tracking-tighter  hover:bg-black/5 cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
-              See details
+              details
+              
+             
             </button>
 
             <a
@@ -889,20 +945,13 @@ function Cell({ cell, onSeeMore }: CellProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Visit ${cell.company} website`}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-black"
+              className="flex min-w-0 flex-1 items-center justify-end gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-[#050a4c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
+             
               <span className="truncate text-right">
-                {`www.${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "")}`}
+                {`www.${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "").replace(/\/+$/, "")}`}
               </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16px"
-                viewBox="0 -960 960 960"
-                width="16px"
-                fill="currentColor"
-              >
-                <path d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z" />
-              </svg>
+             
             </a>
           </div>
         </div>
@@ -914,7 +963,6 @@ function Cell({ cell, onSeeMore }: CellProps) {
 function DetailsSidebar({
   cell,
   isOpen,
-  backgroundRef,
   onClose,
 }: SidebarProps) {
   const portalReady = useSyncExternalStore(
@@ -1061,10 +1109,7 @@ function DetailsSidebar({
       }
     };
 
-    const background = backgroundRef.current;
-    const wasInert = background?.inert ?? false;
     const previousOverflow = document.body.style.overflow;
-    if (background) background.inert = true;
 
     window.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
@@ -1089,11 +1134,10 @@ function DetailsSidebar({
       );
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
-      if (background) background.inert = wasInert;
       focusTimer?.kill();
       trigger?.focus({ preventScroll: true });
     };
-  }, [isOpen, backgroundRef, onClose, portalReady, cell]);
+  }, [isOpen, onClose, portalReady, cell]);
 
   if (!portalReady) return null;
 
@@ -1447,10 +1491,16 @@ export default function GridHover() {
       {/* gap + white background paints the 2px white lines between cells without per-cell borders */}
       <main
         ref={backgroundRef}
+        inert={selected !== null}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
         {CELLS.map((cell) => (
-          <Cell key={cell.id} cell={cell} onSeeMore={openSidebar} />
+          <Cell
+            key={cell.id}
+            cell={cell}
+            onSeeMore={openSidebar}
+            isSidebarOpen={selected !== null}
+          />
         ))}
       </main>
 
@@ -1458,7 +1508,6 @@ export default function GridHover() {
         key={sidebarContent?.id ?? "closed"}
         cell={sidebarContent}
         isOpen={selected !== null}
-        backgroundRef={backgroundRef}
         onClose={closeSidebar}
       />
     </>

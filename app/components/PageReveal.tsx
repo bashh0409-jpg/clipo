@@ -15,6 +15,7 @@ const VIDEO_READY_TIMEOUT_MS = 4_000;
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
   "/start/cosmos_1312131681.webp",
+  "/start/cosmos_2028908772.webp",
 
   "/start/cosmos_1566198137.webp",
   "/start/cosmos_1871981957.webp",
@@ -60,7 +61,7 @@ export default function PageReveal({
     if (initialPathnameRef.current !== "/") {
       stopIntroVideo();
       gsap.set(page, { clearProps: "clipPath,zIndex" });
-      gsap.set(curtain, { autoAlpha: 0 });
+      gsap.set(curtain, { autoAlpha: 0, display: "none" });
       root.removeAttribute("aria-busy");
       return;
     }
@@ -69,7 +70,7 @@ export default function PageReveal({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       stopIntroVideo();
       gsap.set(page, { clipPath: "none" });
-      gsap.set(curtain, { autoAlpha: 0 });
+      gsap.set(curtain, { autoAlpha: 0, display: "none" });
       root.removeAttribute("aria-busy");
       return;
     }
@@ -151,7 +152,7 @@ export default function PageReveal({
         activeTimeline = gsap.timeline({
           onComplete: () => {
             gsap.set(page, { clearProps: "clipPath,zIndex" });
-            gsap.set(curtain, { autoAlpha: 0 });
+            gsap.set(curtain, { autoAlpha: 0, display: "none" });
             html.style.overflow = previousOverflow;
             root.removeAttribute("aria-busy");
           },
@@ -222,7 +223,7 @@ export default function PageReveal({
       cancelVideoWait();
       stopIntroVideo();
       gsap.set(page, { clearProps: "clipPath,zIndex,transform,filter" });
-      gsap.set(curtain, { autoAlpha: 0 });
+      gsap.set(curtain, { autoAlpha: 0, display: "none" });
       html.style.overflow = previousOverflow;
       root.removeAttribute("aria-busy");
     };
@@ -258,14 +259,26 @@ export default function PageReveal({
       <div
         data-page-curtain
         className={`pointer-events-none fixed inset-0 z-[200] overflow-hidden bg-[#fff] ${
-          isInitialHomePage ? "" : "invisible"
+          isInitialHomePage ? "" : "hidden"
         }`}
       >
+        <div className="absolute left-1/2 top-1/2 z-0 aspect-[4/5] w-[min(65vw,60vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden sm:w-[min(35vw,35vh)]">
+          <Image
+            src="/start/cosmos_2024599819.webp"
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 640px) 35vmin, 60vmin"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+
         {INTRO_IMAGES.map((image) => (
           <div
             key={image}
             data-intro-image
-            className="invisible absolute left-1/2 top-1/2 aspect-[4/5] w-[min(65vw,60vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden will-change-[clip-path] sm:w-[min(35vw,35vh)]"
+            className="invisible absolute left-1/2 top-1/2 z-10 aspect-[4/5] w-[min(65vw,60vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden will-change-[clip-path] sm:w-[min(35vw,35vh)]"
             style={{ clipPath: "inset(50%)" }}
           >
             {image === MUX_INTRO_VIDEO ? (
@@ -355,7 +368,7 @@ export default function PageReveal({
           />
         </div>
 
-        <div className="absolute inset-x-0 hidde bottom-0 h-[3px] bg-black/10">
+        <div className="absolute inset-x-0 hidde bottom-0 z-30 h-[3px] bg-black/10">
           <div
             data-intro-progress
             className="h-full w-full origin-left bg-black/60"
