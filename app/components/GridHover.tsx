@@ -735,6 +735,7 @@ const CELLS: CellData[] = [
 function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const cursorHintRef = useRef<HTMLSpanElement>(null);
+  const detailsLabelRef = useRef<HTMLSpanElement>(null);
   const pointerTypeRef = useRef<string>("mouse");
   const dismissingRef = useRef(false);
   const [cursorHint, setCursorHint] = useState("Info");
@@ -787,6 +788,24 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
 
   const open = () => setWipeVisible(true);
   const close = () => setWipeVisible(false);
+
+  const animateDetailsLabel = (visible: boolean) => {
+    const label = detailsLabelRef.current;
+    if (!label) return;
+
+    gsap.killTweensOf(label);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(label, { yPercent: 0 });
+      return;
+    }
+
+    gsap.to(label, {
+      yPercent: visible ? -50 : 0,
+      duration: visible ? 0.38 : 0.24,
+      ease: visible ? "power3.out" : "power2.inOut",
+      overwrite: true,
+    });
+  };
 
   const changeCursorHint = (nextHint: string) => {
     if (cursorHint === nextHint) return;
@@ -887,11 +906,17 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
           if (hint) {
             const x = Math.max(
               8,
-              Math.min(e.clientX + 14, window.innerWidth - hint.offsetWidth - 8),
+              Math.min(
+                e.clientX + 14,
+                window.innerWidth - hint.offsetWidth - 8,
+              ),
             );
             const y = Math.max(
               8,
-              Math.min(e.clientY + 14, window.innerHeight - hint.offsetHeight - 8),
+              Math.min(
+                e.clientY + 14,
+                window.innerHeight - hint.offsetHeight - 8,
+              ),
             );
             gsap.set(hint, {
               x,
@@ -901,7 +926,8 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
           }
           startAmbientSound();
           if (dismissingRef.current) {
-            const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
+            const wipe =
+              rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
             if (wipe) gsap.killTweensOf(wipe);
             dismissingRef.current = false;
           }
@@ -1016,11 +1042,36 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
                 dismissUp();
                 onSeeMore(cell);
               }}
-              className="group flex shrink-0 duration-300 transition-colors transition capitalize items-center whitespace-nowrap py-1 rounded text-[#999] hover:text-[#050a4c] text-sm font-medium bg-black/ px-2 tracking-tighter  hover:bg-black/5 cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
+              onPointerEnter={() => animateDetailsLabel(true)}
+              onPointerLeave={(event) => {
+                if (!event.currentTarget.matches(":focus-visible")) {
+                  animateDetailsLabel(false);
+                }
+              }}
+              onFocus={() => animateDetailsLabel(true)}
+              onBlur={(event) => {
+                if (!event.currentTarget.matches(":hover")) {
+                  animateDetailsLabel(false);
+                }
+              }}
+              className="group flex shrink-0 duration-300 transition-colors transition capitalize items-center whitespace-nowrap py-0.5 rounded text-[#999] hover:text-[#fff] text-sm font-medium bg-[#050a4c]/5 px-2 tracking-tighter  hover:bg-[#050a4c] cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
-              details
-              
-             
+              <span className="h-4 w-fit overflow-hidden">
+                <span
+                  ref={detailsLabelRef}
+                  className="flex flex-col"
+                >
+                  <span className="flex h-4 shrink-0 items-center justify-center">
+                    See more
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="flex h-4 shrink-0 items-center justify-center"
+                  >
+                    See more
+                  </span>
+                </span>
+              </span>
             </button>
 
             <a
@@ -1040,11 +1091,12 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
               }}
               className="flex min-w-0 items-center w-fit gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-[#050a4c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
-             
               <span className="truncate text-right">
-                {`www.${cell.url.replace(/(^\w+:|^)\/\//, "").replace(/^www\./i, "").replace(/\/+$/, "")}`}
+                {`www.${cell.url
+                  .replace(/(^\w+:|^)\/\//, "")
+                  .replace(/^www\./i, "")
+                  .replace(/\/+$/, "")}`}
               </span>
-             
             </a>
           </div>
         </div>

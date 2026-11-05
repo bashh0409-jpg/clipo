@@ -4,6 +4,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 type AboutSection = {
   id: string;
@@ -36,8 +39,6 @@ export default function PinnedAboutSections({
     const track = trackRef.current;
     if (!track || reducedMotion) return;
 
-    gsap.registerPlugin(ScrollTrigger);
-
     const trigger = ScrollTrigger.create({
       trigger: track,
       start: "top top",
@@ -55,16 +56,43 @@ export default function PinnedAboutSections({
     return () => trigger.kill();
   }, [reducedMotion, sections.length]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (reducedMotion || !contentRef.current) return;
 
-    const tween = gsap.fromTo(
-      contentRef.current,
-      { autoAlpha: 0, y: 20 },
-      { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" },
+    const splitTargets = contentRef.current.querySelectorAll<HTMLElement>(
+      "[data-about-split]",
     );
+    const splits = Array.from(splitTargets, (element) =>
+      SplitText.create(element, {
+        type: "words",
+        mask: "words",
+      }),
+    );
+    const words = splits.flatMap((split) => split.words);
+    const tween = gsap.fromTo(
+      words,
+      {
+        yPercent: 65,
+        autoAlpha: 0,
+        filter: "blur(5px)",
+      },
+      {
+        yPercent: 0,
+        autoAlpha: 1,
+        filter: "blur(0px)",
+        duration: 0.5,
+        stagger: 0.025,
+        ease: "power3.out",
+        onComplete: () =>
+          gsap.set(words, {
+            clearProps: "filter,transform,opacity,visibility",
+          }),
+      },
+    );
+
     return () => {
       tween.kill();
+      splits.forEach((split) => split.revert());
     };
   }, [activeIndex, reducedMotion]);
 
@@ -104,11 +132,15 @@ export default function PinnedAboutSections({
               <div ref={contentRef}>
                 <h2
                   id={`h-${activeSection.id}`}
+                  data-about-split
                   className="bbh text-3xl font-bold uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-7xl"
                 >
                   {activeSection.title}
                 </h2>
-                <p className="mx-auto mt-7 max-w-md text-base font-medium leading-5 tracking-tight text-white/90 md:text-lg">
+                <p
+                  data-about-split
+                  className="mx-auto mt-7 max-w-md text-base font-medium leading-5 tracking-tight text-white/90 md:text-lg"
+                >
                   {activeSection.body}
                 </p>
                 <div

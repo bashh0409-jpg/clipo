@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CONTACT_HREF } from "@/lib/contact";
+import SponsorSplitText from "../components/SponsorSplitText";
 
 export const metadata: Metadata = {
   title: "Sponsor | Veyra group",
@@ -12,6 +13,7 @@ export default function SponsorPage() {
     <main className="relative min-h-screen w-full text-white">
       <div aria-hidden="true" className="fixed inset-0 z-0" />
       <section className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-20">
+        <SponsorSplitText>
         <div className="relative z-10 flex w-full flex-col items-center text-center">
           <h1 className="bbh flex w-full flex-col items-center justify-center font-black uppercase leading-[0.85] tracking-tighter text-white md:flex-row md:gap-[0.15em]">
             <span className="text-[24vw] md:text-[8vw]">Veyra</span>
@@ -23,11 +25,11 @@ export default function SponsorPage() {
               Partner with Veyra
             </p>
 
-            <h2 className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-4xl md:text-5xl">
+            <h2 data-split-text className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-4xl md:text-5xl">
               Put your brand in the discovery.
             </h2>
 
-            <p className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
+            <p data-split-text className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
               Veyra introduces people to companies, products, and ideas. We’re
               open to relevant sponsorship partnerships. Sponsored placements
               will be clearly identified and are not independent endorsements.
@@ -46,10 +48,10 @@ export default function SponsorPage() {
             <p className="bbh mb-4 text-xs font-semibold uppercase tracking-tight text-white/70">
               Support the project
             </p>
-            <h2 className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-3xl">
+            <h2 data-split-text className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-3xl">
               Help Veyra grow.
             </h2>
-            <p className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
+            <p data-split-text className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
               If you find this independent company-discovery project useful, you
               can support its development and running costs through our
               BackaBuddy campaign. Contributions are handled by BackaBuddy.
@@ -64,6 +66,7 @@ export default function SponsorPage() {
             </a>
           </div>
         </div>
+        </SponsorSplitText>
       </section>
     </main>
   );
