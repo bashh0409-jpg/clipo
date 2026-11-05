@@ -136,7 +136,7 @@ export default function PinnedAboutSections({
       <div className="relative z-10 flex justify-center px-6 pb-20 text-center">
         <Link
           href="/"
-          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
+          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-white px-2 tracking-tight  py-1 text-xs font-medium text-black shadow-lg backdrop-blur-sm"
         >
           Explore the grid
         </Link>

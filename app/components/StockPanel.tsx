@@ -4,6 +4,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { STOCK_TICKERS, hasStockTicker } from "@/lib/stocks/tickers";
 import type { StockQuote } from "@/lib/stocks/types";
+import gsap from "gsap";
 
 interface StockPanelProps {
   cellId: string;
@@ -101,18 +102,10 @@ export function StockPanel({ cellId, stockUrl }: StockPanelProps) {
           href={stockUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-2 inline-flex items-center gap-1 underline text-sm font-medium tracking-tight text-[#999] hover:text-current"
+          className="inline-flex bg-black/5 p-1 rounded items-center  hover:bg-black/10 duration-200 text-sm font-medium tracking-tight text-[#999] hover:text-current"
         >
-          See stocks
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="20px"
-            viewBox="0 -960 960 960"
-            width="20px"
-            fill="currentColor"
-          >
-            <path d="M630-444H192v-72h438L429-717l51-51 288 288-288 288-51-51 201-201Z" />
-          </svg>
+        Stocks
+         
         </a>
       )}
     </div>
@@ -122,17 +115,51 @@ export function StockPanel({ cellId, stockUrl }: StockPanelProps) {
 function Quote({ quote, label }: { quote: StockQuote; label?: string }) {
   const isUp = (quote.change ?? 0) >= 0;
   const tone = isUp ? "text-emerald-500" : "text-red-500";
+  const priceRef = useRef<HTMLSpanElement>(null);
 
   const formatter = new Intl.NumberFormat("en", {
     style: "currency",
     currency: quote.currency,
   });
 
+  useEffect(() => {
+    const price = priceRef.current;
+    if (
+      !price ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    gsap.fromTo(
+      price,
+      {
+        backgroundColor: isUp
+          ? "rgba(16, 185, 129, 0.2)"
+          : "rgba(239, 68, 68, 0.2)",
+        scale: 1.04,
+      },
+      {
+        backgroundColor: "rgba(255, 255, 255, 0)",
+        scale: 1,
+        duration: 0.9,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+    );
+
+    return () => {
+      gsap.killTweensOf(price);
+    };
+  }, [isUp, quote.asOf, quote.price]);
+
   return (
     <div className="mb-2 flex w-full items-center gap-3">
       <div className="shrink-0">
         <p className="text-sm font-medium tracking-tight">
-          {formatter.format(quote.price)}{" "}
+          <span ref={priceRef} className="inline-block rounded px-1">
+            {formatter.format(quote.price)}
+          </span>{" "}
           {label && <span className="text-[#999]">· {label}</span>}
         </p>
         {quote.changePercent !== null && (
@@ -148,6 +175,7 @@ function Quote({ quote, label }: { quote: StockQuote; label?: string }) {
 
 function Sparkline({ values, tone, format }: SparklineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<SVGPolylineElement>(null);
   const guideRef = useRef<SVGLineElement>(null);
   const dotRef = useRef<SVGCircleElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
@@ -187,6 +215,34 @@ function Sparkline({ values, tone, format }: SparklineProps) {
         : null,
     [scale, values],
   );
+
+  useLayoutEffect(() => {
+    const line = lineRef.current;
+    if (!line) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(line, { clearProps: "strokeDasharray,strokeDashoffset" });
+      return;
+    }
+
+    const length = line.getTotalLength();
+    gsap.fromTo(
+      line,
+      { strokeDasharray: length, strokeDashoffset: length },
+      {
+        strokeDashoffset: 0,
+        duration: 0.85,
+        ease: "power2.out",
+        overwrite: "auto",
+        onComplete: () =>
+          gsap.set(line, { clearProps: "strokeDasharray,strokeDashoffset" }),
+      },
+    );
+
+    return () => {
+      gsap.killTweensOf(line);
+    };
+  }, [points]);
 
   // Cancel any in-flight animation frame on unmount
   useEffect(
@@ -315,6 +371,7 @@ function Sparkline({ values, tone, format }: SparklineProps) {
         aria-hidden
       >
         <polyline
+          ref={lineRef}
           points={points}
           fill="none"
           stroke="currentColor"

@@ -1,11 +1,15 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { playUiSound } from "@/lib/ui-sounds";
 
 const Logo = () => {
   return (
     <Link
       href="/"
       aria-label="Veyra group home"
+      onClick={() => playUiSound("/homelink.ogg")}
       className="fixed left-4 top-4 z-[150] flex shrink-0 items-center text-xs font-semibold uppercase tracking-tighter text-[#fff] bbh"
     >
       <svg

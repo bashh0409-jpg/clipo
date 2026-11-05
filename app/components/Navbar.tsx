@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import gsap from "gsap";
-import { CONTACT_HREF } from "@/lib/contact";
-
+import {
+  getUiSoundEnabled,
+  playUiSound,
+  subscribeToUiSoundPreference,
+  setUiSoundEnabled,
+} from "@/lib/ui-sounds";
 interface NavIconProps {
   size: number;
   strokeWidth: number;
@@ -17,14 +21,20 @@ const NAV_ITEMS = [
   { label: "Work", href: "/", icon: WorkIcon },
   { label: "Sponsor", href: "/sponsor", icon: SponsorIcon },
   { label: "About", href: "/about", icon: InfoIcon },
-  { label: "Contact", href: CONTACT_HREF, icon: ContactIcon },
+  
 ] as const;
 
 export default function Navbar() {
   const pathname = usePathname();
+  const soundEnabled = useSyncExternalStore(
+    subscribeToUiSoundPreference,
+    getUiSoundEnabled,
+    () => true,
+  );
   const logoRef = useRef<HTMLImageElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
+  const soundIconRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const logo = logoRef.current;
@@ -157,75 +167,146 @@ export default function Navbar() {
  }, [pathname]);
 
   return (
-    <nav
-      aria-label="Main navigation"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[150] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
-    >
-      <div
-        ref={navRef}
-        className="pointer-events-auto relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
+    <>
+      <nav
+        aria-label="Main navigation"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[150] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-7 md:pb-7"
       >
-        
+        <div
+          ref={navRef}
+          className="pointer-events-auto relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
+        >
+          
 
+          <span
+            ref={pillRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 top-0 z-0 rounded-full bg-black/10 opacity-0"
+          />
+
+          {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+            const isActive =
+              href === pathname ||
+              (!href.startsWith("mailto:") &&
+                href !== "/" &&
+                pathname.startsWith(`${href}/`));
+            const className = `group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap- rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
+              isActive ? "text-black" : "text-[#999]"
+            }`;
+
+            const content = (
+              <>
+                <Icon
+                  size={18}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                  className="transition-transform duration-300"
+                />
+                <span className="text-[10px] hidden font-medium leading-none md:hidden">
+                  {label}
+                </span>
+              </>
+            );
+
+            return href.startsWith("mailto:") ? (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                data-nav-item
+                data-active={isActive}
+                className={className}
+                onClick={() => playUiSound("/tick.ogg")}
+              >
+                {content}
+              </a>
+            ) : (
+              <Link
+                key={label}
+                href={href}
+                aria-label={label}
+                data-nav-item
+                data-active={isActive}
+                aria-current={isActive ? "page" : undefined}
+                className={className}
+                onClick={() => playUiSound("/tick.ogg")}
+              >
+                {content}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+      <button
+        type="button"
+        aria-label={soundEnabled ? "Turn sound off" : "Turn sound on"}
+        aria-pressed={soundEnabled}
+        title={soundEnabled ? "Sound on" : "Sound off"}
+        onClick={() => {
+          const nextEnabled = !soundEnabled;
+          setUiSoundEnabled(nextEnabled);
+          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            const icon = soundIconRef.current;
+            if (icon) {
+              gsap.fromTo(
+                icon,
+                { filter: "blur(4px)", scale: 0.8 },
+                {
+                  filter: "blur(0px)",
+                  scale: 1,
+                  duration: 0.35,
+                  ease: "power2.out",
+                  overwrite: true,
+                  onComplete: () => gsap.set(icon, { clearProps: "filter,transform" }),
+                },
+              );
+            }
+          }
+          if (nextEnabled) playUiSound("/tick.ogg");
+        }}
+        className="group pointer-events-auto fixed right-0 top-4 z-[160] flex h-7 w-2 cursor-pointer items-center justify-center overflow-hidden rounded-l hover:rounded-l bg-white text-[#999] transition-[width,color] duration-300 hover:w-7 hover:h-7 hover:text-black focus-visible:w-10 focus-visible:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+      >
         <span
-          ref={pillRef}
           aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 z-0 rounded-full bg-black/10 opacity-0"
+          className="absolute left-0.5 h-6 w-[3px] rounded-full bg-black/40 transition-opacity group-hover:opacity-0 group-focus-visible:opacity-0"
         />
-
-        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
-          const isActive =
-            href === pathname ||
-            (!href.startsWith("mailto:") &&
-              href !== "/" &&
-              pathname.startsWith(`${href}/`));
-          const className = `group relative z-10 flex h-8 w-10 min-w-0 flex-1 flex-col items-center justify-center gap- rounded-full transition-colors duration-300 hover:text-black focus-visible:text-black focus-visible:outline-none md:h-8 md:w-10 md:flex-none md:flex-row md:gap-1 ${
-            isActive ? "text-black" : "text-[#999]"
-          }`;
-
-          const content = (
-            <>
-              <Icon
-                size={18}
-                strokeWidth={2}
-                aria-hidden="true"
-                className="transition-transform duration-300"
-              />
-              <span className="text-[10px] hidden font-medium leading-none md:hidden">
-                {label}
-              </span>
-            </>
-          );
-
-          return href.startsWith("mailto:") ? (
-            <a
-              key={label}
-              href={href}
-              aria-label={label}
-              data-nav-item
-              data-active={isActive}
-              className={className}
-            >
-              {content}
-            </a>
-          ) : (
-            <Link
-              key={label}
-              href={href}
-              aria-label={label}
-              data-nav-item
-              data-active={isActive}
-              aria-current={isActive ? "page" : undefined}
-              className={className}
-            >
-              {content}
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+        <span className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+          <SoundIcon ref={soundIconRef} enabled={soundEnabled} />
+        </span>
+      </button>
+    </>
   );
 }
+
+function SoundIcon({
+  enabled,
+  ref,
+}: {
+  enabled: boolean;
+  ref: React.Ref<SVGSVGElement>;
+}) {
+  return (
+    <svg
+      ref={ref}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path
+        d={
+          enabled
+            ? "M14,20.73V18.68q2.25-0.65 3.63-2.5T19,11.98t-1.38-4.2Q16.25,5.93 14,5.27V3.22q3.1,0.7 5.05,3.14T21,11.98t-1.95,5.61T14,20.73ZM3,15V9H7l5-5V20L7,15H3Zm11,1V7.95Q15.18,8.5 15.84,9.6T16.5,12q0,1.27-0.66,2.36T14,16ZM10,8.85L7.85,11H5v2H7.85L10,15.15V8.85ZM7.5,12Z"
+            : "M19.8,22.6l-3.02-3.03q-0.63,0.4-1.33,0.69T14,20.73V18.68q0.35-0.13 0.69-0.25q0.34-0.13 0.64-0.3L12,14.8V20L7,15H3V9H6.2L1.4,4.2L2.8,2.8L21.2,21.2l-1.4,1.4Zm-0.2-5.8l-1.45-1.45q0.42-0.78 0.64-1.63T19,11.98q0-2.35-1.38-4.2Q16.25,5.93 14,5.27V3.22q3.1,0.7 5.05,3.14T21,11.98q0,1.32-0.36,2.55T19.6,16.8Zm-3.35-3.35L14,11.2V7.95Q15.18,8.5 15.84,9.6T16.5,12q0,0.38-0.06 0.74t-0.19 0.71ZM12,9.2L9.4,6.6L12,4V9.2Zm-2,5.95V12.8L8.2,11H5v2H7.85L10,15.15ZM9.1,11.9Z"
+        }
+      />
+    </svg>
+  );
+}
+
+
 
 function SponsorIcon({ size, className, ...props }: NavIconProps) {
   return (
@@ -271,22 +352,6 @@ function InfoIcon({ size, className, ...props }: NavIconProps) {
       className={className}
     >
       <path d="M440-280h80v-240h-80v240Zm68.5-331.5Q520-623 520-640t-11.5-28.5Q497-680 480-680t-28.5 11.5Q440-657 440-640t11.5 28.5Q463-600 480-600t28.5-11.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-    </svg>
-  );
-}
-
-function ContactIcon({ size, className, ...props }: NavIconProps) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      height={size}
-      viewBox="0 -960 960 960"
-      width={size}
-      fill="currentColor"
-      className={className}
-    >
-      <path d="M440-120v-80h320v-284q0-117-81.5-198.5T480-764q-117 0-198.5 81.5T200-484v244h-40q-33 0-56.5-23.5T80-320v-80q0-21 10.5-39.5T120-469l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-840q68 0 129 24t109 66.5Q766-707 797-649t40 126l3 52q19 9 29.5 27t10.5 38v92q0 20-10.5 38T840-249v49q0 33-23.5 56.5T760-120H440ZM331.5-411.5Q320-423 320-440t11.5-28.5Q343-480 360-480t28.5 11.5Q400-457 400-440t-11.5 28.5Q377-400 360-400t-28.5-11.5Zm240 0Q560-423 560-440t11.5-28.5Q583-480 600-480t28.5 11.5Q640-457 640-440t-11.5 28.5Q617-400 600-400t-28.5-11.5ZM241-462q-7-106 64-182t177-76q89 0 156.5 56.5T720-519q-91-1-167.5-49T435-698q-16 80-67.5 142.5T241-462Z" />
     </svg>
   );
 }

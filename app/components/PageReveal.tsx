@@ -77,8 +77,11 @@ export default function PageReveal({
 
     // Prevent scrolling while the intro plays.
     const html = document.documentElement;
+    const body = document.body;
     const previousOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
     html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
     let cancelled = false;
     let cancelVideoWait = () => {};
     const pageImagesLoaded = Promise.all(
@@ -154,6 +157,7 @@ export default function PageReveal({
             gsap.set(page, { clearProps: "clipPath,zIndex" });
             gsap.set(curtain, { autoAlpha: 0, display: "none" });
             html.style.overflow = previousOverflow;
+            body.style.overflow = previousBodyOverflow;
             root.removeAttribute("aria-busy");
           },
         });
@@ -225,6 +229,7 @@ export default function PageReveal({
       gsap.set(page, { clearProps: "clipPath,zIndex,transform,filter" });
       gsap.set(curtain, { autoAlpha: 0, display: "none" });
       html.style.overflow = previousOverflow;
+      body.style.overflow = previousBodyOverflow;
       root.removeAttribute("aria-busy");
     };
     reducedMotion.addEventListener("change", handleMotionPreferenceChange);
@@ -235,6 +240,7 @@ export default function PageReveal({
       cancelVideoWait();
       reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       html.style.overflow = previousOverflow;
+      body.style.overflow = previousBodyOverflow;
     };
   }, []);
 

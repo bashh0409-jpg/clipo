@@ -79,7 +79,7 @@ export default function MouseFollowerImage() {
       className="pointer-events-none absolute right-12 top-44 z-0 hidden h-48 w-48 sm:block md:h-64 md:w-64"
     >
       <img
-        src="https://clipo.one/uploads/loading/see.svg?v=20260901-3"
+        src="/see.svg"
         alt=""
         className="h-full w-full scale-x-[-1] object-contain"
       />

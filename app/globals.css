@@ -27,8 +27,10 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-html:has([data-page-reveal][data-intro-active="true"][aria-busy="true"]) {
+html:has([data-page-reveal][aria-busy="true"]),
+html:has([data-page-reveal][aria-busy="true"]) body {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 * {

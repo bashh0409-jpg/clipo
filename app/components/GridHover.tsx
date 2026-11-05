@@ -13,6 +13,7 @@ import { SplitText } from "gsap/SplitText";
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { StockPanel } from "./StockPanel";
+import { playUiSound, startAmbientSound } from "@/lib/ui-sounds";
 gsap.registerPlugin(SplitText);
 
 const companyFont = Playfair_Display({
@@ -619,9 +620,9 @@ const CELLS: CellData[] = [
   {
     id: "tymebank",
     imgSrc: "/logos/tymebank.svg",
-    company: "TymeBank",
+    company: "Gotyme Bank",
     title: "Digital banking",
-    url: "https://www.tymebank.co.za/",
+    url: "https://gotyme.co.za/",
     instagramUrl: "https://www.instagram.com/tymebank/",
     linkedinUrl: "https://www.linkedin.com/company/tymebank",
     reveal:
@@ -717,11 +718,11 @@ const CELLS: CellData[] = [
     id: "veyra",
     imgSrc: "/logos/veyra.svg",
     company: "Veyra group",
-    title: "Portfolio group",
+    title: "Company discovery website",
     url: "https://veyra.thewisestudio.xyz/",
     reveal:
-      "Veyra group is a portfolio of companies, products, and ideas that make everyday life simpler, smarter, and more connected. From moving money across borders to running a business, filing taxes, or investing for the future, each company in the group tackles a different real-world challenge. Veyra's mission is simple: good ideas deserve to be seen. Veyra is a portfolio group bringing together companies, products, and ideas focused on making everyday experiences simpler, smarter, and more connected.",
-    detail: "Portfolio and company discovery",
+      "Veyra Group is an independent company-discovery website helping people explore the companies and products shaping everyday life. Browse profiles to learn what each company does, who it serves, and where it operates. Good ideas deserve to be seen.",
+    detail: "Company profiles and discovery",
     location: "Pietermaritzburg, South Africa",
     ceo: "Wandile M. Y. Langa",
     availability: "Explore individual portfolio company profiles",
@@ -733,8 +734,14 @@ const CELLS: CellData[] = [
 
 function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const cursorHintRef = useRef<HTMLSpanElement>(null);
   const pointerTypeRef = useRef<string>("mouse");
   const dismissingRef = useRef(false);
+  const [cursorHint, setCursorHint] = useState("Info");
+  const websiteHost = cell.company
+    .replace(/(^\w+:|^)\/\//, "")
+    .replace(/^www\./i, "")
+    .split(/[/?#]/)[0];
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -780,6 +787,36 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
 
   const open = () => setWipeVisible(true);
   const close = () => setWipeVisible(false);
+
+  const changeCursorHint = (nextHint: string) => {
+    if (cursorHint === nextHint) return;
+
+    const hint = cursorHintRef.current;
+    if (
+      !hint ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setCursorHint(nextHint);
+      return;
+    }
+
+    gsap.killTweensOf(hint);
+    gsap.to(hint, {
+      filter: "blur(5px)",
+      duration: 0.12,
+      onComplete: () => {
+        setCursorHint(nextHint);
+        requestAnimationFrame(() => {
+          gsap.to(hint, {
+            filter: "blur(0px)",
+            duration: 0.2,
+            ease: "power2.out",
+            onComplete: () => gsap.set(hint, { clearProps: "filter" }),
+          });
+        });
+      },
+    });
+  };
 
   useEffect(() => {
     if (isSidebarOpen) return;
@@ -846,22 +883,65 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
       }}
       onPointerEnter={(e) => {
         if (e.pointerType === "mouse") {
+          const hint = cursorHintRef.current;
+          if (hint) {
+            const x = Math.max(
+              8,
+              Math.min(e.clientX + 14, window.innerWidth - hint.offsetWidth - 8),
+            );
+            const y = Math.max(
+              8,
+              Math.min(e.clientY + 14, window.innerHeight - hint.offsetHeight - 8),
+            );
+            gsap.set(hint, {
+              x,
+              y,
+            });
+            gsap.to(hint, { autoAlpha: 1, duration: 0.18 });
+          }
+          startAmbientSound();
           if (dismissingRef.current) {
             const wipe = rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
             if (wipe) gsap.killTweensOf(wipe);
             dismissingRef.current = false;
           }
+          playUiSound("/hover.ogg");
           open();
         }
       }}
       onPointerLeave={(e) => {
         if (e.pointerType === "mouse") {
+          gsap.to(cursorHintRef.current, {
+            autoAlpha: 0,
+            duration: 0.15,
+            overwrite: "auto",
+          });
           if (!dismissingRef.current) close();
         }
+      }}
+      onPointerMove={(e) => {
+        if (e.pointerType !== "mouse" || !cursorHintRef.current) return;
+        const hint = cursorHintRef.current;
+        const x = Math.max(
+          8,
+          Math.min(e.clientX + 14, window.innerWidth - hint.offsetWidth - 8),
+        );
+        const y = Math.max(
+          8,
+          Math.min(e.clientY + 14, window.innerHeight - hint.offsetHeight - 8),
+        );
+        gsap.to(cursorHintRef.current, {
+          x,
+          y,
+          duration: 0.12,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
       }}
       // Touch devices open the details directly instead of stepping through the hover reveal.
       onClick={() => {
         if (pointerTypeRef.current === "mouse") return;
+        playUiSound("/tick.ogg");
         onSeeMore(cell);
       }}
       onFocus={(e) => {
@@ -869,6 +949,7 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
           e.target instanceof HTMLElement &&
           e.target.matches(":focus-visible")
         ) {
+          startAmbientSound();
           open();
         }
       }}
@@ -896,6 +977,7 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
       <div
         onClick={(e) => {
           e.stopPropagation();
+          playUiSound("/tick.ogg");
           dismissUp();
           onSeeMore(cell);
         }}
@@ -930,6 +1012,7 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
               onClick={(e) => {
                 // Prevent the card's touch handler from opening the sidebar again.
                 e.stopPropagation();
+                playUiSound("/tick.ogg");
                 dismissUp();
                 onSeeMore(cell);
               }}
@@ -945,7 +1028,17 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Visit ${cell.company} website`}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-[#050a4c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
+              onPointerEnter={(event) => {
+                if (event.pointerType === "mouse") {
+                  changeCursorHint(`Visit ${websiteHost}`);
+                }
+              }}
+              onPointerLeave={(event) => {
+                if (event.pointerType === "mouse") {
+                  changeCursorHint("Info");
+                }
+              }}
+              className="flex min-w-0 items-center w-fit gap-1 text-sm font-medium tracking-tight text-[#999] hover:underline transition-colors duration-500 hover:text-[#050a4c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
              
               <span className="truncate text-right">
@@ -956,6 +1049,18 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
           </div>
         </div>
       </div>
+      {typeof document !== "undefined" &&
+        createPortal(
+          <span
+            ref={cursorHintRef}
+            aria-hidden="true"
+            style={{ zIndex: 2147483647 }}
+            className="pointer-events-none fixed px-1  rounded-xs left-0 top-0 z-[99999] whitespace-nowrap bg-black p-0.5  font-mon font-semibold text-[10px] uppercase tracking-tight text-white opacity-0"
+          >
+            {cursorHint}
+          </span>,
+          document.body,
+        )}
     </div>
   );
 }

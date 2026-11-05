@@ -66,17 +66,17 @@ export default function AboutPage() {
           <h2 className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-4xl md:text-5xl">
             Companies, products, and ideas.
           </h2>
-          <p className="mx-auto mt-7 max-w-sm text-sm font-medium leading-5 tracking-tight text-white/90">
+          <p className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
             Good ideas deserve to be seen. Veyra helps you discover the
             companies and products behind them.
           </p>
-          
-        </div><a
-            href="#about"
-            className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
-          >
-            Read more
-          </a>
+        </div>
+        <a
+          href="#about"
+          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-white px-2 tracking-tight  py-1 text-xs font-medium text-black shadow-lg backdrop-blur-sm"
+        >
+          Read more
+        </a>
       </section>
 
       {/* ───────── ABOUT CONTENT ───────── */}
@@ -109,7 +109,7 @@ export default function AboutPage() {
         </aside>{" "}
         <a
           href={CONTACT_HREF}
-          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
+          className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-white px-2 tracking-tight  py-1 text-xs font-medium text-black shadow-lg backdrop-blur-sm"
         >
           Contact us
         </a>

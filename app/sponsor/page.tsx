@@ -27,7 +27,7 @@ export default function SponsorPage() {
               Put your brand in the discovery.
             </h2>
 
-            <p className="mx-auto mt-7 mb-8 max-w-sm text-sm font-medium leading-5 tracking-tight text-white">
+            <p className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
               Veyra introduces people to companies, products, and ideas. We’re
               open to relevant sponsorship partnerships. Sponsored placements
               will be clearly identified and are not independent endorsements.
@@ -36,9 +36,31 @@ export default function SponsorPage() {
 
             <a
               href={CONTACT_HREF}
-              className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
+              className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-white px-2 tracking-tight  py-1 text-xs font-medium text-black shadow-lg backdrop-blur-sm"
             >
               Contact us
+            </a>
+          </div>
+
+          <div className="mx-auto mt-14 w-full max-w-xl border-t border-white/20 pt-10">
+            <p className="bbh mb-4 text-xs font-semibold uppercase tracking-tight text-white/70">
+              Support the project
+            </p>
+            <h2 className="bbh text-xl font-bold uppercase leading-[0.98] tracking-tight sm:text-3xl">
+              Help Veyra grow.
+            </h2>
+            <p className="mx-auto mt-7 mb-8 max-w-md text-sm font-semibold leading-tight tracking-tight text-white">
+              If you find this independent company-discovery project useful, you
+              can support its development and running costs through our
+              BackaBuddy campaign. Contributions are handled by BackaBuddy.
+            </p>
+            <a
+              href="https://www.backabuddy.co.za/campaign/support-veyra-group-grow"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pointer-events-auto uppercase font-mono mt-8 z-30  rounded bg-white px-2 tracking-tight  py-1 text-xs font-medium text-black shadow-lg backdrop-blur-sm"
+            >
+              Support Veyra on BackaBuddy
             </a>
           </div>
         </div>
