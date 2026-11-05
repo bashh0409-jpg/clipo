@@ -29,9 +29,22 @@ const bbhBartle = BBH_Bartle({
 });
 
 export const metadata: Metadata = {
-  title: "Veyra group | Selected work",
+  metadataBase: new URL("https://veyra.thewisestudio.xyz"),
+  title: "Veyra | Discover companies and products",
   description:
-    "Explore companies, products, and ideas featured in the Veyra group portfolio.",
+    "Discover companies and products shaping everyday life. Explore what they do, who they serve, and where they operate.",
+  openGraph: {
+    title: "Veyra | Discover companies and products",
+    description:
+      "Discover companies and products shaping everyday life. Explore what they do, who they serve, and where they operate.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Veyra | Discover companies and products",
+    description:
+      "Discover companies and products shaping everyday life. Explore what they do, who they serve, and where they operate.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -50,12 +63,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <SequentialVideoBackground />
         <SmoothScroll />
+        <header>
+          <Navbar />
+          <Logo />
+        </header>
         <PageReveal>{children}</PageReveal>
         <PageTransition />
-
-        <Navbar />
-        <Logo />
         <Sidebar/>
+        <footer className="sr-only">
+          Veyra is an independent company-discovery website.
+        </footer>
         <SpeedInsights />
         <Analytics />
       </body>

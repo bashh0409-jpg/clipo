@@ -1599,6 +1599,9 @@ export default function GridHover() {
         inert={selected !== null}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
+        <h1 className="sr-only">
+          Discover companies and products with Veyra
+        </h1>
         {CELLS.map((cell) => (
           <Cell
             key={cell.id}
