@@ -246,13 +246,13 @@ export default function Navbar() {
           setUiSoundEnabled(nextEnabled);
           if (nextEnabled) playUiSound("/tick.ogg");
         }}
-        className="group pointer-events-auto fixed right-0 top-4 z-[160] flex h-7 w-2 cursor-pointer items-center justify-center overflow-hidden rounded-l bg-white text-[#999] transition-[width,color] duration-300 hover:w-20 focus-visible:w-20 focus-visible:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+        className="group pointer-events-auto fixed right-0 top-4 z-[160] hidden h-7 w-2 cursor-pointer items-center justify-center overflow-hidden rounded-l bg-white text-[#999] transition-[width,color] duration-300 hover:w-20 focus-visible:w-20 focus-visible:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none md:flex"
       >
         <span
           aria-hidden="true"
           className="absolute left-0.5 h-6 w-[3px] rounded-full bg-black/40 transition-opacity group-hover:opacity-0 group-focus-visible:opacity-0"
         />
-        <span className="w-16 whitespace-nowrap  text-left text-sm font-semibold  tracking-tighter text-[#000] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="w-16 whitespace-nowrap text-left text-sm font-semibold tracking-tighter text-black opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
           Sound: {soundEnabled ? "On" : "Off"}
         </span>
       </button>

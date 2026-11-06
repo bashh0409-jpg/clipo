@@ -9,6 +9,8 @@ import PageReveal from "./components/PageReveal";
 import PageTransition from "./components/PageTransition";
 import SequentialVideoBackground from "./components/SequentialVideoBackground";
 import Sidebar from "./components/Sidebar";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,7 +74,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="sr-only">
           Veyra is an independent company-discovery website.
         </footer>
-        <CookieConsent />
+        <SpeedInsights />
+<Analytics />        
       </body>
     </html>
   );

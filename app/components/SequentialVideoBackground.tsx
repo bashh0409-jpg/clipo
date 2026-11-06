@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+
+const backgroundPoster = "/start/cosmos_2024599819.webp";
 
 const videos = [
   "/start/cosmos_889225998.mp4",
@@ -17,6 +20,7 @@ export default function SequentialVideoBackground() {
   const pathname = usePathname();
   const [videoIndices, setVideoIndices] = useState<[number, number]>([0, 1]);
   const [activeSlot, setActiveSlot] = useState(0);
+  const [hasVideoStarted, setHasVideoStarted] = useState(false);
   const [isRendered, setIsRendered] = useState(() =>
     backgroundPaths.has(pathname),
   );
@@ -64,6 +68,16 @@ export default function SequentialVideoBackground() {
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
       aria-hidden="true"
     >
+      <Image
+        src={backgroundPoster}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className={`z-10 object-cover transition-opacity duration-700 ${
+          hasVideoStarted ? "opacity-0" : "opacity-100"
+        }`}
+      />
       {videoIndices.map((videoIndex, slot) => (
         <video
           key={slot}
@@ -78,6 +92,7 @@ export default function SequentialVideoBackground() {
           muted
           playsInline
           preload="auto"
+          onPlaying={() => setHasVideoStarted(true)}
           onCanPlay={() => {
             readySlotsRef.current[slot] = true;
             if (pendingSlotRef.current === slot) {

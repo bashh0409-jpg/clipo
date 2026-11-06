@@ -8,6 +8,7 @@ const AMBIENT_VOLUME = 0.1;
 const CROSSFADE_DURATION_MS = 1_800;
 const SOUND_PREFERENCE_KEY = "veyra-sounds-enabled";
 const SOUND_PREFERENCE_EVENT = "veyra-sound-preference-change";
+const SMALL_SCREEN_QUERY = "(max-width: 767px)";
 let soundEnabled = true;
 let ambientTrackIndex = 0;
 let ambientPlayCount = 0;
@@ -138,12 +139,22 @@ export function getUiSoundEnabled() {
     console.warn("Unable to read the sound preference.", error);
   }
 
-  return soundEnabled;
+  return soundEnabled && !window.matchMedia(SMALL_SCREEN_QUERY).matches;
 }
 
 export function subscribeToUiSoundPreference(callback: () => void) {
+  const smallScreen = window.matchMedia(SMALL_SCREEN_QUERY);
+  const handleScreenChange = () => {
+    if (smallScreen.matches) stopAmbientSound();
+    callback();
+  };
+
   window.addEventListener(SOUND_PREFERENCE_EVENT, callback);
-  return () => window.removeEventListener(SOUND_PREFERENCE_EVENT, callback);
+  smallScreen.addEventListener("change", handleScreenChange);
+  return () => {
+    window.removeEventListener(SOUND_PREFERENCE_EVENT, callback);
+    smallScreen.removeEventListener("change", handleScreenChange);
+  };
 }
 
 export function setUiSoundEnabled(enabled: boolean) {
