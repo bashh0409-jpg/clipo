@@ -80,20 +80,20 @@ export default function CookieConsent() {
           aria-label="Cookie preferences"
           className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-3 z-[200] flex items-center gap-1 rounded-full bg-white px-1 pl-2 py-1 text-black shadow-xl"
         >
-          <span className="text-xs tracking-tight mr-1 font-medium">Allow analytics?</span>
+          <span className="text-xs tracking-tight mr-1 font-medium">This site uses cookies.</span>
           <button
             type="button"
             onClick={() => saveChoice("accepted")}
             className="rounded-full bg-black px-3 cursor-pointer py-1 text-xs font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
-            Yes
+            Okay
           </button>
           <button
             type="button"
             onClick={() => saveChoice("rejected")}
             className="rounded-full border border-black/20 px-3 cursor-pointer py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
-            No
+            Reject
           </button>
         </section>
       ) : null}
