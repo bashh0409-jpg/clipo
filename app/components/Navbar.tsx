@@ -252,7 +252,7 @@ export default function Navbar() {
           aria-hidden="true"
           className="absolute left-0.5 h-6 w-[3px] rounded-full bg-black/40 transition-opacity group-hover:opacity-0 group-focus-visible:opacity-0"
         />
-        <span className="w-16 whitespace-nowrap  text-left text-sm font-semibold  tracking-tighter text-[#999] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="w-16 whitespace-nowrap  text-left text-sm font-semibold  tracking-tighter text-[#000] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
           Sound: {soundEnabled ? "On" : "Off"}
         </span>
       </button>

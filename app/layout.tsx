@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, BBH_Bartle } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import CookieConsent from "./components/CookieConsent";
 import Logo from "./components/Logo";
 import SmoothScroll from "./components/SmoothScroll";
 import PageReveal from "./components/PageReveal";
@@ -73,8 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="sr-only">
           Veyra is an independent company-discovery website.
         </footer>
-        <SpeedInsights />
-        <Analytics />
+        <CookieConsent />
       </body>
     </html>
   );
