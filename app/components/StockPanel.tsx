@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { STOCK_TICKERS, hasStockTicker } from "@/lib/stocks/tickers";
 import type { StockQuote } from "@/lib/stocks/types";
 import gsap from "gsap";
+import { RefreshCw } from "lucide-react";
 
 interface StockPanelProps {
   cellId: string;
@@ -88,9 +89,17 @@ export function StockPanel({ cellId, stockUrl }: StockPanelProps) {
       )}
 
       {currentState.status === "error" && (
-        <p className="mb-2 text-sm font-medium tracking-tight text-[#999]">
-          Quote unavailable
-        </p>
+        <div className="mb-2 flex  flex-col gap-2">
+          <p className="text-sm font-medium tracking-tight text-[#999]">
+            Quote unavailable.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className=" bg-[#050a4c] w-fit text-white hover:bg-[#050a4c]/50 p-0.5 px-1 rounded items-center  duration-400 text-sm font-medium tracking-tight"
+          >
+            Reload
+          </button>
+        </div>
       )}
 
       {currentState.status === "ready" && (
@@ -102,10 +111,9 @@ export function StockPanel({ cellId, stockUrl }: StockPanelProps) {
           href={stockUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex bg-black/5 p-1 rounded items-center  hover:bg-black/10 duration-200 text-sm font-medium tracking-tight text-[#999] hover:text-current"
+          className="inline-flex bg-[#050a4c] text-white hover:bg-[#050a4c]/50 p-0.5 px-1 rounded items-center  duration-400 text-sm font-medium tracking-tight"
         >
-        Stocks
-         
+          Stocks
         </a>
       )}
     </div>

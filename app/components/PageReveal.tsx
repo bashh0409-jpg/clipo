@@ -344,9 +344,10 @@ export default function PageReveal({
         ))}
 
         {videoNeedsTap && (
+          
           <button
             type="button"
-            className="pointer-events-auto uppercase font-mono absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
+            className="pointer-events-auto cursor-pointer uppercase font-mono absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded bg-black px-2 tracking-tight  py-1 text-xs font-medium text-white shadow-lg backdrop-blur-sm"
             onClick={() => {
               const player = introVideoRef.current;
               if (!player) return;
