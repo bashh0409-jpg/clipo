@@ -10,7 +10,6 @@ import { usePathname } from "next/navigation";
 
 const MUX_PLAYBACK_ID = "s00AcBh8SwqiRssd7F017X7i01jYBOe5scgDrUyZYybOMg";
 const MUX_INTRO_VIDEO = "mux-intro-video";
-const VIDEO_READY_TIMEOUT_MS = 4_000;
 
 const INTRO_IMAGES = [
   "/start/cosmos_1271383869.webp",
@@ -49,7 +48,7 @@ export default function PageReveal({
     const page = root.querySelector<HTMLElement>("[data-page-content]");
     const curtain = root.querySelector<HTMLElement>("[data-page-curtain]");
     const progress = root.querySelector<HTMLElement>("[data-intro-progress]");
-    if (!page || !curtain || !progress) return;
+    if (!page) return;
 
     const stopIntroVideo = () => {
       const player = introVideoRef.current;
@@ -61,10 +60,11 @@ export default function PageReveal({
     if (initialPathnameRef.current !== "/") {
       stopIntroVideo();
       gsap.set(page, { clearProps: "clipPath,zIndex" });
-      gsap.set(curtain, { autoAlpha: 0, display: "none" });
+      if (curtain) gsap.set(curtain, { autoAlpha: 0, display: "none" });
       root.removeAttribute("aria-busy");
       return;
     }
+    if (!curtain || !progress) return;
 
     // Reduced motion: skip the intro entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -83,59 +83,11 @@ export default function PageReveal({
     html.style.overflow = "hidden";
     body.style.overflow = "hidden";
     let cancelled = false;
-    let cancelVideoWait = () => {};
     const pageImagesLoaded = Promise.all(
       Array.from(curtain.querySelectorAll("img"), (image) =>
         image.decode().catch(() => undefined),
       ),
     );
-    const videoReady = new Promise<void>((resolve) => {
-      const player = introVideoRef.current;
-      if (!player) {
-        resolve();
-        return;
-      }
-
-      let settled = false;
-      const finish = () => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timeoutId);
-        player.removeEventListener("canplay", handleVideoReady);
-        player.removeEventListener("playing", handleVideoReady);
-        player.removeEventListener("error", handleVideoError);
-        resolve();
-      };
-      const handleVideoReady = () => finish();
-      const handleVideoTimeout = () => {
-        setVideoNeedsTap(true);
-        console.warn(
-          "The Mux intro video did not become playable before the reveal timeout.",
-        );
-        finish();
-      };
-      const handleVideoError = () => {
-        console.error("The Mux intro video failed to load.");
-        finish();
-      };
-      const timeoutId = setTimeout(handleVideoTimeout, VIDEO_READY_TIMEOUT_MS);
-
-      cancelVideoWait = () => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timeoutId);
-        player.removeEventListener("canplay", handleVideoReady);
-        player.removeEventListener("playing", handleVideoReady);
-        player.removeEventListener("error", handleVideoError);
-        resolve();
-      };
-      player.addEventListener("canplay", handleVideoReady);
-      player.addEventListener("playing", handleVideoReady);
-      player.addEventListener("error", handleVideoError);
-      if (player.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
-        finish();
-      }
-    });
     let activeTimeline: gsap.core.Timeline | null = null;
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray<HTMLElement>("[data-intro-image]");
@@ -208,11 +160,7 @@ export default function PageReveal({
         activeTimeline.play();
       };
 
-      void Promise.all([
-        document.fonts.ready,
-        pageImagesLoaded,
-        videoReady,
-      ]).then(() => {
+      void Promise.all([document.fonts.ready, pageImagesLoaded]).then(() => {
         if (!cancelled) playImageSequence();
       });
 
@@ -224,7 +172,6 @@ export default function PageReveal({
       if (!reducedMotion.matches) return;
       cancelled = true;
       activeTimeline?.kill();
-      cancelVideoWait();
       stopIntroVideo();
       gsap.set(page, { clearProps: "clipPath,zIndex,transform,filter" });
       gsap.set(curtain, { autoAlpha: 0, display: "none" });
@@ -237,7 +184,6 @@ export default function PageReveal({
     return () => {
       cancelled = true;
       ctx.revert();
-      cancelVideoWait();
       reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       html.style.overflow = previousOverflow;
       body.style.overflow = previousBodyOverflow;
@@ -262,12 +208,11 @@ export default function PageReveal({
         {children}
       </div>
 
-      <div
-        data-page-curtain
-        className={`pointer-events-none fixed inset-0 z-[200] overflow-hidden bg-[#fff] ${
-          isInitialHomePage ? "" : "hidden"
-        }`}
-      >
+      {isInitialHomePage && (
+        <div
+          data-page-curtain
+          className="pointer-events-none fixed inset-0 z-[200] overflow-hidden bg-[#fff]"
+        >
         <div className="absolute left-1/2 top-1/2 z-0 aspect-[4/5] w-[min(65vw,60vh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden sm:w-[min(35vw,35vh)]">
           <Image
             src="/start/cosmos_2024599819.webp"
@@ -381,7 +326,8 @@ export default function PageReveal({
             className="h-full w-full origin-left bg-black/60"
           />
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
