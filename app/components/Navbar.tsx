@@ -21,7 +21,6 @@ const NAV_ITEMS = [
   { label: "Work", href: "/", icon: WorkIcon },
   { label: "Sponsor", href: "/sponsor", icon: SponsorIcon },
   { label: "About", href: "/about", icon: InfoIcon },
-  
 ] as const;
 
 export default function Navbar() {
@@ -103,67 +102,67 @@ export default function Navbar() {
   }, []);
 
   // Keep the pill on the active route.
-   // It does not respond to hover or focus.
+  // It does not respond to hover or focus.
   useEffect(() => {
     const nav = navRef.current;
-   const pill = pillRef.current;
+    const pill = pillRef.current;
 
-   if (!nav || !pill) return;
+    if (!nav || !pill) return;
 
-   const items = Array.from(
-     nav.querySelectorAll<HTMLAnchorElement>("[data-nav-item]"),
-   );
+    const items = Array.from(
+      nav.querySelectorAll<HTMLAnchorElement>("[data-nav-item]"),
+    );
 
-   const activeItem =
-     items.find((item) => item.dataset.active === "true") ?? null;
+    const activeItem =
+      items.find((item) => item.dataset.active === "true") ?? null;
 
-   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-   const movePill = () => {
-   const immediate = reducedMotion.matches;
-   if (!activeItem) {
-     if (immediate) gsap.set(pill, { opacity: 0 });
-     else gsap.to(pill, { opacity: 0, duration: 0.2, overwrite: "auto" });
-     return;
-   }
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const movePill = () => {
+      const immediate = reducedMotion.matches;
+      if (!activeItem) {
+        if (immediate) gsap.set(pill, { opacity: 0 });
+        else gsap.to(pill, { opacity: 0, duration: 0.2, overwrite: "auto" });
+        return;
+      }
 
-   const navRect = nav.getBoundingClientRect();
-   const itemRect = activeItem.getBoundingClientRect();
+      const navRect = nav.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
 
-   const position = {
-     x: itemRect.left - navRect.left,
-     y: itemRect.top - navRect.top,
-     width: itemRect.width,
-     height: itemRect.height,
-     opacity: 1,
-   };
-   if (immediate) {
-     gsap.set(pill, position);
-     return;
-   }
+      const position = {
+        x: itemRect.left - navRect.left,
+        y: itemRect.top - navRect.top,
+        width: itemRect.width,
+        height: itemRect.height,
+        opacity: 1,
+      };
+      if (immediate) {
+        gsap.set(pill, position);
+        return;
+      }
 
-   gsap.to(pill, {
-     ...position,
-     duration: immediate ? 0 : 0.45,
-     ease: "power3.inOut",
-     overwrite: "auto",
-   });
-   };
+      gsap.to(pill, {
+        ...position,
+        duration: immediate ? 0 : 0.45,
+        ease: "power3.inOut",
+        overwrite: "auto",
+      });
+    };
 
-   const handleResize = () => movePill();
-   const handleMotionPreferenceChange = () => movePill();
+    const handleResize = () => movePill();
+    const handleMotionPreferenceChange = () => movePill();
 
-   // Animate the pill to the active route.
-   movePill();
+    // Animate the pill to the active route.
+    movePill();
 
-   window.addEventListener("resize", handleResize);
-   reducedMotion.addEventListener("change", handleMotionPreferenceChange);
+    window.addEventListener("resize", handleResize);
+    reducedMotion.addEventListener("change", handleMotionPreferenceChange);
 
-   return () => {
-     window.removeEventListener("resize", handleResize);
-     reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
-     gsap.killTweensOf(pill);
-   };
- }, [pathname]);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
+      gsap.killTweensOf(pill);
+    };
+  }, [pathname]);
 
   return (
     <>
@@ -173,14 +172,12 @@ export default function Navbar() {
       >
         <div
           ref={navRef}
-          className="pointer-events-auto relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-white px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
+          className="pointer-events-auto relative mx-auto flex w-fit max-w-[360px] items-center justify-between gap-1 rounded-full bg-[#ddd] px-1 py-1 text-black shadow-2xl backdrop-blur-xl md:w-fit md:max-w-xs md:gap-2"
         >
-          
-
           <span
             ref={pillRef}
             aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-0 z-0 rounded-full bg-black/10 opacity-0"
+            className="pointer-events-none absolute left-0 top-0 z-0 rounded-full bg-white opacity-0 shadow-[0_0_8px_2px_rgba(255,255,255,0.12)]"
           />
 
           {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
@@ -246,14 +243,32 @@ export default function Navbar() {
           setUiSoundEnabled(nextEnabled);
           if (nextEnabled) playUiSound("/tick.ogg");
         }}
-        className="group pointer-events-auto fixed right-0 top-4 z-[160] hidden h-7 w-2 cursor-pointer items-center justify-center overflow-hidden rounded-l bg-white text-[#999] transition-[width,color] duration-300 hover:w-20 focus-visible:w-20 focus-visible:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none md:flex"
+        className="pointer-events-auto hidden md:inline-block fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-[160] h-10 w-[104px] cursor-pointer rounded-full bg-[#ddd] p-1 text-black shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-transform duration-200  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none md:bottom-7 md:right-7"
       >
-        <span
-          aria-hidden="true"
-          className="absolute left-0.5 h-6 w-[3px] rounded-full bg-black/40 transition-opacity group-hover:opacity-0 group-focus-visible:opacity-0"
-        />
-        <span className="w-16 whitespace-nowrap text-left text-sm font-semibold tracking-tighter text-black opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
-          Sound: {soundEnabled ? "On" : "Off"}
+        <span className="sr-only">
+          {soundEnabled ? "Turn sound off" : "Turn sound on"}
+        </span>
+        <span className="relative font-semibold tracking-tight grid h-full grid-cols-2 items-center rounded-full text-sm font-medium">
+          <span
+            aria-hidden="true"
+            className={`absolute inset-y-0 w-1/2 rounded-full bg-white  transition-transform duration-300 ${
+              soundEnabled ? "translate-x-full" : "translate-x-0"
+            }`}
+          />
+          <span
+            className={`relative z-10 transition-colors duration-200 ${
+              soundEnabled ? "text-[#999]" : "text-black"
+            }`}
+          >
+            Off
+          </span>
+          <span
+            className={`relative z-10 transition-colors duration-200 ${
+              soundEnabled ? "text-black" : "text-black/45"
+            }`}
+          >
+            On
+          </span>
         </span>
       </button>
     </>
@@ -288,6 +303,21 @@ function WorkIcon({ size, className, ...props }: NavIconProps) {
       className={className}
     >
       <path d="M280-80q-33 0-56.5-23.5T200-160v-320q0-85 44.5-152T360-732v-28q0-50 35-85t85-35q50 0 85 35t35 85v28q71 33 115.5 100T760-480v320q0 33-23.5 56.5T680-80H280Zm348.5-251.5Q640-343 640-360v-120H320v80h240v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5ZM440-756q11-2 20-3t20-1q11 0 20 1t20 3v-4q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v4Z" />
+    </svg>
+  );
+}
+function WorkIco({ size, className, ...props }: NavIconProps) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      height={size}
+      viewBox="0 -960 960 960"
+      width={size}
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M6,19H9V13h6v6h3V10L12,5.5L6,10v9ZM4,21V9l8-6l8,6V21H13V15H11v6H4Zm8-8.75Z" />
     </svg>
   );
 }

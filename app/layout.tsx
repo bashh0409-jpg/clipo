@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono, BBH_Bartle } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
@@ -55,6 +56,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${bbhBartle.variable} h-full antialiased`}
     >
       <head>
+        <Script
+          src="https://cdn.visitors.now/v.js"
+          data-token="d18eadc5-86c0-4029-9621-6895cf652195"
+          data-persist
+          strategy="beforeInteractive"
+        />
         <link
           rel="preconnect"
           href="https://stream.mux.com"
@@ -70,12 +77,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </header>
         <PageReveal>{children}</PageReveal>
         <PageTransition />
-        <Sidebar/>
+        <Sidebar />
         <footer className="sr-only">
           Veyra is an independent company-discovery website.
         </footer>
         <SpeedInsights />
-<Analytics />        
+        <Analytics />
       </body>
     </html>
   );

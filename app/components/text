@@ -1,0 +1,11 @@
+Install the Visitors analytics tracking script into this project.
+
+If in a monorepo ensure it's in the web/marketing related project. Add the following script tag to the <head> of every page (or the root layout/template if using a framework):
+
+<script src="https://cdn.visitors.now/v.js" data-token="d18eadc5-86c0-4029-9621-6895cf652195" data-persist></script>
+
+- The script must load on every page
+- Place it in the <head> tag, not the body
+- If this is a React/Next.js/Remix/Astro/etc. framework, add it to the root layout or document template
+- Do not wrap it in any conditional logic, it should always load
+- Do not modify the script tag attributes
