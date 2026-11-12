@@ -91,7 +91,7 @@ export default function SequentialVideoBackground() {
           autoPlay={activeSlot === slot}
           muted
           playsInline
-          preload="auto"
+          preload={activeSlot === slot ? "auto" : "metadata"}
           onPlaying={() => setHasVideoStarted(true)}
           onCanPlay={() => {
             readySlotsRef.current[slot] = true;
@@ -107,6 +107,11 @@ export default function SequentialVideoBackground() {
               advanceToSlot(nextSlot);
             } else {
               pendingSlotRef.current = nextSlot;
+              const nextVideo = videoRefs.current[nextSlot];
+              if (nextVideo) {
+                nextVideo.preload = "auto";
+                nextVideo.load();
+              }
             }
           }}
         />

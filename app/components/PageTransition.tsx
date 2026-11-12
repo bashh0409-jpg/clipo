@@ -48,6 +48,7 @@ export default function PageTransition() {
       const page = document.querySelector<HTMLElement>("[data-page-content]");
       if (page) gsap.set(page, { clearProps: "transform,filter" });
       if (stageRef.current) gsap.set(stageRef.current, { autoAlpha: 0 });
+      delete document.documentElement.dataset.pageNavigating;
       window.dispatchEvent(new Event("page-transition-complete"));
     };
 
@@ -75,6 +76,7 @@ export default function PageTransition() {
       gsap.set(stage, { autoAlpha: 1 });
       outgoingPageRef.current = snapshot;
       directionRef.current = direction;
+      document.documentElement.dataset.pageNavigating = "true";
     };
 
     const handleDocumentClick = (event: MouseEvent) => {
@@ -165,6 +167,7 @@ export default function PageTransition() {
       outgoingPageRef.current = null;
       gsap.set(stage, { autoAlpha: 0 });
       gsap.set(page, { clearProps: "transform" });
+      delete document.documentElement.dataset.pageNavigating;
       window.dispatchEvent(new Event("page-transition-complete"));
       return;
     }
@@ -173,6 +176,7 @@ export default function PageTransition() {
       x: -direction * window.innerWidth,
       filter: "blur(30px)",
     });
+    delete document.documentElement.dataset.pageNavigating;
     transitionRef.current = gsap.timeline({
       onComplete: () => {
         snapshot?.remove();

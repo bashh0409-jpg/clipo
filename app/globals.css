@@ -33,6 +33,10 @@ html:has([data-page-reveal][aria-busy="true"]) body {
   overscroll-behavior: none;
 }
 
+html[data-page-navigating="true"] [data-page-content] {
+  visibility: hidden;
+}
+
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
