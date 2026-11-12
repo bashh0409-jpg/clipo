@@ -13,7 +13,7 @@ import { SplitText } from "gsap/SplitText";
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { StockPanel } from "./StockPanel";
-import { playUiSound, startAmbientSound } from "@/lib/ui-sounds";
+import { playUiSound } from "@/lib/ui-sounds";
 gsap.registerPlugin(SplitText);
 
 const companyFont = Playfair_Display({
@@ -924,14 +924,13 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
             });
             gsap.to(hint, { autoAlpha: 1, duration: 0.18 });
           }
-          startAmbientSound();
           if (dismissingRef.current) {
             const wipe =
               rootRef.current?.querySelector<HTMLElement>("[data-wipe]");
             if (wipe) gsap.killTweensOf(wipe);
             dismissingRef.current = false;
           }
-          playUiSound("/hover.ogg");
+          playUiSound("/tap_05.ogg");
           open();
         }
       }}
@@ -975,7 +974,6 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
           e.target instanceof HTMLElement &&
           e.target.matches(":focus-visible")
         ) {
-          startAmbientSound();
           open();
         }
       }}
@@ -1057,10 +1055,7 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
               className="group flex shrink-0 duration-300 transition-colors transition capitalize items-center whitespace-nowrap py-0.5 rounded text-[#999] hover:text-[#fff] text-sm font-medium bg-[#050a4c]/5 px-2 tracking-tighter  hover:bg-[#050a4c] cursor-pointer transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#050a4c]"
             >
               <span className="h-4 w-fit overflow-hidden">
-                <span
-                  ref={detailsLabelRef}
-                  className="flex flex-col"
-                >
+                <span ref={detailsLabelRef} className="flex flex-col">
                   <span className="flex h-4 shrink-0 items-center justify-center">
                     See more
                   </span>
@@ -1117,11 +1112,7 @@ function Cell({ cell, onSeeMore, isSidebarOpen }: CellProps) {
   );
 }
 
-function DetailsSidebar({
-  cell,
-  isOpen,
-  onClose,
-}: SidebarProps) {
+function DetailsSidebar({ cell, isOpen, onClose }: SidebarProps) {
   const portalReady = useSyncExternalStore(
     subscribeToNothing,
     getClientSnapshot,
@@ -1651,9 +1642,7 @@ export default function GridHover() {
         inert={selected !== null}
         className="grid w-full grid-cols-2 gap-[2px] bg-white p-[2px] md:grid-cols-3 lg:grid-cols-4 "
       >
-        <h1 className="sr-only">
-          Discover companies and products with Veyra
-        </h1>
+        <h1 className="sr-only">Discover companies and products with Veyra</h1>
         {CELLS.map((cell) => (
           <Cell
             key={cell.id}
